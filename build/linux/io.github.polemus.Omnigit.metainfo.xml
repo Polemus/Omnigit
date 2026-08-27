@@ -130,6 +130,17 @@
   <content_rating type="oars-1.1" />
 
   <releases>
+    <release version="0.4.3" date="2026-08-27">
+      <url type="details">https://github.com/Polemus/Omnigit/releases/tag/v0.4.3</url>
+      <description>
+        <p>
+          Branches checked out in another worktree now open that
+          worktree instead of failing halfway through a checkout. The
+          sidebar tells two copies of one project apart, the repository
+          picker moved up into the header, and Omnigit has a new icon.
+        </p>
+      </description>
+    </release>
     <release version="0.4.2" date="2026-08-21">
       <url type="details">https://github.com/Polemus/Omnigit/releases/tag/v0.4.2</url>
       <description>
