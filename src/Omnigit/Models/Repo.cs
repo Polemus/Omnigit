@@ -100,9 +100,28 @@ public sealed class BranchInfo
     /// <summary>Which remote it lives on. Empty for a branch that is only local.</summary>
     public string RemoteName { get; init; } = string.Empty;
 
+    /// <summary>
+    /// The working directory of the linked worktree standing on this branch, empty when
+    /// none is. Git allows one worktree per branch, so this one cannot be checked out
+    /// here while that is true - and finding out by clicking is expensive, because the
+    /// checkout writes the tree before it discovers it cannot move HEAD.
+    /// </summary>
+    public string CheckedOutIn { get; init; } = string.Empty;
+
+    /// <summary>True while another worktree has it, which is what makes it unselectable.</summary>
+    public bool IsCheckedOutElsewhere => CheckedOutIn.Length > 0;
+
     /// <summary>What git would call the ref: "origin/feature" for a remote-only branch.</summary>
     public string QualifiedName =>
         IsRemoteOnly && !string.IsNullOrEmpty(RemoteName) ? $"{RemoteName}/{Name}" : Name;
+
+    /// <summary>
+    /// What the picker shows under the name: normally the last commit, and where the
+    /// branch is in use when it is - a disabled row draws no tooltip, so the reason has
+    /// to be on the row itself.
+    /// </summary>
+    public string PickerDetail =>
+        IsCheckedOutElsewhere ? $"Checked out in {CheckedOutIn}" : LastCommitSummary;
 
     public string RelativeTime => TimeFormat.Relative(LastCommitAt);
 }

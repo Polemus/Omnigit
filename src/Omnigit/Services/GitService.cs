@@ -143,6 +143,10 @@ public sealed partial class GitService : IGitService
         var defaultName = DefaultBranchName(repo, repo.Network.Remotes["origin"]
                                                   ?? repo.Network.Remotes.FirstOrDefault());
 
+        // A branch another worktree is standing on cannot be checked out here, so the
+        // picker says which copy has it instead of offering a click that half-applies.
+        var elsewhere = WorktreeBranches(repo);
+
         var locals = repo.Branches
             .Where(b => !b.IsRemote)
             .Select(b => new BranchInfo
@@ -152,6 +156,7 @@ public sealed partial class GitService : IGitService
                 LastCommitAt = b.Tip?.Committer.When ?? DateTimeOffset.MinValue,
                 IsCurrent = b.FriendlyName == currentName,
                 IsDefault = b.FriendlyName == defaultName,
+                CheckedOutIn = elsewhere.GetValueOrDefault(b.FriendlyName, string.Empty),
             })
             .ToList();
 
@@ -453,6 +458,18 @@ public sealed partial class GitService : IGitService
     {
         using var repo = new Repository(Discover(path));
 
+        // First, because it is the one refusal that has to happen before the stash: the
+        // switch cannot succeed, and stashing for it would leave the work on the stack
+        // with nothing having moved.
+        if (CheckedOutElsewhere(repo, branchName) is { } worktree)
+        {
+            return new SwitchResult(
+                SwitchOutcome.CheckedOutElsewhere,
+                $"{branchName} is already checked out in {worktree}. Switch that copy to "
+                + "another branch first, or remove it.",
+                []);
+        }
+
         var changed = ChangedPaths(repo);
 
         var bring = bringPaths is null
@@ -551,8 +568,58 @@ public sealed partial class GitService : IGitService
             .ToList();
     }
 
+    /// <summary>
+    /// The working directory of the linked worktree standing on <paramref name="branchName"/>,
+    /// or null when no other worktree has it checked out.
+    /// </summary>
+    /// <remarks>
+    /// git refuses this switch before touching anything - "'x' is already used by worktree
+    /// at …". libgit2 does not: <c>Commands.Checkout</c> writes the working tree and the
+    /// index first and only then sets HEAD, so the refusal arrives after the files have
+    /// been replaced. What is left is a working tree and index holding the target branch's
+    /// content while HEAD still names the branch you were on, nothing rolled back, and a
+    /// "cannot set HEAD" in the log that describes none of it. That is a half-applied
+    /// switch nobody asked for, so the question is asked here instead, before any of it.
+    /// </remarks>
+    private static string? CheckedOutElsewhere(Repository repo, string branchName)
+        => WorktreeBranches(repo).GetValueOrDefault(branchName);
+
+    /// <summary>
+    /// Branch name to the working directory of the linked worktree standing on it. Built
+    /// in one pass because the branch list wants every answer at once and a switch wants
+    /// one; a repository with no worktrees pays for an empty enumeration.
+    /// </summary>
+    private static Dictionary<string, string> WorktreeBranches(Repository repo)
+    {
+        var found = new Dictionary<string, string>(StringComparer.Ordinal);
+
+        foreach (var worktree in repo.Worktrees)
+        {
+            // A worktree whose directory was deleted by hand is still listed until someone
+            // prunes it, and opening that one throws rather than coming back empty.
+            try
+            {
+                using var linked = worktree.WorktreeRepository;
+
+                if (linked.Head.FriendlyName is { Length: > 0 } name)
+                    found[name] = linked.Info.WorkingDirectory;
+            }
+            catch (LibGit2SharpException)
+            {
+            }
+        }
+
+        return found;
+    }
+
     private static void Switch(Repository repo, string branchName, bool create, string? startPoint)
     {
+        // The callers refuse this with a message of their own. Repeated here because this
+        // is the primitive that half-applies, and the next caller added is the one that
+        // will not have thought about worktrees.
+        if (CheckedOutElsewhere(repo, branchName) is { } worktree)
+            throw new InvalidOperationException($"'{branchName}' is already checked out in {worktree}.");
+
         if (create)
         {
             if (repo.Head.Tip is null)

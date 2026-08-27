@@ -218,8 +218,14 @@
                                                         <ItemsControl ItemsSource="{Binding Branches}">
                                                             <ItemsControl.ItemTemplate>
                                                                 <DataTemplate x:DataType="m:BranchInfo">
+                                                                    <!-- Disabled while another worktree
+                                                                         is standing on the branch: git
+                                                                         allows one worktree per branch,
+                                                                         and the checkout would write the
+                                                                         tree before finding that out. -->
                                                                     <Button Classes="rowButton"
                                                                             Click="OnBranchRowClick"
+                                                                            IsEnabled="{Binding !IsCheckedOutElsewhere}"
                                                                             ToolTip.Tip="{Binding QualifiedName}"
                                                                             Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).SelectBranchCommand}"
                                                                             CommandParameter="{Binding}">
@@ -243,10 +249,14 @@
                                                                                             IsVisible="{Binding IsCurrent}">
                                                                                         <TextBlock Classes="muted" Text="Current" />
                                                                                     </Border>
+                                                                                    <Border Classes="chip" Padding="6,1"
+                                                                                            IsVisible="{Binding IsCheckedOutElsewhere}">
+                                                                                        <TextBlock Classes="muted" Text="In use" />
+                                                                                    </Border>
                                                                                 </StackPanel>
                                                                                 <TextBlock Classes="muted"
                                                                                            TextTrimming="CharacterEllipsis"
-                                                                                           Text="{Binding LastCommitSummary}" />
+                                                                                           Text="{Binding PickerDetail}" />
                                                                             </StackPanel>
 
                                                                             <TextBlock Grid.Column="2" Classes="muted"

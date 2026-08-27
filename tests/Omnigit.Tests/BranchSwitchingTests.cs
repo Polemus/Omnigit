@@ -1,3 +1,4 @@
+using LibGit2Sharp;
 using Omnigit.Services;
 
 namespace Omnigit.Tests;
@@ -354,5 +355,81 @@ public class BranchSwitchingTests
         Assert.True(result.Succeeded);
         Assert.Equal(feature, repo.CurrentBranch());
         Assert.Equal("local edit\n", repo.Read("other.txt"));
+    }
+
+    // ---- one worktree per branch -------------------------------------------
+    //
+    // libgit2 checks out and only then sets HEAD, so a branch a linked worktree is
+    // standing on used to be refused *after* the working tree and index had already been
+    // replaced with its content - a half-applied switch, reported only as "cannot set
+    // HEAD to reference '<branch>' as it is the current HEAD of a linked repository".
+
+    [Fact]
+    public void SwitchingToABranchAnotherWorktreeHasIsRefused()
+    {
+        using var repo = RepoWithCommit();
+        var start = repo.CurrentBranch();
+        var worktree = repo.AddWorktree("sidecar");
+
+        var result = Git.SwitchBranch(repo.Path, "sidecar", create: false, bringPaths: null);
+
+        Assert.Equal(SwitchOutcome.CheckedOutElsewhere, result.Outcome);
+        Assert.Contains(worktree, result.Message);
+
+        // Where the half-applied switch showed: HEAD still names this branch, and the
+        // tree and index have to still agree with it.
+        Assert.Equal(start, repo.CurrentBranch());
+        Assert.Equal(FileStatus.Unaltered, repo.StatusOf("kept.txt"));
+    }
+
+    [Fact]
+    public void TheRefusalComesBeforeAnythingIsStashed()
+    {
+        using var repo = RepoWithCommit();
+        repo.AddWorktree("sidecar");
+
+        repo.Write("kept.txt", "uncommitted\n");
+
+        // Leaving everything behind is the path that stashes first. A stash taken for a
+        // switch that cannot happen strands the work on the stack with nothing moved.
+        var result = Git.SwitchBranch(repo.Path, "sidecar", create: false, bringPaths: []);
+
+        Assert.Equal(SwitchOutcome.CheckedOutElsewhere, result.Outcome);
+        Assert.Equal(0, repo.StashCount());
+        Assert.Equal("uncommitted\n", repo.Read("kept.txt"));
+    }
+
+    [Fact]
+    public void TheBranchListSaysWhichWorktreeHasIt()
+    {
+        using var repo = RepoWithCommit();
+        var start = repo.CurrentBranch();
+        var worktree = repo.AddWorktree("sidecar");
+
+        var branches = Git.GetBranches(repo.Path);
+
+        var sidecar = branches.Single(b => b.Name == "sidecar");
+        Assert.True(sidecar.IsCheckedOutElsewhere);
+        Assert.Equal(worktree, sidecar.CheckedOutIn.TrimEnd('/', '\\'));
+        Assert.Contains(worktree, sidecar.PickerDetail);
+
+        // The branch you are standing on is not "in use" by somebody else.
+        Assert.False(branches.Single(b => b.Name == start).IsCheckedOutElsewhere);
+    }
+
+    [Fact]
+    public void CherryPickingOntoABranchAnotherWorktreeHasIsRefused()
+    {
+        using var repo = RepoWithCommit();
+        var start = repo.CurrentBranch();
+        repo.AddWorktree("sidecar");
+
+        repo.Write("other.txt", "to copy\n");
+        repo.Commit("second");
+
+        var result = Git.CherryPickCommit(repo.Path, repo.HeadSha(), "sidecar");
+
+        Assert.Equal(CommitOperationOutcome.Refused, result.Outcome);
+        Assert.Equal(start, repo.CurrentBranch());
     }
 }

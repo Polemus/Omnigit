@@ -214,12 +214,41 @@ public sealed class TempRepository : IDisposable
         return repo.Tags[name]?.Annotation?.Message;
     }
 
+    /// <summary>
+    /// Adds a linked worktree beside this one, checked out on a new branch named
+    /// <paramref name="branchName"/> - what <c>git worktree add &lt;path&gt;</c> does.
+    /// That is the state git refuses a second checkout of the branch in: one worktree
+    /// per branch.
+    /// </summary>
+    /// <remarks>
+    /// The overload taking a committish as well returns null and creates nothing, so the
+    /// branch is the one the worktree brings with it rather than one made beforehand.
+    /// </remarks>
+    public string AddWorktree(string branchName)
+    {
+        var path = Path + "-worktree-" + branchName.Replace('/', '-');
+
+        using var repo = new Repository(Path);
+        repo.Worktrees.Add(branchName, path, isLocked: false);
+
+        return path;
+    }
+
     public void Dispose()
     {
         // The bare origin from AddOrigin sits beside the working copy, so it needs
         // removing too or every test that pushes leaves one behind.
         Remove(Path);
         Remove(Path + "-origin.git");
+
+        foreach (var worktree in Directory.Exists(System.IO.Path.GetDirectoryName(Path)!)
+                     ? Directory.EnumerateDirectories(
+                         System.IO.Path.GetDirectoryName(Path)!,
+                         System.IO.Path.GetFileName(Path) + "-worktree-*")
+                     : [])
+        {
+            Remove(worktree);
+        }
     }
 
     private static void Remove(string directory)

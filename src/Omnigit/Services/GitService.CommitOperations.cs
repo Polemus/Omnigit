@@ -149,6 +149,16 @@ public sealed partial class GitService
 
         if (target.Length > 0 && !string.Equals(target, repo.Head.FriendlyName, StringComparison.Ordinal))
         {
+            // Same refusal a branch switch makes, and for the same reason: the checkout
+            // below writes the tree before it fails on HEAD, so a branch another worktree
+            // is standing on has to be turned away before it runs.
+            if (CheckedOutElsewhere(repo, target) is { } worktree)
+            {
+                return CommitOperationResult.Refused(
+                    $"{target} is already checked out in {worktree}. Switch that copy to "
+                    + "another branch first, or remove it.");
+            }
+
             // Adopt for the same reason the branch picker checks one out: the target list
             // is the branch list, and that now holds branches which are only on the
             // remote. Copying a commit onto one means creating it here first.

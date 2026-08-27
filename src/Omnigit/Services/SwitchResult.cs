@@ -12,6 +12,12 @@ public enum SwitchOutcome
     /// would overwrite uncommitted work. Nothing was changed.
     /// </summary>
     Conflicts,
+
+    /// <summary>
+    /// Another worktree is standing on the target branch, so git will not let this one
+    /// stand on it too. Nothing was changed.
+    /// </summary>
+    CheckedOutElsewhere,
 }
 
 /// <summary>
