@@ -87,6 +87,53 @@ public class DesktopIntegrationTests
         Assert.Equal("[Desktop Entry]", result.First(l => !l.StartsWith('#') && l.Length > 0));
     }
 
+    // ---- refreshing the installed icons ------------------------------------
+    //
+    // The desktop entry names only the AppImage, so a build whose artwork changed
+    // while its path did not writes an identical entry. Deciding "already current"
+    // from that alone left the old icon installed with no way to ever replace it.
+
+    private static string AppDirWithIcon(string contents)
+    {
+        var root = Path.Combine(Path.GetTempPath(), "omnigit-tests", Guid.NewGuid().ToString("n"));
+        var icons = Path.Combine(root, "usr", "share", "icons", "hicolor", "256x256", "apps");
+        Directory.CreateDirectory(icons);
+        File.WriteAllText(Path.Combine(icons, $"{DesktopIntegration.AppId}.png"), contents);
+        return root;
+    }
+
+    [Fact]
+    public void CopyIcons_replaces_an_icon_whose_contents_changed()
+    {
+        var appDir = AppDirWithIcon("old pixels");
+        var dataHome = Path.Combine(Path.GetTempPath(), "omnigit-tests", Guid.NewGuid().ToString("n"));
+        var installed = Path.Combine(
+            dataHome, "icons", "hicolor", "256x256", "apps", $"{DesktopIntegration.AppId}.png");
+
+        try
+        {
+            Assert.Equal(1, DesktopIntegration.CopyIcons(appDir, dataHome));
+            Assert.Equal("old pixels", File.ReadAllText(installed));
+
+            // Nothing changed, so nothing is written - which is what tells the caller
+            // the installation is up to date.
+            Assert.Equal(0, DesktopIntegration.CopyIcons(appDir, dataHome));
+
+            File.WriteAllText(
+                Path.Combine(appDir, "usr", "share", "icons", "hicolor", "256x256", "apps",
+                    $"{DesktopIntegration.AppId}.png"),
+                "new pixels");
+
+            Assert.Equal(1, DesktopIntegration.CopyIcons(appDir, dataHome));
+            Assert.Equal("new pixels", File.ReadAllText(installed));
+        }
+        finally
+        {
+            Directory.Delete(appDir, recursive: true);
+            Directory.Delete(dataHome, recursive: true);
+        }
+    }
+
     [Theory]
     [InlineData("/opt/Omnigit.AppImage", "/opt/Omnigit.AppImage")]
     [InlineData("/home/u/My Apps/Omnigit.AppImage", "\"/home/u/My Apps/Omnigit.AppImage\"")]

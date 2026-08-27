@@ -100,6 +100,10 @@ public partial class MainWindow : Window
     private void OnBranchRowClick(object? sender, RoutedEventArgs e)
         => Dispatcher.UIThread.Post(() => BranchPickerButton.Flyout?.Hide());
 
+    /// <summary>
+    /// Hiding the flyout is deferred: Click runs before Command, and tearing down the
+    /// popup detaches the DataContext the command reads from.
+    /// </summary>
     private void OnAddRepositoryRowClick(object? sender, RoutedEventArgs e)
         => Dispatcher.UIThread.Post(() => AddRepositoryButton.Flyout?.Hide());
 

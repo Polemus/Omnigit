@@ -61,31 +61,76 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <!-- Wordmark, with + pushed to the right of the block so it sits over
-                     the sidebar it fills. -->
-                <Grid Grid.Column="0" ColumnDefinitions="Auto,*,Auto" Margin="14,0,18,0">
-                    <Border Grid.Column="0" Width="26" Height="26" CornerRadius="7"
-                            VerticalAlignment="Center"
-                            Background="{DynamicResource AccentBrush}">
-                        <TextBlock Text="OG" FontSize="12" FontWeight="Bold"
-                                   Foreground="{DynamicResource TextOnAccent}"
-                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </Border>
-                    <TextBlock Grid.Column="1" Text="Omnigit" FontSize="15" FontWeight="SemiBold"
-                               Margin="9,0,0,0" VerticalAlignment="Center" />
+                <!-- Current repository, in the toolbar's first column - which is the
+                     sidebar's width, so it sits directly above the list it opens. The
+                     list still expands in place underneath, inside the sidebar. It was
+                     below this strip, under a wordmark naming the application the user
+                     had just launched. -->
+                <Grid Grid.Column="0" ColumnDefinitions="*,Auto" Margin="0,0,10,0">
+                    <Button Grid.Column="0" Classes="repoPicker"
+                            Command="{Binding ToggleRepositoryPickerCommand}">
+                        <!-- No host badge: the hosting site is named on the line above, which
+                             is what a coloured square was standing in for. "Current
+                             repository" is gone with it - the chevron and the position at the
+                             top of the sidebar say that already, and the line is worth more
+                             carrying the owner and the site the clone came from. -->
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="9">
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Classes="muted" TextTrimming="CharacterEllipsis"
+                                           Text="{Binding SelectedRepository.OriginLabel}" />
 
-                    <!-- Everything that brings a new repository in. It was buried at the
-                         bottom of the picker, which is a list of what you already have. -->
-                    <Button Grid.Column="2" x:Name="AddRepositoryButton"
+                                <!-- The name alone is not an identity: a worktree and the
+                                     clone it belongs to carry the same one, and so do two
+                                     clones of one project. Hence the chip and the path. -->
+                                <StackPanel Orientation="Horizontal" Spacing="7">
+                                    <TextBlock Classes="body" FontWeight="SemiBold"
+                                               TextTrimming="CharacterEllipsis"
+                                               Text="{Binding SelectedRepository.Name}" />
+                                    <Border Classes="chip" Padding="6,1"
+                                            IsVisible="{Binding SelectedRepository.IsWorktree}">
+                                        <TextBlock Classes="muted" Text="Worktree" />
+                                    </Border>
+                                </StackPanel>
+
+                                <TextBlock Classes="muted" TextTrimming="CharacterEllipsis"
+                                           Text="{Binding SelectedRepository.SidebarPath}" />
+                            </StackPanel>
+
+                            <!-- Points down closed, up open. Two Paths rather than a rotation
+                                 so there is no transform to animate or get stuck. -->
+                            <Path Grid.Column="1" Classes="icon"
+                                  Data="{DynamicResource IconChevronDown}"
+                                  IsVisible="{Binding !IsRepositoryPickerOpen}" />
+                            <Path Grid.Column="1" Classes="icon"
+                                  Data="{DynamicResource IconChevronDown}"
+                                  RenderTransformOrigin="50%,50%"
+                                  RenderTransform="rotate(180deg)"
+                                  IsVisible="{Binding IsRepositoryPickerOpen}" />
+                        </Grid>
+                    </Button>
+
+                    <!-- Everything that brings a new repository in, beside the list it
+                         adds to. It was in the toolbar over the sidebar, which put it
+                         a long way from the repositories it is about. -->
+                    <Button Grid.Column="1" x:Name="AddRepositoryButton"
                             Classes="addButton" VerticalAlignment="Center"
+                            Margin="10,0,0,0"
                             ToolTip.Tip="Add a repository">
                         <Path Data="{DynamicResource IconPlus}" Width="16" Height="16"
                               Stretch="None" StrokeLineCap="Round" Fill="Transparent" />
                         <Button.Flyout>
-                            <Flyout Placement="BottomEdgeAlignedLeft"
+                            <Flyout Placement="BottomEdgeAlignedRight"
                                     FlyoutPresenterClasses="picker">
                                 <StackPanel Width="280">
+                                    <!-- Signed into nothing, and the two rows above are
+                                         both about a hosting site there isn't one of.
+                                         Cloning has nowhere to clone from, and a local
+                                         repository would land in a sidebar grouped by
+                                         sites - so the menu offers the one thing that
+                                         has to happen first, rather than three rows of
+                                         which two do nothing. -->
                                     <Button Classes="rowButton"
+                                            IsVisible="{Binding HasAccounts}"
                                             Click="OnAddRepositoryRowClick"
                                             Command="{Binding AddRepositoryCommand}">
                                         <StackPanel Orientation="Horizontal" Spacing="9">
@@ -95,11 +140,24 @@
                                     </Button>
 
                                     <Button Classes="rowButton"
+                                            IsVisible="{Binding HasAccounts}"
                                             Click="OnAddRepositoryRowClick"
                                             Command="{Binding ShowCloneCommand}">
                                         <StackPanel Orientation="Horizontal" Spacing="9">
                                             <Path Classes="icon" Data="{DynamicResource IconRepo}" />
-                                            <TextBlock Classes="body" Text="Clone from a hosting site…" />
+                                            <TextBlock Classes="body" Text="Clone repository…" />
+                                        </StackPanel>
+                                    </Button>
+
+                                    <Border Classes="divider" Margin="0,5"
+                                            IsVisible="{Binding HasAccounts}" />
+
+                                    <Button Classes="rowButton"
+                                            Click="OnAddRepositoryRowClick"
+                                            Command="{Binding AddAccountCommand}">
+                                        <StackPanel Orientation="Horizontal" Spacing="9">
+                                            <Path Classes="icon" Data="{DynamicResource IconGlobe}" />
+                                            <TextBlock Classes="body" Text="Add a hosting site…" />
                                         </StackPanel>
                                     </Button>
                                 </StackPanel>
@@ -107,6 +165,8 @@
                         </Button.Flyout>
                     </Button>
                 </Grid>
+
+
 
                 <!-- Current branch -->
                 <Button Grid.Column="1" x:Name="BranchPickerButton"
@@ -218,14 +278,13 @@
                                                         <ItemsControl ItemsSource="{Binding Branches}">
                                                             <ItemsControl.ItemTemplate>
                                                                 <DataTemplate x:DataType="m:BranchInfo">
-                                                                    <!-- Disabled while another worktree
-                                                                         is standing on the branch: git
-                                                                         allows one worktree per branch,
-                                                                         and the checkout would write the
-                                                                         tree before finding that out. -->
+                                                                    <!-- A branch another worktree is
+                                                                         standing on cannot be checked out
+                                                                         here - git allows one worktree per
+                                                                         branch - so this row opens that
+                                                                         worktree instead. -->
                                                                     <Button Classes="rowButton"
                                                                             Click="OnBranchRowClick"
-                                                                            IsEnabled="{Binding !IsCheckedOutElsewhere}"
                                                                             ToolTip.Tip="{Binding QualifiedName}"
                                                                             Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).SelectBranchCommand}"
                                                                             CommandParameter="{Binding}">
@@ -251,7 +310,7 @@
                                                                                     </Border>
                                                                                     <Border Classes="chip" Padding="6,1"
                                                                                             IsVisible="{Binding IsCheckedOutElsewhere}">
-                                                                                        <TextBlock Classes="muted" Text="In use" />
+                                                                                        <TextBlock Classes="muted" Text="Worktree" />
                                                                                     </Border>
                                                                                 </StackPanel>
                                                                                 <TextBlock Classes="muted"

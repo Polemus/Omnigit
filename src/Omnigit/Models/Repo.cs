@@ -56,7 +56,55 @@ public sealed class RepositoryInfo
 
     public string HeadShortSha => HeadSha.Length > 7 ? HeadSha[..7] : HeadSha;
 
+    /// <summary>
+    /// A linked worktree rather than the clone itself. It shares a remote with the main
+    /// working copy, so the sidebar would otherwise list two rows reading the same
+    /// owner/name with nothing to tell them apart.
+    /// </summary>
+    public bool IsWorktree { get; init; }
+
+    /// <summary>
+    /// The working directory of the clone this worktree belongs to. Empty for anything
+    /// that is not one.
+    /// </summary>
+    public string WorktreeOf { get; init; } = string.Empty;
+
     public string FullName => string.IsNullOrEmpty(Owner) ? Name : $"{Owner}/{Name}";
+
+    /// <summary>
+    /// What comes before the name in the sidebar: forge and owner, muted, so the bold
+    /// part is the repository itself. Two clones of one project read identically down to
+    /// here - the line underneath is what tells them apart.
+    /// </summary>
+    public string SidebarOrigin => string.IsNullOrEmpty(Owner)
+        ? $"{Host.Name}/"
+        : $"{Host.Name}/{Owner}/";
+
+    /// <summary>
+    /// Where the clone is, under the name. Home is written as <c>~</c>: the prefix is the
+    /// same on every row and spends the width that the distinguishing end of the path
+    /// needs.
+    /// </summary>
+    public string SidebarPath
+    {
+        get
+        {
+            var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+            return home.Length > 0 && LocalPath.StartsWith(home, StringComparison.Ordinal)
+                ? "~" + LocalPath[home.Length..]
+                : LocalPath;
+        }
+    }
+
+    /// <summary>
+    /// Hovering a sidebar row. Every row gives its path, because two rows can otherwise
+    /// read identically; a worktree also names the clone it belongs to, which is the
+    /// thing the icon and the detail line only hint at.
+    /// </summary>
+    public string SidebarTooltip => IsWorktree && WorktreeOf.Length > 0
+        ? $"Linked worktree of {WorktreeOf}\n{LocalPath}"
+        : LocalPath;
 
     /// <summary>
     /// Where this clone came from, for the line above the name in the picker. Owner and
@@ -103,12 +151,11 @@ public sealed class BranchInfo
     /// <summary>
     /// The working directory of the linked worktree standing on this branch, empty when
     /// none is. Git allows one worktree per branch, so this one cannot be checked out
-    /// here while that is true - and finding out by clicking is expensive, because the
-    /// checkout writes the tree before it discovers it cannot move HEAD.
+    /// here while that is true - the picker opens that worktree instead.
     /// </summary>
     public string CheckedOutIn { get; init; } = string.Empty;
 
-    /// <summary>True while another worktree has it, which is what makes it unselectable.</summary>
+    /// <summary>True while another worktree has it, which is what redirects the row.</summary>
     public bool IsCheckedOutElsewhere => CheckedOutIn.Length > 0;
 
     /// <summary>What git would call the ref: "origin/feature" for a remote-only branch.</summary>
@@ -116,12 +163,11 @@ public sealed class BranchInfo
         IsRemoteOnly && !string.IsNullOrEmpty(RemoteName) ? $"{RemoteName}/{Name}" : Name;
 
     /// <summary>
-    /// What the picker shows under the name: normally the last commit, and where the
-    /// branch is in use when it is - a disabled row draws no tooltip, so the reason has
-    /// to be on the row itself.
+    /// What the picker shows under the name: normally the last commit, and for a branch
+    /// another worktree holds, where clicking the row leads.
     /// </summary>
     public string PickerDetail =>
-        IsCheckedOutElsewhere ? $"Checked out in {CheckedOutIn}" : LastCommitSummary;
+        IsCheckedOutElsewhere ? $"Open {CheckedOutIn}" : LastCommitSummary;
 
     public string RelativeTime => TimeFormat.Relative(LastCommitAt);
 }

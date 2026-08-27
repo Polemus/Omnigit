@@ -410,11 +410,32 @@ public class BranchSwitchingTests
 
         var sidecar = branches.Single(b => b.Name == "sidecar");
         Assert.True(sidecar.IsCheckedOutElsewhere);
-        Assert.Equal(worktree, sidecar.CheckedOutIn.TrimEnd('/', '\\'));
+        Assert.Equal(worktree, sidecar.CheckedOutIn);
         Assert.Contains(worktree, sidecar.PickerDetail);
 
         // The branch you are standing on is not "in use" by somebody else.
         Assert.False(branches.Single(b => b.Name == start).IsCheckedOutElsewhere);
+    }
+
+    [Fact]
+    public void AWorktreeOpensAsARepositoryThatSaysItIsOne()
+    {
+        using var repo = RepoWithCommit();
+        var worktree = repo.AddWorktree("sidecar");
+
+        var opened = Git.OpenRepository(worktree);
+
+        // The sidebar lists it beside the clone it belongs to, and both read the same
+        // owner/name - the directory is the only thing that tells them apart.
+        Assert.True(opened.IsWorktree);
+        Assert.Equal(worktree, opened.LocalPath);
+        Assert.Equal(repo.Path, opened.WorktreeOf);
+        Assert.Contains(System.IO.Path.GetFileName(worktree), opened.SidebarPath);
+        Assert.Contains(repo.Path, opened.SidebarTooltip);
+
+        var clone = Git.OpenRepository(repo.Path);
+        Assert.False(clone.IsWorktree);
+        Assert.Equal(repo.Path, clone.SidebarTooltip);
     }
 
     [Fact]

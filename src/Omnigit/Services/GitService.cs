@@ -48,6 +48,7 @@ public sealed partial class GitService : IGitService
 
         var head = repo.Head;
         var standing = Standing(repo, head);
+        var clone = CloneBehindWorktree(repo);
 
         return new RepositoryInfo
         {
@@ -66,7 +67,30 @@ public sealed partial class GitService : IGitService
             HeadSha = head?.Tip?.Sha ?? string.Empty,
             Operation = ToOperation(repo.Info.CurrentOperation),
             ConflictCount = repo.Index.Conflicts.Count(),
+            IsWorktree = clone is not null,
+            WorktreeOf = clone ?? string.Empty,
         };
+    }
+
+    /// <summary>
+    /// The working directory of the clone this worktree belongs to, or null when the
+    /// repository is the clone itself.
+    /// </summary>
+    /// <remarks>
+    /// libgit2 exposes no worktree flag, but it puts a worktree's git directory at
+    /// <c>&lt;clone&gt;/.git/worktrees/&lt;name&gt;</c> - a shape nothing else produces,
+    /// and one that names the clone three levels up.
+    /// </remarks>
+    private static string? CloneBehindWorktree(Repository repo)
+    {
+        if (repo.Info.Path?.TrimEnd(Path.DirectorySeparatorChar, '/') is not { } gitDir)
+            return null;
+
+        var worktrees = new DirectoryInfo(gitDir).Parent;
+
+        return worktrees?.Name == "worktrees"
+            ? worktrees.Parent?.Parent?.FullName
+            : null;
     }
 
     /// <summary>
@@ -601,8 +625,10 @@ public sealed partial class GitService : IGitService
             {
                 using var linked = worktree.WorktreeRepository;
 
+                // libgit2 hands back a trailing separator; everything downstream compares
+                // this against a repository path or shows it to the user.
                 if (linked.Head.FriendlyName is { Length: > 0 } name)
-                    found[name] = linked.Info.WorkingDirectory;
+                    found[name] = linked.Info.WorkingDirectory.TrimEnd('/', '\\');
             }
             catch (LibGit2SharpException)
             {

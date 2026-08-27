@@ -1339,7 +1339,53 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
         }
 
+        // Git allows one worktree per branch, so this one cannot be checked out here
+        // while another is standing on it. That worktree is a working directory of its
+        // own, which is exactly what the sidebar is a list of - so the row goes there
+        // rather than being a dead end that names a path and does nothing.
+        if (branch.IsCheckedOutElsewhere)
+        {
+            await OpenWorktreeAsync(branch);
+            return;
+        }
+
         await BeginBranchSwitchAsync(branch.Name, create: false);
+    }
+
+    /// <summary>
+    /// Opens the linked worktree holding <paramref name="branch"/>, adding it to the
+    /// sidebar the first time. It is remembered like any other repository: having been
+    /// taken there once, finding it again should not mean going through the picker.
+    /// </summary>
+    private async Task OpenWorktreeAsync(BranchInfo branch)
+    {
+        var path = branch.CheckedOutIn;
+
+        var known = Repositories.FirstOrDefault(
+            r => string.Equals(r.LocalPath, path, StringComparison.Ordinal));
+
+        if (known is null)
+        {
+            await AddRepositoryPathAsync(path, persist: true);
+
+            // Read back rather than taken from the return: a repository discovered from
+            // a subdirectory resolves to its own root, which the add reports as already
+            // present by returning null.
+            known = Repositories.FirstOrDefault(
+                r => string.Equals(r.LocalPath, path, StringComparison.Ordinal));
+        }
+
+        if (known is null)
+        {
+            Log(ActivityLevel.Error,
+                $"{branch.Name} is checked out in {path}, which could not be opened.");
+            return;
+        }
+
+        IsRepositoryPickerOpen = false;
+        await OpenRepositoryAsync(known);
+
+        Log(ActivityLevel.Info, $"Opened the worktree holding {branch.Name}");
     }
 
     [RelayCommand]
@@ -2439,6 +2485,18 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         IsSettingsPageVisible = false;
         IsClonePageVisible = false;
+    }
+
+    /// <summary>
+    /// Straight to the accounts page, for the + menu. Signing in is the first thing a
+    /// new install needs and there is nothing else the menu can usefully offer until it
+    /// has happened.
+    /// </summary>
+    [RelayCommand]
+    private void AddAccount()
+    {
+        ShowSettings();
+        SettingsSection = 0;
     }
 
     [RelayCommand]

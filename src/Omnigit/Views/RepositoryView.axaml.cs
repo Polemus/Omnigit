@@ -10,6 +10,7 @@ public partial class RepositoryView : UserControl
 {
     public RepositoryView() => InitializeComponent();
 
+
     // Both lists want the same two things from a right-click, so they share the handlers
     // below and differ only in which flyout hangs off the ListBox.
 

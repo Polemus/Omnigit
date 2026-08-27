@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -107,18 +108,26 @@ public static class DesktopIntegration
         var target = Path.Combine(dataHome, "applications", $"{AppId}.desktop");
         var entry = Localise(File.ReadAllText(source), appImage);
 
+        // Icons first, and separately from the entry. The entry only names the
+        // AppImage, so a build whose artwork changed while its path did not produces
+        // an identical entry - and returning "already current" on that alone left the
+        // old picture installed for good, with a new icon in the AppImage that nothing
+        // would ever copy out of it.
+        var copied = CopyIcons(appDir, dataHome);
+
         // The mount point in APPDIR changes on every launch, so the entry can only
         // be compared against itself - not against anything under appDir.
-        if (File.Exists(target) && File.ReadAllText(target) == entry)
-            return new(DesktopIntegrationOutcome.AlreadyCurrent);
+        var entryCurrent = File.Exists(target) && File.ReadAllText(target) == entry;
 
-        var copied = CopyIcons(appDir, dataHome);
+        if (entryCurrent && copied == 0)
+            return new(DesktopIntegrationOutcome.AlreadyCurrent);
 
         Directory.CreateDirectory(Path.GetDirectoryName(target)!);
         File.WriteAllText(target, entry);
 
-        // Shells watch these directories, so nothing needs to be told. The cache is
-        // only a speed-up and is rebuilt from the files either way.
+        if (copied > 0)
+            RefreshIconCache(dataHome);
+
         return new(
             DesktopIntegrationOutcome.Installed,
             $"{target} and {copied} icon{(copied == 1 ? "" : "s")}");
@@ -127,9 +136,14 @@ public static class DesktopIntegration
     /// <summary>
     /// Copies the hicolor icons out of the AppDir into the user's icon theme, which
     /// is what makes the entry's <c>Icon=io.github.polemus.Omnigit</c> resolve to a
-    /// picture instead of falling back to the cog.
+    /// picture instead of falling back to the cog. Returns how many were actually
+    /// written - an icon already identical is left alone, so the count doubles as
+    /// "was anything out of date".
     /// </summary>
-    private static int CopyIcons(string appDir, string dataHome)
+    /// <remarks>
+    /// Internal so the refresh can be tested without a mounted AppImage.
+    /// </remarks>
+    internal static int CopyIcons(string appDir, string dataHome)
     {
         var from = Path.Combine(appDir, "usr", "share", "icons");
         if (!Directory.Exists(from))
@@ -139,12 +153,73 @@ public static class DesktopIntegration
         foreach (var file in Directory.EnumerateFiles(from, $"{AppId}.*", SearchOption.AllDirectories))
         {
             var to = Path.Combine(dataHome, "icons", Path.GetRelativePath(from, file));
+
+            if (SameContents(file, to))
+                continue;
+
             Directory.CreateDirectory(Path.GetDirectoryName(to)!);
             File.Copy(file, to, overwrite: true);
             copied++;
         }
 
         return copied;
+    }
+
+    /// <summary>
+    /// Compared by content rather than by timestamp: an icon copied out of a squashfs
+    /// mount carries whatever mtime the image was built with, and a rebuild of the same
+    /// version can leave that unchanged while the pixels differ.
+    /// </summary>
+    private static bool SameContents(string source, string target)
+    {
+        var a = new FileInfo(source);
+        var b = new FileInfo(target);
+
+        if (!b.Exists || a.Length != b.Length)
+            return false;
+
+        return File.ReadAllBytes(source).AsSpan().SequenceEqual(File.ReadAllBytes(target));
+    }
+
+    /// <summary>
+    /// Rebuilds <c>hicolor/icon-theme.cache</c>, best effort.
+    /// </summary>
+    /// <remarks>
+    /// Shells watch these directories, so a new icon file is noticed on its own - but
+    /// only where there is no cache. GTK reads that index in preference to scanning,
+    /// and overwriting an icon in place changes neither the file count nor the
+    /// directory's timestamp, so a cache written before the change stays valid and
+    /// keeps serving the old picture indefinitely. That is not a speed-up any more, so
+    /// the cache is rebuilt whenever an icon actually changed.
+    ///
+    /// Nothing here is required for correctness on a machine with no cache at all,
+    /// which is why every failure is ignored: the tool may not be installed, and the
+    /// icons are already written by the time it runs.
+    /// </remarks>
+    private static void RefreshIconCache(string dataHome)
+    {
+        var hicolor = Path.Combine(dataHome, "icons", "hicolor");
+
+        try
+        {
+            using var process = Process.Start(new ProcessStartInfo("gtk-update-icon-cache")
+            {
+                ArgumentList = { "--force", "--ignore-theme-index", hicolor },
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+            });
+
+            // It writes one file and exits. Waiting keeps it from outliving a startup
+            // that is otherwise finished, and the timeout means a wedged one cannot
+            // hold the launch open.
+            process?.WaitForExit(TimeSpan.FromSeconds(5));
+        }
+        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or IOException
+                                       or UnauthorizedAccessException or InvalidOperationException)
+        {
+            // No such tool, or it would not run. The files are written either way.
+        }
     }
 
     private static string DataHome()
