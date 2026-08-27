@@ -31,20 +31,20 @@
     },
     {
         "type": "file",
-        "url": "https://api.nuget.org/v3-flatcontainer/avalonia.controls.colorpicker/12.0.0/avalonia.controls.colorpicker.12.0.0.nupkg",
-        "sha512": "1a3d2c972dcd4889daebb4fae629132e4f066578f90a5ea08bbe6a8f3bbf6e04b13ae6e3710bbc92439273bfc5b00af66c51c6c3a68b0d0e079359d85579c9a3",
+        "url": "https://api.nuget.org/v3-flatcontainer/avalonia.controls.colorpicker/12.1.0/avalonia.controls.colorpicker.12.1.0.nupkg",
+        "sha512": "90bff9176388512b54aa52de5a002f1f2b1f177b5916525ce9f2defb71540c2d938cdf22fedd790a1a945f609c2665e1d70e062bce4b0017ef54cec236150f93",
         "dest": "nuget-sources",
-        "dest-filename": "avalonia.controls.colorpicker.12.0.0.nupkg",
+        "dest-filename": "avalonia.controls.colorpicker.12.1.0.nupkg",
         "only-arches": [
             "aarch64"
         ]
     },
     {
         "type": "file",
-        "url": "https://api.nuget.org/v3-flatcontainer/avalonia.controls.datagrid/12.0.0/avalonia.controls.datagrid.12.0.0.nupkg",
-        "sha512": "ea81fff4bf1797c5e62d3087ca1c12ae7c9f936d61a7cfcb8d9fe7e2b2040a618fc6506ec9092e95d78af412bdacf6102711b778015063074c7fab65ba5295ce",
+        "url": "https://api.nuget.org/v3-flatcontainer/avalonia.controls.datagrid/12.1.0/avalonia.controls.datagrid.12.1.0.nupkg",
+        "sha512": "cf0718fa6721f664138013819cc9662eb7cb3018b818af9029ace193a11226abf914613b128dc560de7e1848320584e4b04f1280ecf13b7747c7bc787529d45d",
         "dest": "nuget-sources",
-        "dest-filename": "avalonia.controls.datagrid.12.0.0.nupkg",
+        "dest-filename": "avalonia.controls.datagrid.12.1.0.nupkg",
         "only-arches": [
             "aarch64"
         ]
@@ -111,10 +111,10 @@
     },
     {
         "type": "file",
-        "url": "https://api.nuget.org/v3-flatcontainer/avalonia.remote.protocol/12.0.0/avalonia.remote.protocol.12.0.0.nupkg",
-        "sha512": "fc6c79dba60015941eed3bb452cea57aa5b3fc5a0b1ffba5540d5876f995a9ee099cbb11078e69b51a7b907c75266f4c56de6ea7edcf52a5e28b24c64119f739",
+        "url": "https://api.nuget.org/v3-flatcontainer/avalonia.remote.protocol/12.1.0/avalonia.remote.protocol.12.1.0.nupkg",
+        "sha512": "d364634892d0bd647b73e39b322d74a05544abbd5f53a463195506979655b0bd79980c2329c0c235e7fa8c0fcda246a75720824ca751190cab16803b6232dc84",
         "dest": "nuget-sources",
-        "dest-filename": "avalonia.remote.protocol.12.0.0.nupkg",
+        "dest-filename": "avalonia.remote.protocol.12.1.0.nupkg",
         "only-arches": [
             "aarch64"
         ]
@@ -131,10 +131,10 @@
     },
     {
         "type": "file",
-        "url": "https://api.nuget.org/v3-flatcontainer/avalonia.skia/12.0.0/avalonia.skia.12.0.0.nupkg",
-        "sha512": "666817fe618d1fe0b1e4d34993baa00a6206d9fdd9b2021913103a3207e9328046d2a5b126d0ea309e0f6ff60b50f34fe9a1b1b8f948fad35e93d50782a10b43",
+        "url": "https://api.nuget.org/v3-flatcontainer/avalonia.skia/12.1.0/avalonia.skia.12.1.0.nupkg",
+        "sha512": "8b48d8359e7b01799380e75241f76d49fbc6e000595a8b6d2695b332adbd4ad59e0692e6a7d60aa27248e82361d0679f5bff1645451da180b96cc5820681e4fb",
         "dest": "nuget-sources",
-        "dest-filename": "avalonia.skia.12.0.0.nupkg",
+        "dest-filename": "avalonia.skia.12.1.0.nupkg",
         "only-arches": [
             "aarch64"
         ]
@@ -201,10 +201,10 @@
     },
     {
         "type": "file",
-        "url": "https://api.nuget.org/v3-flatcontainer/fluentavaloniaui/3.0.2/fluentavaloniaui.3.0.2.nupkg",
-        "sha512": "b454c022018ec4af03ae22eaa326353dc99319e15e27b89ea42f749de7ef860877ddee18a590ec55e0efead7a048ce8d73ff47b805e9f0f387a741b6b9691946",
+        "url": "https://api.nuget.org/v3-flatcontainer/fluentavaloniaui/3.1.0/fluentavaloniaui.3.1.0.nupkg",
+        "sha512": "f0314eab31fa875ea3816c876606cf1d54082956df79af540b611b17e1bd7eb7996d53344266e08fffd4a09563e9862e8f02b6c28b5592da9d63d81e35886314",
         "dest": "nuget-sources",
-        "dest-filename": "fluentavaloniaui.3.0.2.nupkg",
+        "dest-filename": "fluentavaloniaui.3.1.0.nupkg",
         "only-arches": [
             "aarch64"
         ]
@@ -275,16 +275,6 @@
         "sha512": "12d41802ea5cd506baf7a0f1e44365bdffab3e664e3d6866c66c0578a5afe33507b581b899e2ffcc94c6928439dfc42b88d66fda162998134d470fe8e2cda01e",
         "dest": "nuget-sources",
         "dest-filename": "libgit2sharp.nativebinaries.2.0.324.nupkg",
-        "only-arches": [
-            "aarch64"
-        ]
-    },
-    {
-        "type": "file",
-        "url": "https://api.nuget.org/v3-flatcontainer/microcom.runtime/0.11.5/microcom.runtime.0.11.5.nupkg",
-        "sha512": "cc3e7e7b3877c506085cd9a6a7fc4f434e7e5ed8f4036d0713777a9b1bd5acb63d772687b54bd9c771538b7d7edb1e7e7e463c1210180dc9f586de3c62fd0481",
-        "dest": "nuget-sources",
-        "dest-filename": "microcom.runtime.0.11.5.nupkg",
         "only-arches": [
             "aarch64"
         ]
