@@ -52,7 +52,14 @@ public partial class App : Application
 
             var http = new System.Net.Http.HttpClient { Timeout = System.TimeSpan.FromSeconds(30) };
             var credentials = CredentialStoreFactory.Create();
-            var log = new ActivityLog();
+
+            // The console is a window on the session; the file is the record of it, and
+            // the only one that survives the app being closed by the user or by a crash.
+            var logFile = new LogFile();
+            var log = new ActivityLog(logFile);
+
+            if (logFile.IsWriting)
+                log.Write(ActivityLevel.Trace, $"Logging to {logFile.Path}");
 
             // Before anything can reach a remote. On Windows this puts git's HTTPS on
             // .NET's stack instead of libgit2's, which cannot survive TLS 1.3 - see

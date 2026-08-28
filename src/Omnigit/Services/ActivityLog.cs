@@ -59,11 +59,27 @@ public interface IActivityLog
 /// </remarks>
 public sealed class ActivityLog : IActivityLog
 {
-    private const int MaxEntries = 500;
+    /// <summary>
+    /// How much of the session the console holds. It is a bound collection kept for the
+    /// life of the process and laid out on screen, so it cannot grow forever - but 500
+    /// was too tight to be the only copy of anything: a chatty clone would evict every
+    /// line that explained itself long before anyone came to read it. The file below has
+    /// no such limit, which is what lets this be a window rather than the record.
+    /// </summary>
+    private const int MaxEntries = 5000;
 
     private readonly ObservableCollection<ActivityEntry> _entries = [];
+    private readonly LogFile? _file;
 
-    public ActivityLog() => Entries = new ReadOnlyObservableCollection<ActivityEntry>(_entries);
+    /// <param name="file">
+    /// Where the same lines are kept across restarts. Null keeps the log in memory only,
+    /// which is what the tests want and what an opt-out gives.
+    /// </param>
+    public ActivityLog(LogFile? file = null)
+    {
+        _file = file;
+        Entries = new ReadOnlyObservableCollection<ActivityEntry>(_entries);
+    }
 
     public ReadOnlyObservableCollection<ActivityEntry> Entries { get; }
 
@@ -75,6 +91,11 @@ public sealed class ActivityLog : IActivityLog
             return;
 
         var entry = new ActivityEntry { Level = level, Message = message, Detail = detail };
+
+        // On whichever thread logged, before the hop to the UI one: file writes have no
+        // business on the thread drawing the window, and a line written by the thread
+        // that produced it is one the app cannot lose on its way to being shown.
+        _file?.Write(level, message, detail);
 
         if (Dispatcher.UIThread.CheckAccess())
             Append(entry);
