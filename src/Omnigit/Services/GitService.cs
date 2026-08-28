@@ -1169,6 +1169,9 @@ public sealed partial class GitService : IGitService
             OnPackBuilderProgress = (_, current, _) => { pushed = current; return true; },
             OnPushTransferProgress = (current, total, _) =>
             {
+                if (current > 0)
+                    probe.TransferBegan = true;
+
                 if (trace is not null && total > 0 && (current == total || current % 50 == 0))
                     trace($"  {current}/{total} objects sent");
 
@@ -1195,6 +1198,13 @@ public sealed partial class GitService : IGitService
         public bool WasAsked { get; set; }
         public bool HadCredentials { get; init; }
         public required string Host { get; init; }
+
+        /// <summary>
+        /// Set once objects are moving. Authentication happens before the first byte, so
+        /// a failure after this point is never a rejected token however the callback was
+        /// used — see <see cref="RunNetwork"/>.
+        /// </summary>
+        public bool TransferBegan { get; set; }
     }
 
     /// <param name="prune">
@@ -1216,6 +1226,9 @@ public sealed partial class GitService : IGitService
             Prune = prune,
             OnTransferProgress = progress =>
             {
+                if (progress.ReceivedObjects > 0)
+                    probe.TransferBegan = true;
+
                 if (trace is null || progress.TotalObjects == 0)
                     return true;
 
@@ -1279,6 +1292,15 @@ public sealed partial class GitService : IGitService
     /// appropriate mechanism for credentials") says nothing useful, and turning an
     /// everyday signed-out state into an exception makes the debugger halt on it during
     /// every development run.
+    ///
+    /// <b>The credentials callback firing does not mean they were refused.</b> It fires
+    /// on every private remote, including the ones that then work perfectly, so treating
+    /// it alone as proof of an auth failure re-labelled every later fault as a rejected
+    /// token: a clone of a large repository that died three quarters of the way through
+    /// checkout told the user to sign in again, and threw the real message away with the
+    /// half-written directory. Authentication is settled before the first object moves,
+    /// so once <see cref="AuthProbe.TransferBegan"/> is set the server has accepted us
+    /// and whatever went wrong afterwards is reported in its own words.
     /// </remarks>
     private static SyncResult? RunNetwork(AuthProbe probe, Action operation)
     {
@@ -1287,9 +1309,10 @@ public sealed partial class GitService : IGitService
             operation();
             return null;
         }
-        catch (LibGit2SharpException ex) when (probe.WasAsked || IsAuthFailure(ex.Message))
+        catch (LibGit2SharpException ex) when (!probe.TransferBegan
+                                               && (probe.WasAsked || IsAuthFailure(ex.Message)))
         {
-            // The callback fired, so the server wanted credentials. Which message is
+            // The server wanted credentials and we never got past that. Which message is
             // right depends on whether we had any to give it.
             return probe.HadCredentials
                 ? new SyncResult(SyncOutcome.CredentialsRejected,
@@ -1301,8 +1324,35 @@ public sealed partial class GitService : IGitService
         }
         catch (LibGit2SharpException ex)
         {
-            return new SyncResult(SyncOutcome.Failed, $"{probe.Host}: {ex.Message}");
+            return new SyncResult(SyncOutcome.Failed, $"{probe.Host}: {ex.Message}{Hint(ex.Message)}");
         }
+    }
+
+    /// <summary>
+    /// Advice appended to a libgit2 message that names a cause the user can do something
+    /// about, and says nothing when it doesn't.
+    /// </summary>
+    /// <remarks>
+    /// Windows is where this earns itself. A path over 260 characters fails during
+    /// checkout rather than at the network, so the repository clones in full and then
+    /// reports a file it could not write - which reads as a broken app unless the setting
+    /// that lifts the limit is named. libgit2 honours <c>core.longpaths</c>, and Windows
+    /// itself needs the registry switch as well, so both are given.
+    /// </remarks>
+    private static string Hint(string message)
+    {
+        if (!OperatingSystem.IsWindows())
+            return string.Empty;
+
+        if (message.Contains("too long", StringComparison.OrdinalIgnoreCase)
+            || message.Contains("path is too long", StringComparison.OrdinalIgnoreCase))
+        {
+            return " — a path in this repository is longer than Windows allows by default. "
+                   + "Run \"git config --global core.longpaths true\", enable Win32 long paths "
+                   + "in Windows, and clone somewhere with a shorter path.";
+        }
+
+        return string.Empty;
     }
 
     private static Remote? FindRemote(Repository repo)
