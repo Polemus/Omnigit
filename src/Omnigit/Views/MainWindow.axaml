@@ -410,8 +410,8 @@
                     <Button Classes="iconButton" Click="OnToggleTheme" ToolTip.Tip="Toggle theme">
                         <Path Classes="icon" Data="{DynamicResource IconMoon}" x:Name="ThemeIcon" />
                     </Button>
-                    <Button Classes="iconButton" Command="{Binding ShowSettingsCommand}"
-                            ToolTip.Tip="Settings">
+                    <Button Classes="iconButton" Command="{Binding ToggleSettingsCommand}"
+                            ToolTip.Tip="{Binding SettingsButtonLabel}">
                         <!-- The gear, with a dot over its corner when there is a newer
                              Omnigit. Settings is where the update lives, so this is the
                              one control in the header that can carry the news. -->

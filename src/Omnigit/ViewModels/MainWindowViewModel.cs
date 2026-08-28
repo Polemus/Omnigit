@@ -257,10 +257,6 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     private const int GraphLimit = 400;
 
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(GraphButtonLabel))]
-    public partial bool IsGraphPageVisible { get; set; }
-
     /// <summary>What the header button would do if pressed now.</summary>
     public string GraphButtonLabel => IsGraphPageVisible ? "Hide the commit graph" : "Commit graph";
 
@@ -304,14 +300,17 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (IsGraphPageVisible)
         {
-            IsGraphPageVisible = false;
+            ActivePage = Page.Repository;
             return;
         }
 
         if (SelectedRepository is not { } repository)
             return;
 
-        IsGraphPageVisible = true;
+        // No return address recorded, unlike settings and clone: the graph is another
+        // view of the repository rather than an interruption to what you were doing, so
+        // it swaps with the repository and goes back to it.
+        ActivePage = Page.Graph;
         IsGraphLoading = true;
         OnPropertyChanged(nameof(GraphTitle));
 
@@ -340,7 +339,7 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void CloseGraph() => IsGraphPageVisible = false;
+    private void CloseGraph() => ActivePage = Page.Repository;
 
     [RelayCommand]
     private async Task CopyGraphCommitShaAsync()
@@ -407,10 +406,52 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool IsChangesTab => SelectedTabIndex == 0;
     public bool IsHistoryTab => SelectedTabIndex == 1;
 
-    // ---- Browse and clone --------------------------------------------------
+    // ---- Which page is showing ---------------------------------------------
 
+    /// <summary>The four things the content area can be.</summary>
+    public enum Page
+    {
+        Repository,
+        Clone,
+        Settings,
+        Graph,
+    }
+
+    /// <summary>
+    /// One value rather than a bool per page, so two pages showing at once stops being
+    /// something that can be expressed.
+    /// </summary>
+    /// <remarks>
+    /// It used to be three independent bools, and nothing kept them apart: ShowSettings
+    /// cleared clone but not graph, and neither ShowClone nor ShowGraph cleared anything.
+    /// The pages are stacked in one Panel, where the last visible child draws on top - so
+    /// opening settings over the graph set the flag and left the graph painted over it,
+    /// and the gear looked dead. Three methods each remembering to clear the other two is
+    /// a convention; this is an invariant, and the next page added gets it for free.
+    /// </remarks>
     [ObservableProperty]
-    public partial bool IsClonePageVisible { get; set; }
+    [NotifyPropertyChangedFor(nameof(IsClonePageVisible))]
+    [NotifyPropertyChangedFor(nameof(IsSettingsPageVisible))]
+    [NotifyPropertyChangedFor(nameof(IsGraphPageVisible))]
+    [NotifyPropertyChangedFor(nameof(GraphButtonLabel))]
+    [NotifyPropertyChangedFor(nameof(SettingsButtonLabel))]
+    public partial Page ActivePage { get; set; }
+
+    /// <summary>
+    /// Where closing settings or the clone page goes back to. Depth of one on purpose:
+    /// "where was I" only ever has one answer, and a history stack would be answering a
+    /// question nobody asks.
+    /// </summary>
+    private Page _returnTo = Page.Repository;
+
+    public bool IsClonePageVisible => ActivePage == Page.Clone;
+    public bool IsSettingsPageVisible => ActivePage == Page.Settings;
+    public bool IsGraphPageVisible => ActivePage == Page.Graph;
+
+    /// <summary>What the header's gear would do if pressed now.</summary>
+    public string SettingsButtonLabel => IsSettingsPageVisible ? "Close settings" : "Settings";
+
+    // ---- Browse and clone --------------------------------------------------
 
     /// <summary>What the list is filtered down to. Rebuilt rather than filtered in the view.</summary>
     public ObservableCollection<RemoteRepositoryViewModel> RemoteRepositories { get; } = [];
@@ -434,9 +475,6 @@ public partial class MainWindowViewModel : ViewModelBase
         : "Nothing matches that filter.";
 
     // ---- Settings ----------------------------------------------------------
-
-    [ObservableProperty]
-    public partial bool IsSettingsPageVisible { get; set; }
 
     /// <summary>
     /// Which section of settings is showing. An int rather than an enum so the tab rail
@@ -2451,14 +2489,14 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private async Task ShowCloneAsync()
     {
-        IsClonePageVisible = true;
+        GoTo(Page.Clone);
 
         if (_allRemotes.Count == 0)
             await LoadRemoteRepositoriesAsync();
     }
 
     [RelayCommand]
-    private void CloseClone() => IsClonePageVisible = false;
+    private void CloseClone() => GoBack();
 
     /// <summary>
     /// Asks every signed-in account what it can see. Sites are queried in parallel
@@ -2589,7 +2627,9 @@ public partial class MainWindowViewModel : ViewModelBase
 
         var added = await AddRepositoryPathAsync(target, persist: true);
 
-        IsClonePageVisible = false;
+        // Straight to the repository, not back to whatever the clone page covered: the
+        // point of the clone was the repository, and it is about to be opened.
+        ShowRepository();
 
         if (added is not null)
             await OpenRepositoryAsync(added);
@@ -2598,19 +2638,59 @@ public partial class MainWindowViewModel : ViewModelBase
         await LoadRemoteRepositoriesAsync();
     }
 
+    /// <summary>
+    /// Opens settings, and does nothing if it is already open. Deliberately not the
+    /// toggle: the + menu's "add a hosting site" row comes through here, and a toggle
+    /// would close settings at the moment that menu asked to open it.
+    /// </summary>
     [RelayCommand]
     private void ShowSettings()
     {
+        if (IsSettingsPageVisible)
+            return;
+
         RefreshHostEntries();
-        IsClonePageVisible = false;
-        IsSettingsPageVisible = true;
+        GoTo(Page.Settings);
     }
 
+    /// <summary>
+    /// The header's gear. Settings is an interruption rather than a destination, so
+    /// closing it puts back whatever it covered - press it while reading the graph and
+    /// press it again, and the graph is still there.
+    /// </summary>
+    [RelayCommand]
+    private void ToggleSettings()
+    {
+        if (IsSettingsPageVisible)
+            GoBack();
+        else
+            ShowSettings();
+    }
+
+    /// <summary>
+    /// Settings' own "← Back to repository", which says where it goes. Forgets the
+    /// return address with it - the user asked for the repository, not for whatever
+    /// they had been looking at before.
+    /// </summary>
     [RelayCommand]
     private void ShowRepository()
     {
-        IsSettingsPageVisible = false;
-        IsClonePageVisible = false;
+        _returnTo = Page.Repository;
+        ActivePage = Page.Repository;
+    }
+
+    /// <summary>Opens a page that can be stepped out of, remembering what it covered.</summary>
+    private void GoTo(Page page)
+    {
+        _returnTo = ActivePage;
+        ActivePage = page;
+    }
+
+    /// <summary>Uncovers whatever the current page was opened over.</summary>
+    private void GoBack()
+    {
+        ActivePage = _returnTo;
+        _returnTo = Page.Repository;
     }
 
     /// <summary>
