@@ -1295,36 +1295,56 @@ public sealed partial class GitService : IGitService
     ///
     /// <b>The credentials callback firing does not mean they were refused.</b> It fires
     /// on every private remote, including the ones that then work perfectly, so treating
-    /// it alone as proof of an auth failure re-labelled every later fault as a rejected
-    /// token: a clone of a large repository that died three quarters of the way through
-    /// checkout told the user to sign in again, and threw the real message away with the
-    /// half-written directory. Authentication is settled before the first object moves,
-    /// so once <see cref="AuthProbe.TransferBegan"/> is set the server has accepted us
-    /// and whatever went wrong afterwards is reported in its own words.
+    /// it alone as proof of an auth failure re-labelled every other fault as a rejected
+    /// token. Against one Gitea server every operation - the background fetch, two clones
+    /// that died in the first second and one that died at 90% - said the token had
+    /// expired and told the user to sign in again, while the token was fine and libgit2
+    /// was failing on TLS. So the message decides: what we had to give the server only
+    /// chooses the wording, and anything unrecognised is reported in libgit2's own words.
+    ///
+    /// <see cref="AuthProbe.WasAsked"/> still stands in for a message with no account
+    /// signed in, where "you need to sign in" is true whatever else went wrong: the
+    /// server demanded credentials and there were none to give it.
     /// </remarks>
     private static SyncResult? RunNetwork(AuthProbe probe, Action operation)
     {
         try
         {
+            // Anything left from an earlier call would be attached to this one's failure.
+            GitHttpTransport.TakeLastError();
+
             operation();
             return null;
         }
-        catch (LibGit2SharpException ex) when (!probe.TransferBegan
-                                               && (probe.WasAsked || IsAuthFailure(ex.Message)))
-        {
-            // The server wanted credentials and we never got past that. Which message is
-            // right depends on whether we had any to give it.
-            return probe.HadCredentials
-                ? new SyncResult(SyncOutcome.CredentialsRejected,
-                    $"{probe.Host} rejected the saved credentials. The token may have expired "
-                    + "or lost its scopes — sign in again on the Accounts screen.")
-                : new SyncResult(SyncOutcome.NotSignedIn,
-                    $"{probe.Host} needs you to be signed in. Open the Accounts screen and add "
-                    + $"an account for {probe.Host}, then try again.");
-        }
         catch (LibGit2SharpException ex)
         {
-            return new SyncResult(SyncOutcome.Failed, $"{probe.Host}: {ex.Message}{Hint(ex.Message)}");
+            // LibGit2Sharp's read and write entry points drop the message of anything
+            // thrown inside them - only its Action entry point passes one on - so on
+            // Windows the useful half of a transport failure is the one GitHttpTransport
+            // kept for itself. It has to be folded in before anything is decided, since
+            // whether this was an authentication failure is read from the message.
+            var detail = GitHttpTransport.TakeLastError();
+
+            var message = detail is null || ex.Message.Contains(detail, StringComparison.Ordinal)
+                ? ex.Message
+                : $"{ex.Message} — {detail}";
+
+            if (!probe.TransferBegan && probe.HadCredentials && IsAuthFailure(message))
+            {
+                return new SyncResult(SyncOutcome.CredentialsRejected,
+                    $"{probe.Host} rejected the saved credentials. The token may have expired "
+                    + "or lost its scopes — sign in again on the Accounts screen.");
+            }
+
+            if (!probe.TransferBegan && !probe.HadCredentials
+                && (probe.WasAsked || IsAuthFailure(message)))
+            {
+                return new SyncResult(SyncOutcome.NotSignedIn,
+                    $"{probe.Host} needs you to be signed in. Open the Accounts screen and add "
+                    + $"an account for {probe.Host}, then try again.");
+            }
+
+            return new SyncResult(SyncOutcome.Failed, $"{probe.Host}: {message}{Hint(message)}");
         }
     }
 
@@ -1333,19 +1353,42 @@ public sealed partial class GitService : IGitService
     /// about, and says nothing when it doesn't.
     /// </summary>
     /// <remarks>
-    /// Windows is where this earns itself. A path over 260 characters fails during
-    /// checkout rather than at the network, so the repository clones in full and then
-    /// reports a file it could not write - which reads as a broken app unless the setting
-    /// that lifts the limit is named. libgit2 honours <c>core.longpaths</c>, and Windows
-    /// itself needs the registry switch as well, so both are given.
+    /// Windows is where this earns itself, twice.
+    ///
+    /// A path over 260 characters fails during checkout rather than at the network, so
+    /// the repository clones in full and then reports a file it could not write - which
+    /// reads as a broken app unless the setting that lifts the limit is named. libgit2
+    /// honours <c>core.longpaths</c>, and Windows itself needs the registry switch as
+    /// well, so both are given.
+    ///
+    /// "could not decrypt tls message" is libgit2's, from its Schannel stream, and it is
+    /// an upstream bug rather than anything about this repository or this token.
+    /// <c>connect_context</c> asks Windows for <c>SP_PROT_TLS1_3_CLIENT</c> and the read
+    /// loop then treats every <c>DecryptMessage</c> result that isn't <c>SEC_E_OK</c>,
+    /// <c>SEC_E_CONTEXT_EXPIRED</c> or <c>SEC_E_INCOMPLETE_MESSAGE</c> as fatal -
+    /// <c>SEC_I_RENEGOTIATE</c> included, which is how Schannel hands back TLS 1.3's
+    /// post-handshake traffic (a session ticket, a key update). Both halves are still
+    /// there on libgit2's main branch, so upgrading LibGit2Sharp does not fix it and
+    /// there is no runtime switch: the native library we ship is built without WinHTTP,
+    /// so Schannel is the only HTTPS it has. Whether it fires depends on when the server
+    /// sends one of those messages, which is why the same clone dies instantly, or at
+    /// 90%, or occasionally not at all.
     /// </remarks>
     private static string Hint(string message)
     {
-        if (!OperatingSystem.IsWindows())
-            return string.Empty;
+        // Schannel is Windows' own TLS, so this cannot come from anywhere else - but the
+        // check keeps the advice off a platform it would be nonsense on.
+        if (OperatingSystem.IsWindows()
+            && message.Contains("decrypt tls message", StringComparison.OrdinalIgnoreCase))
+        {
+            return " — a bug in libgit2's TLS 1.3 support on Windows, not a problem with "
+                   + "your sign-in or this repository. Trying again often gets through, and "
+                   + "git on the command line is unaffected; the server side fix is to stop "
+                   + "offering TLS 1.3 on that host.";
+        }
 
-        if (message.Contains("too long", StringComparison.OrdinalIgnoreCase)
-            || message.Contains("path is too long", StringComparison.OrdinalIgnoreCase))
+        if (OperatingSystem.IsWindows()
+            && message.Contains("too long", StringComparison.OrdinalIgnoreCase))
         {
             return " — a path in this repository is longer than Windows allows by default. "
                    + "Run \"git config --global core.longpaths true\", enable Win32 long paths "
@@ -1441,11 +1484,22 @@ public sealed partial class GitService : IGitService
     private static SyncResult NoRemote(string what)
         => new(SyncOutcome.NoRemote, $"This repository has no remote to {what}.");
 
+    /// <summary>
+    /// Whether libgit2's own message says this was an authentication failure.
+    /// </summary>
+    /// <remarks>
+    /// "authenticat" rather than "authentication", so that libgit2's SSH wording
+    /// ("failed to authenticate SSH session") is caught alongside the HTTP one. This is
+    /// now the only thing that can produce "rejected the saved credentials", so a
+    /// spelling missing from here shows the user libgit2's message instead - wordier,
+    /// but never a working token accused of having expired.
+    /// </remarks>
     private static bool IsAuthFailure(string message)
-        => message.Contains("authentication", StringComparison.OrdinalIgnoreCase)
+        => message.Contains("authenticat", StringComparison.OrdinalIgnoreCase)
            || message.Contains("401", StringComparison.Ordinal)
            || message.Contains("403", StringComparison.Ordinal)
-           || message.Contains("credentials", StringComparison.OrdinalIgnoreCase);
+           || message.Contains("unauthorized", StringComparison.OrdinalIgnoreCase)
+           || message.Contains("credential", StringComparison.OrdinalIgnoreCase);
 
     private static string Short(Commit? commit)
         => commit?.Sha is { Length: >= 7 } sha ? sha[..7] : "HEAD";

@@ -54,6 +54,12 @@ public partial class App : Application
             var credentials = CredentialStoreFactory.Create();
             var log = new ActivityLog();
 
+            // Before anything can reach a remote. On Windows this puts git's HTTPS on
+            // .NET's stack instead of libgit2's, which cannot survive TLS 1.3 - see
+            // GitHttpTransport for what it works around and how to tell when it can go.
+            if (GitHttpTransport.RegisterForWindows() is { } transport)
+                log.Write(ActivityLevel.Info, transport);
+
             var viewModel = new MainWindowViewModel(
                 new GitService(),
                 new RepositoryStore(),
