@@ -813,53 +813,36 @@
 
                 <Border Grid.Row="0" Background="{DynamicResource SurfaceBackground}"
                         BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0,1,0,0">
-                    <!-- A list rather than a run of text: an error nobody can copy is one
-                         they have to retype into a message to us, and the unit worth
-                         copying is the line. Multiple, so ctrl- and shift-click pick out
-                         a set of them, and Ctrl+C or the right-click menu takes the lot.
-                         Same right-click handling as the changed files: the row under the
-                         pointer is selected first, unless it is already part of a
-                         selection, which is left alone. -->
-                    <ListBox x:Name="LogList" Classes="plain logList"
-                             ItemsSource="{Binding LogEntries}"
-                             SelectionMode="Multiple"
-                             SelectedItems="{Binding SelectedLogEntries}"
-                             ContextRequested="OnLogContextRequested">
-                        <ListBox.KeyBindings>
-                            <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyLogCommand}" />
-                        </ListBox.KeyBindings>
-                        <ListBox.ContextFlyout>
-                            <MenuFlyout Placement="Pointer">
-                                <MenuItem Header="{Binding CopyLogLabel}"
-                                          Command="{Binding CopyLogCommand}" />
-                            </MenuFlyout>
-                        </ListBox.ContextFlyout>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate x:DataType="svc:ActivityEntry">
-                                <StackPanel Margin="14,1">
-                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                                        <TextBlock Grid.Column="0" Classes="mono"
-                                                   Foreground="{DynamicResource DiffGutterText}"
-                                                   Text="{Binding Timestamp}" />
-                                        <TextBlock Grid.Column="1"
-                                                   Classes="mono logLine"
-                                                   Classes.trace="{Binding IsTrace}"
-                                                   Classes.success="{Binding IsSuccess}"
-                                                   Classes.warning="{Binding IsWarning}"
-                                                   Classes.error="{Binding IsError}"
-                                                   TextWrapping="Wrap"
-                                                   Text="{Binding Message}" />
-                                    </Grid>
-                                    <TextBlock Classes="mono" FontSize="11"
-                                               Margin="72,2,0,6"
-                                               Foreground="{DynamicResource TextMuted}"
-                                               TextWrapping="Wrap"
-                                               IsVisible="{Binding HasDetail}"
-                                               Text="{Binding Detail}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                    <!-- One text surface, not a row per line: a selection is started
+                         wherever the pointer goes down and dragged to wherever it comes
+                         up, across as many lines as that covers - which is what every
+                         terminal and log viewer does. Rows can only be selected whole,
+                         which is not how anybody copies half of one line and the start
+                         of the next. The colours survive because each line is a Run of
+                         its own, built in the code-behind; Inlines cannot be bound. -->
+                    <!-- The padding is the text block's own, and its background is
+                         Transparent: a control with no background is not hit-tested at
+                         all, and padding on the ScrollViewer would be dead space
+                         belonging to nothing. Between those and the MinHeight the
+                         code-behind keeps level with the viewport, every pixel of the
+                         console is somewhere a drag can start - including the empty
+                         space above the first line and below the last. -->
+                    <ScrollViewer x:Name="LogScroller">
+                        <SelectableTextBlock x:Name="LogText"
+                                             Classes="mono"
+                                             TextWrapping="Wrap"
+                                             Background="Transparent"
+                                             Padding="14,8"
+                                             HorizontalAlignment="Stretch"
+                                             Foreground="{DynamicResource TextPrimary}">
+                            <SelectableTextBlock.ContextFlyout>
+                                <MenuFlyout Placement="Pointer">
+                                    <MenuItem Header="Copy" Click="OnCopyLogSelection" />
+                                    <MenuItem Header="Select all" Click="OnSelectAllLog" />
+                                </MenuFlyout>
+                            </SelectableTextBlock.ContextFlyout>
+                        </SelectableTextBlock>
+                    </ScrollViewer>
                 </Border>
             </Grid>
         </Grid>

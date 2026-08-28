@@ -1,12 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Documents;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using Omnigit.Services;
 using Omnigit.ViewModels;
 
 namespace Omnigit.Views;
@@ -83,38 +88,105 @@ public partial class MainWindow : Window
         if (DataContext is not MainWindowViewModel model)
             return;
 
+        // Text is only as tall as the lines in it, so with a short log everything below
+        // the last one would belong to the ScrollViewer and a drag started there would
+        // select nothing. Keeping the surface at least as tall as what is on screen is
+        // what makes the empty part of the console draggable.
+        LogScroller.SizeChanged += (_, size) => LogText.MinHeight = size.NewSize.Height;
+
         ((INotifyCollectionChanged)model.LogEntries).CollectionChanged += (_, args) =>
         {
-            if (args.Action != NotifyCollectionChangedAction.Add)
-                return;
-
-            Dispatcher.UIThread.Post(() =>
+            switch (args.Action)
             {
-                if (model.LogEntries.Count > 0)
-                    LogList.ScrollIntoView(model.LogEntries[^1]);
-            }, DispatcherPriority.Background);
+                case NotifyCollectionChangedAction.Add:
+                    foreach (var entry in args.NewItems!.OfType<ActivityEntry>())
+                        AppendLogLine(entry);
+                    break;
+
+                // The log is capped, so once it is full every new line drops the oldest.
+                // Rebuilding the whole surface for that would run five hundred times a
+                // fetch, so the runs that line contributed come off the front instead.
+                case NotifyCollectionChangedAction.Remove:
+                    for (var i = 0; i < args.OldItems!.Count; i++)
+                        DropOldestLogLine();
+                    break;
+
+                default:
+                    LogText.Inlines?.Clear();
+                    _logLineRuns.Clear();
+                    foreach (var entry in model.LogEntries)
+                        AppendLogLine(entry);
+                    break;
+            }
+
+            if (args.Action == NotifyCollectionChangedAction.Add)
+                Dispatcher.UIThread.Post(() => LogScroller.ScrollToEnd(), DispatcherPriority.Background);
         };
+
+        foreach (var entry in model.LogEntries)
+            AppendLogLine(entry);
+    }
+
+    /// <summary>How many runs each line put into the surface, oldest first.</summary>
+    private readonly Queue<int> _logLineRuns = new();
+
+    /// <summary>
+    /// Writes one entry as its own runs, so the whole log is a single selectable text
+    /// while each line keeps the colour of what it was saying.
+    /// </summary>
+    private void AppendLogLine(ActivityEntry entry)
+    {
+        if (LogText.Inlines is not { } inlines)
+            return;
+
+        var runs = 2;
+
+        inlines.Add(Coloured($"{entry.Timestamp}  ", "DiffGutterText"));
+        inlines.Add(Coloured($"{entry.Message}\n", LevelResource(entry)));
+
+        if (entry.HasDetail)
+        {
+            // Indented under its line, the way it was shown when each entry was a row.
+            var detail = string.Join("\n          ", entry.Detail!.Split('\n').Select(l => l.TrimEnd('\r')));
+            inlines.Add(Coloured($"          {detail}\n", "TextMuted"));
+            runs++;
+        }
+
+        _logLineRuns.Enqueue(runs);
+    }
+
+    private void DropOldestLogLine()
+    {
+        if (LogText.Inlines is not { } inlines || !_logLineRuns.TryDequeue(out var runs))
+            return;
+
+        for (var i = 0; i < runs && inlines.Count > 0; i++)
+            inlines.RemoveAt(0);
     }
 
     /// <summary>
-    /// Right-clicking the log selects the row under the pointer, so the menu acts on
-    /// what was aimed at - unless that row is already part of a selection, which is
-    /// left alone rather than collapsed to the one row. The same rule as the changed
-    /// files list, and the reason a set of lines can be copied in one go.
+    /// A run whose colour follows the theme. The brush is bound rather than looked up,
+    /// so switching between light and dark repaints the log with everything else.
     /// </summary>
-    private void OnLogContextRequested(object? sender, ContextRequestedEventArgs e)
+    private static Run Coloured(string text, string resourceKey)
     {
-        if (sender is not ListBox list || e.Source is not Visual visual)
-            return;
-
-        if (visual.FindAncestorOfType<ListBoxItem>(includeSelf: true) is not { DataContext: { } row })
-            return;
-
-        if (list.SelectedItems is { Count: > 1 } selected && selected.Contains(row))
-            return;
-
-        list.SelectedItem = row;
+        var run = new Run(text);
+        run.Bind(TextElement.ForegroundProperty, new DynamicResourceExtension(resourceKey));
+        return run;
     }
+
+    private static string LevelResource(ActivityEntry entry) => entry.Level switch
+    {
+        ActivityLevel.Trace => "TextMuted",
+        ActivityLevel.Success => "StatusAdded",
+        ActivityLevel.Warning => "StatusModified",
+        ActivityLevel.Error => "StatusDeleted",
+        _ => "TextPrimary",
+    };
+
+    private void OnCopyLogSelection(object? sender, RoutedEventArgs e) => LogText.Copy();
+
+    private void OnSelectAllLog(object? sender, RoutedEventArgs e) => LogText.SelectAll();
 
     // Flyouts don't dismiss themselves when a templated row is clicked, so these
     // close them explicitly.
