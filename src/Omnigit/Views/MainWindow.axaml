@@ -404,7 +404,7 @@
                          it sits beside. Here it gets the window. -->
                     <Button Classes="iconButton" Command="{Binding ShowGraphCommand}"
                             IsVisible="{Binding HasSelectedRepository}"
-                            ToolTip.Tip="Commit graph">
+                            ToolTip.Tip="{Binding GraphButtonLabel}">
                         <Path Classes="icon" Data="{DynamicResource IconGraph}" />
                     </Button>
                     <Button Classes="iconButton" Click="OnToggleTheme" ToolTip.Tip="Toggle theme">

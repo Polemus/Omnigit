@@ -258,7 +258,11 @@ public partial class MainWindowViewModel : ViewModelBase
     private const int GraphLimit = 400;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(GraphButtonLabel))]
     public partial bool IsGraphPageVisible { get; set; }
+
+    /// <summary>What the header button would do if pressed now.</summary>
+    public string GraphButtonLabel => IsGraphPageVisible ? "Hide the commit graph" : "Commit graph";
 
     /// <summary>
     /// Every branch, not just the one checked out. A graph of one branch is a straight
@@ -289,9 +293,21 @@ public partial class MainWindowViewModel : ViewModelBase
         var many => $"{many} commits across every branch",
     };
 
+    /// <summary>
+    /// The header button is a toggle, not a way in. It is the only control that opens
+    /// the graph, so pressing it again while the graph is up has to be the way back out
+    /// - otherwise the one button that looks like it should close the page does nothing,
+    /// and the only exit is the one inside the page.
+    /// </summary>
     [RelayCommand]
     private async Task ShowGraphAsync()
     {
+        if (IsGraphPageVisible)
+        {
+            IsGraphPageVisible = false;
+            return;
+        }
+
         if (SelectedRepository is not { } repository)
             return;
 
