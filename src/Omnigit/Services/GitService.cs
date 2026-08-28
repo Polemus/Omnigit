@@ -1216,8 +1216,10 @@ public sealed partial class GitService : IGitService
         GitCredentials? credentials, AuthProbe probe, Action<string>? trace = null, bool prune = true)
     {
         // libgit2 reports transfer progress per object, which would flood the console.
-        // Only the crossing of each 10% boundary is reported.
-        var lastReported = -1;
+        // Only the crossing of each 10% boundary is reported, and the download and the
+        // indexing that follows it are counted separately.
+        var lastReceived = -1;
+        var lastIndexed = -1;
 
         return new FetchOptions
         {
@@ -1232,12 +1234,31 @@ public sealed partial class GitService : IGitService
                 if (trace is null || progress.TotalObjects == 0)
                     return true;
 
-                var percent = progress.ReceivedObjects * 100 / progress.TotalObjects;
-                if (percent / 10 > lastReported / 10 || percent == 100)
+                var received = progress.ReceivedObjects * 100 / progress.TotalObjects;
+                if (received / 10 > lastReceived / 10)
                 {
-                    lastReported = percent;
-                    trace($"  {percent}% — {progress.ReceivedObjects}/{progress.TotalObjects} objects, "
+                    lastReceived = received;
+                    trace($"  {received}% — {progress.ReceivedObjects}/{progress.TotalObjects} objects, "
                           + $"{progress.ReceivedBytes / 1024} KB");
+                }
+
+                // Everything has arrived and libgit2 is still working: it indexes what it
+                // received and resolves the deltas, calling this back throughout with the
+                // received counts unchanged. There used to be an "or it is 100%" clause
+                // here to guarantee a closing line, and on a repository big enough to
+                // spend a minute in that phase it wrote thousands of identical 100% lines
+                // - which filled the capped log and pushed every useful line out of it.
+                // The deciles already include 100. What the phase deserved was a count of
+                // its own, since it is the half of a large clone that otherwise looks
+                // like a hang.
+                if (progress.ReceivedObjects < progress.TotalObjects)
+                    return true;
+
+                var indexed = progress.IndexedObjects * 100 / progress.TotalObjects;
+                if (indexed / 10 > lastIndexed / 10)
+                {
+                    lastIndexed = indexed;
+                    trace($"  indexed {indexed}% — {progress.IndexedObjects}/{progress.TotalObjects} objects");
                 }
 
                 return true;
