@@ -354,6 +354,29 @@
 
     <!-- Tag badge in the history list. Accent-tinted so a released commit is findable
          by colour while scrolling, rather than reading every row. -->
+    <!-- The graph page's rows. Taller than the sidebar's, because the lanes need room
+         to be followed and the window is not short of it. -->
+    <Style Selector="ListBox.graphList ListBoxItem">
+        <Setter Property="MinHeight" Value="34" />
+    </Style>
+
+    <!-- Branch names on the commit their tip is. Quieter than a tag badge: a tag is an
+         event worth spotting, a branch tip is a label for the lane beside it. -->
+    <Style Selector="Border.refBadge">
+        <Setter Property="Background" Value="{DynamicResource HoverBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderSubtle}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="Padding" Value="5,1" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="Border.refBadge > TextBlock">
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="FontFamily" Value="{DynamicResource MonoFont}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+    </Style>
+
     <Style Selector="Border.tagBadge">
         <Setter Property="Background" Value="{DynamicResource ElevatedBackground}" />
         <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
@@ -456,6 +479,9 @@
 
     <Style Selector="ListBox.plain ListBoxItem">
         <Setter Property="Padding" Value="0" />
+        <!-- Rows touch. The commit graph draws a line to the edge of its cell, so any
+             space between two rows is a gap in that line. -->
+        <Setter Property="Margin" Value="0" />
         <Setter Property="MinHeight" Value="0" />
         <Setter Property="CornerRadius" Value="0" />
         <Setter Property="Background" Value="Transparent" />

@@ -424,10 +424,28 @@
                                     <StackPanel Grid.Column="1" Spacing="2">
                                         <!-- Badges keep their width; the summary gives way,
                                              since a tag is the thing being scanned for. -->
-                                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="7">
+                                        <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="7">
                                             <TextBlock Grid.Column="0" Classes="body" Text="{Binding Summary}"
                                                        TextTrimming="CharacterEllipsis" />
-                                            <ItemsControl Grid.Column="1" ItemsSource="{Binding Tags}"
+                                            <ItemsControl Grid.Column="1" ItemsSource="{Binding Refs}"
+                                                          IsVisible="{Binding HasRefs}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal" Spacing="4" />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate x:DataType="x:String">
+                                                        <!-- Which branches end here. On a
+                                                             graph of every branch this is
+                                                             what says which lane is which. -->
+                                                        <Border Classes="refBadge">
+                                                            <TextBlock Text="{Binding}" />
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                            <ItemsControl Grid.Column="2" ItemsSource="{Binding Tags}"
                                                           IsVisible="{Binding HasTags}">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>

@@ -189,9 +189,50 @@ public sealed class StashInfo
     public string RelativeTime => TimeFormat.Relative(CreatedAt);
 }
 
+/// <summary>
+/// One line of the graph drawn beside the history, as a cell split at the node: what
+/// arrives from the row above, and what leaves towards the row below.
+/// </summary>
+public sealed class CommitGraphRow
+{
+    /// <summary>The column this commit's node is drawn in.</summary>
+    public required int Lane { get; init; }
+
+    /// <summary>Which colour of the lane palette it takes.</summary>
+    public required int Colour { get; init; }
+
+    public required bool IsMerge { get; init; }
+
+    /// <summary>Lines from the top edge of the cell down to the node's height.</summary>
+    public required IReadOnlyList<GraphSegment> Above { get; init; }
+
+    /// <summary>Lines from the node's height down to the bottom edge.</summary>
+    public required IReadOnlyList<GraphSegment> Below { get; init; }
+
+    /// <summary>How many columns this row needs, for sizing the gutter.</summary>
+    public required int Lanes { get; init; }
+}
+
+/// <summary>A line crossing half a cell, from one lane to another.</summary>
+public readonly record struct GraphSegment(int From, int To, int Colour);
+
 public sealed class CommitInfo
 {
     public required string Sha { get; init; }
+
+    /// <summary>
+    /// Parent shas, first parent first. The graph is drawn from these; the first
+    /// continues the commit's own lane and the rest are what make a merge visible.
+    /// </summary>
+    public IReadOnlyList<string> Parents { get; init; } = [];
+
+    /// <summary>Where this commit sits in the graph, or null when it isn't drawn.</summary>
+    public CommitGraphRow? Graph { get; init; }
+
+    /// <summary>Branches whose tip is this commit, e.g. "main", "origin/main".</summary>
+    public IReadOnlyList<string> Refs { get; init; } = [];
+
+    public bool HasRefs => Refs.Count > 0;
     public required string Summary { get; init; }
     public required string AuthorName { get; init; }
     public required string AuthorInitials { get; init; }

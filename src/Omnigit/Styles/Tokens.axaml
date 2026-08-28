@@ -69,6 +69,19 @@
             <SolidColorBrush x:Key="StatusDeleted" Color="#F85149" />
             <SolidColorBrush x:Key="StatusRenamed" Color="#58A6FF" />
 
+            <!-- Commit graph lanes. Eight, cycled: enough that two branches side by side
+                 are never the same colour, few enough that each stays distinguishable.
+                 Ordered so the first lanes - which is where main and the branch you are
+                 on end up - are the calmest. -->
+            <SolidColorBrush x:Key="GraphLane0" Color="#58A6FF" />
+            <SolidColorBrush x:Key="GraphLane1" Color="#3FB950" />
+            <SolidColorBrush x:Key="GraphLane2" Color="#D29922" />
+            <SolidColorBrush x:Key="GraphLane3" Color="#BC8CFF" />
+            <SolidColorBrush x:Key="GraphLane4" Color="#F778BA" />
+            <SolidColorBrush x:Key="GraphLane5" Color="#39C5CF" />
+            <SolidColorBrush x:Key="GraphLane6" Color="#FF9C5B" />
+            <SolidColorBrush x:Key="GraphLane7" Color="#A5D6FF" />
+
             <!-- Banners -->
             <SolidColorBrush x:Key="BannerErrorBackground" Color="#2A1416" />
             <SolidColorBrush x:Key="BannerErrorBorder" Color="#F85149" />
@@ -130,6 +143,16 @@
             <SolidColorBrush x:Key="StatusDeleted" Color="#CF222E" />
             <SolidColorBrush x:Key="StatusRenamed" Color="#0969DA" />
 
+            <!-- The same eight lanes, darkened to hold their own on a white background. -->
+            <SolidColorBrush x:Key="GraphLane0" Color="#0969DA" />
+            <SolidColorBrush x:Key="GraphLane1" Color="#1A7F37" />
+            <SolidColorBrush x:Key="GraphLane2" Color="#9A6700" />
+            <SolidColorBrush x:Key="GraphLane3" Color="#8250DF" />
+            <SolidColorBrush x:Key="GraphLane4" Color="#BF3989" />
+            <SolidColorBrush x:Key="GraphLane5" Color="#1B7C83" />
+            <SolidColorBrush x:Key="GraphLane6" Color="#BC4C00" />
+            <SolidColorBrush x:Key="GraphLane7" Color="#54AEFF" />
+
             <!-- Banners -->
             <SolidColorBrush x:Key="BannerErrorBackground" Color="#FFEBE9" />
             <SolidColorBrush x:Key="BannerErrorBorder" Color="#CF222E" />
@@ -166,6 +189,9 @@
     <StreamGeometry x:Key="IconChevronDown">M 4,6.5 L 8,10.5 L 12,6.5</StreamGeometry>
 
     <StreamGeometry x:Key="IconRepo">M 4,1.5 h 8.5 a 1,1 0 0 1 1,1 v 12 h -9.5 a 1.5,1.5 0 0 1 -1.5,-1.5 v -10 a 1.5,1.5 0 0 1 1.5,-1.5 z M 3,12 h 10.5</StreamGeometry>
+
+    <!-- Two commits on a line with a branch leaving it: the shape the graph draws. -->
+    <StreamGeometry x:Key="IconGraph">M 4,4.4 a 1.9,1.9 0 1 0 0.01,0 M 4,11.6 a 1.9,1.9 0 1 0 0.01,0 M 12,8 a 1.9,1.9 0 1 0 0.01,0 M 4,6.3 L 4,9.7 M 4,7 C 4,10 10.1,9.4 10.1,8.4</StreamGeometry>
 
     <StreamGeometry x:Key="IconBranch">M 2,3.5 a 2,2 0 1,0 4,0 a 2,2 0 1,0 -4,0 M 2,12.5 a 2,2 0 1,0 4,0 a 2,2 0 1,0 -4,0 M 10,3.5 a 2,2 0 1,0 4,0 a 2,2 0 1,0 -4,0 M 4,5.5 L 4,10.5 M 12,5.5 C 12,9.2 4,7.8 4,10.5</StreamGeometry>
 

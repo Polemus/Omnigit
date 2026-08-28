@@ -22,7 +22,7 @@ public interface IGitService
     /// <summary>Working-tree changes, staged and unstaged and untracked, each with its diff.</summary>
     IReadOnlyList<FileChange> GetWorkingChanges(string path);
 
-    IReadOnlyList<CommitInfo> GetHistory(string path, int maxCount);
+    IReadOnlyList<CommitInfo> GetHistory(string path, int maxCount, bool everyBranch = false);
 
     /// <summary>Diffs for one commit against its first parent. Loaded on demand.</summary>
     IReadOnlyList<FileChange> GetCommitFiles(string path, string sha);

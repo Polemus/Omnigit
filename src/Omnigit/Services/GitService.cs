@@ -319,7 +319,12 @@ public sealed partial class GitService : IGitService
         return changes;
     }
 
-    public IReadOnlyList<CommitInfo> GetHistory(string path, int maxCount)
+    /// <param name="everyBranch">
+    /// Walks every branch rather than the one checked out. The graph beside the list is
+    /// the reason it exists: a log of one branch is a straight line, and the shape worth
+    /// drawing is where the others left it and rejoined.
+    /// </param>
+    public IReadOnlyList<CommitInfo> GetHistory(string path, int maxCount, bool everyBranch = false)
     {
         using var repo = new Repository(Discover(path));
 
@@ -327,19 +332,34 @@ public sealed partial class GitService : IGitService
             return [];
 
         var tags = TagsBySha(repo);
+        var refs = RefsBySha(repo);
 
-        return repo.Commits
+        var commits = repo.Commits
             .QueryBy(new CommitFilter
             {
-                IncludeReachableFrom = repo.Head,
+                IncludeReachableFrom = everyBranch ? Everything(repo) : repo.Head,
                 // Time alone ties commits made within the same second into an
                 // arbitrary order; topological breaks those ties by ancestry.
                 SortBy = CommitSortStrategies.Time | CommitSortStrategies.Topological,
             })
             .Take(maxCount)
-            .Select(c => new CommitInfo
+            .ToList();
+
+        // The graph is built from the page that will be drawn, not from the repository:
+        // a parent below the last row has nowhere to go, and a lane that runs off the
+        // bottom is exactly what the list shows anyway.
+        var listed = commits.Select(c => c.Sha).ToHashSet(StringComparer.Ordinal);
+
+        var graph = CommitGraph.Build(
+            [.. commits.Select(c => (c.Sha, (IReadOnlyList<string>)
+                [.. c.Parents.Select(p => p.Sha).Where(listed.Contains)]))]);
+
+        return commits
+            .Select((c, i) => new CommitInfo
             {
                 Sha = c.Sha,
+                Parents = [.. c.Parents.Select(p => p.Sha)],
+                Graph = graph[i],
                 Summary = string.IsNullOrWhiteSpace(c.MessageShort) ? "(no message)" : c.MessageShort,
                 AuthorName = c.Author.Name,
                 AuthorInitials = Initials(c.Author.Name),
@@ -349,8 +369,50 @@ public sealed partial class GitService : IGitService
                 // which is far too slow for a list. It's filled in on selection.
                 FilesChanged = 0,
                 Tags = tags.TryGetValue(c.Sha, out var names) ? names : [],
+                Refs = refs.TryGetValue(c.Sha, out var branches) ? branches : [],
             })
             .ToList();
+    }
+
+    /// <summary>
+    /// Every branch, local and remote-tracking, as the starting points of the walk.
+    /// </summary>
+    /// <remarks>
+    /// Remote-tracking refs are in deliberately: a lane that stops three commits short of
+    /// its origin counterpart is what being behind looks like, and it is the reason to
+    /// draw the thing at all. The pull-request mirrors under <c>pr/</c> are left out for
+    /// the same reason the branch picker leaves them out - they are our own bookkeeping,
+    /// not branches anyone pushed.
+    /// </remarks>
+    private static IEnumerable<Branch> Everything(Repository repo)
+        => repo.Branches.Where(b => !b.IsRemote
+                                    || (!b.CanonicalName.EndsWith("/HEAD", StringComparison.Ordinal)
+                                        && !b.FriendlyName.Contains("/pr/", StringComparison.Ordinal)));
+
+    /// <summary>
+    /// Branch tips, grouped by the commit they point at, so a row can say which branches
+    /// end there. Built once per load for the same reason the tags are.
+    /// </summary>
+    private static Dictionary<string, IReadOnlyList<string>> RefsBySha(Repository repo)
+    {
+        var byCommit = new Dictionary<string, List<string>>(StringComparer.Ordinal);
+
+        foreach (var branch in Everything(repo))
+        {
+            if (branch.Tip is not { } tip)
+                continue;
+
+            if (!byCommit.TryGetValue(tip.Sha, out var names))
+                byCommit[tip.Sha] = names = [];
+
+            names.Add(branch.FriendlyName);
+        }
+
+        // Local before remote, so "main" reads before "origin/main" on a tip both are on.
+        return byCommit.ToDictionary(
+            e => e.Key,
+            e => (IReadOnlyList<string>)[.. e.Value.OrderBy(n => n.Contains('/')).ThenBy(n => n, StringComparer.Ordinal)],
+            StringComparer.Ordinal);
     }
 
     /// <summary>

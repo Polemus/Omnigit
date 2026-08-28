@@ -245,6 +245,101 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public bool HasRepositories => Repositories.Count > 0;
 
+    /// <summary>Whether anything is open to draw or act on.</summary>
+    public bool HasSelectedRepository => SelectedRepository is not null;
+
+    // ---- The commit graph --------------------------------------------------
+
+    /// <summary>
+    /// How much history the graph draws. Larger than the sidebar's list because the
+    /// shape is the point here - a page of twenty commits shows no branching at all -
+    /// and bounded because every row is laid out whether it is on screen or not.
+    /// </summary>
+    private const int GraphLimit = 400;
+
+    [ObservableProperty]
+    public partial bool IsGraphPageVisible { get; set; }
+
+    /// <summary>
+    /// Every branch, not just the one checked out. A graph of one branch is a straight
+    /// line, so the scope is not a setting here - it is what the page is for.
+    /// </summary>
+    public ObservableCollection<CommitInfo> GraphCommits { get; } = [];
+
+    [ObservableProperty]
+    public partial CommitInfo? SelectedGraphCommit { get; set; }
+
+    /// <summary>
+    /// Width of the gutter, in lanes: one number for the page rather than per row, or
+    /// the summaries beside it would sit in a ragged column.
+    /// </summary>
+    [ObservableProperty]
+    public partial int GraphLanes { get; set; } = 1;
+
+    [ObservableProperty]
+    public partial bool IsGraphLoading { get; set; }
+
+    public string GraphTitle => SelectedRepository?.Name ?? "Graph";
+
+    public string GraphSubtitle => GraphCommits.Count switch
+    {
+        0 => "Nothing to draw",
+        1 => "1 commit across every branch",
+        var many when many >= GraphLimit => $"The most recent {many} commits across every branch",
+        var many => $"{many} commits across every branch",
+    };
+
+    [RelayCommand]
+    private async Task ShowGraphAsync()
+    {
+        if (SelectedRepository is not { } repository)
+            return;
+
+        IsGraphPageVisible = true;
+        IsGraphLoading = true;
+        OnPropertyChanged(nameof(GraphTitle));
+
+        try
+        {
+            var commits = await Task.Run(
+                () => _git.GetHistory(repository.LocalPath, GraphLimit, everyBranch: true));
+
+            Replace(GraphCommits, commits);
+
+            GraphLanes = commits.Count == 0
+                ? 1
+                : Math.Min(commits.Max(c => c.Graph?.Lanes ?? 1), CommitGraph.MaxLanes);
+
+            SelectedGraphCommit = null;
+        }
+        catch (Exception ex)
+        {
+            Log(ActivityLevel.Error, $"Could not read the history: {ex.Message}");
+        }
+        finally
+        {
+            IsGraphLoading = false;
+            OnPropertyChanged(nameof(GraphSubtitle));
+        }
+    }
+
+    [RelayCommand]
+    private void CloseGraph() => IsGraphPageVisible = false;
+
+    [RelayCommand]
+    private async Task CopyGraphCommitShaAsync()
+    {
+        if (SelectedGraphCommit is { } commit)
+            await CopyAsync(commit.Sha, "commit SHA");
+    }
+
+    [RelayCommand]
+    private async Task CopyGraphCommitSummaryAsync()
+    {
+        if (SelectedGraphCommit is { } commit)
+            await CopyAsync(commit.Summary, "commit summary");
+    }
+
     // ---- Selection ---------------------------------------------------------
 
     [ObservableProperty]
@@ -256,6 +351,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [NotifyCanExecuteChangedFor(nameof(FetchCommand))]
     [NotifyCanExecuteChangedFor(nameof(PullCommand))]
     [NotifyCanExecuteChangedFor(nameof(PushCommand))]
+    [NotifyPropertyChangedFor(nameof(HasSelectedRepository))]
     public partial RepositoryInfo? SelectedRepository { get; set; }
 
     [ObservableProperty]

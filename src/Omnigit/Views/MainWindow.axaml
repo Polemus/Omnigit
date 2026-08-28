@@ -398,6 +398,15 @@
                 <!-- Right-hand controls -->
                 <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="4"
                             VerticalAlignment="Center" Margin="10,0,0,0">
+                    <!-- The graph is a page of its own rather than a column in the
+                         sidebar: ten lanes is 140px, which is most of that pane, and a
+                         repository the size of Linux would leave no room for the summary
+                         it sits beside. Here it gets the window. -->
+                    <Button Classes="iconButton" Command="{Binding ShowGraphCommand}"
+                            IsVisible="{Binding HasSelectedRepository}"
+                            ToolTip.Tip="Commit graph">
+                        <Path Classes="icon" Data="{DynamicResource IconGraph}" />
+                    </Button>
                     <Button Classes="iconButton" Click="OnToggleTheme" ToolTip.Tip="Toggle theme">
                         <Path Classes="icon" Data="{DynamicResource IconMoon}" x:Name="ThemeIcon" />
                     </Button>
@@ -432,12 +441,14 @@
                     <MultiBinding Converter="{x:Static BoolConverters.And}">
                         <Binding Path="!IsSettingsPageVisible" />
                         <Binding Path="!IsClonePageVisible" />
+                        <Binding Path="!IsGraphPageVisible" />
                     </MultiBinding>
                 </views:RepositoryView.IsVisible>
             </views:RepositoryView>
 
             <views:CloneView IsVisible="{Binding IsClonePageVisible}" />
             <views:SettingsView IsVisible="{Binding IsSettingsPageVisible}" />
+            <views:GraphView IsVisible="{Binding IsGraphPageVisible}" />
 
             <!-- Discarding is the other unrecoverable action here: the change was never
                  committed, so nothing can bring it back. Hence the scrim and the extra
