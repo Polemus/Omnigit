@@ -422,30 +422,20 @@
                                                    HorizontalAlignment="Center" VerticalAlignment="Center" />
                                     </Border>
                                     <StackPanel Grid.Column="1" Spacing="2">
-                                        <!-- Badges keep their width; the summary gives way,
-                                             since a tag is the thing being scanned for. -->
-                                        <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="7">
+                                        <!-- Tags keep their width; the summary gives way,
+                                             since a tag is the thing being scanned for.
+
+                                             No branch badges here. They label the lanes
+                                             on the graph page, which is where every
+                                             branch is on screen at once and a tip needs
+                                             naming. This list is one branch - HEAD's -
+                                             so a badge for every other branch that
+                                             happens to end on a commit in it says
+                                             nothing about the line being read. -->
+                                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="7">
                                             <TextBlock Grid.Column="0" Classes="body" Text="{Binding Summary}"
                                                        TextTrimming="CharacterEllipsis" />
-                                            <ItemsControl Grid.Column="1" ItemsSource="{Binding Refs}"
-                                                          IsVisible="{Binding HasRefs}">
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <StackPanel Orientation="Horizontal" Spacing="4" />
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate x:DataType="x:String">
-                                                        <!-- Which branches end here. On a
-                                                             graph of every branch this is
-                                                             what says which lane is which. -->
-                                                        <Border Classes="refBadge">
-                                                            <TextBlock Text="{Binding}" />
-                                                        </Border>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                            <ItemsControl Grid.Column="2" ItemsSource="{Binding Tags}"
+                                            <ItemsControl Grid.Column="1" ItemsSource="{Binding Tags}"
                                                           IsVisible="{Binding HasTags}">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>
