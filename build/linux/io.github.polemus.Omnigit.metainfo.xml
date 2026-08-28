@@ -130,6 +130,17 @@
   <content_rating type="oars-1.1" />
 
   <releases>
+    <release version="0.4.7" date="2026-08-28">
+      <url type="details">https://github.com/Polemus/Omnigit/releases/tag/v0.4.7</url>
+      <description>
+        <p>
+          A clone no longer fills the activity log with thousands of
+          identical lines at 100%; the indexing that follows a download
+          is reported on its own instead, so a large clone says what it
+          is doing rather than appearing to hang.
+        </p>
+      </description>
+    </release>
     <release version="0.4.6" date="2026-08-28">
       <url type="details">https://github.com/Polemus/Omnigit/releases/tag/v0.4.6</url>
       <description>
