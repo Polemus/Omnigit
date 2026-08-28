@@ -308,6 +308,15 @@ public sealed class DiffLine
     public required DiffLineKind Kind { get; init; }
     public required string Text { get; init; }
 
+    /// <summary>
+    /// Coloured runs within <see cref="Text"/>, or empty when the file's language has no
+    /// grammar we ship - which is an ordinary answer, and renders as plain text.
+    /// Computed once when the patch is parsed rather than per row: highlighting depends
+    /// on the lines before it, so it cannot be done by a row that does not know its
+    /// neighbours.
+    /// </summary>
+    public IReadOnlyList<Services.SyntaxSpan> Spans { get; init; } = [];
+
     /// <summary>Line number in the pre-image, or empty for added lines.</summary>
     public string OldNumber { get; init; } = string.Empty;
 

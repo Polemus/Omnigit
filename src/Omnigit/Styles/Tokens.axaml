@@ -63,6 +63,18 @@
             <SolidColorBrush x:Key="DiffCodeText" Color="#C9D1D9" />
             <SolidColorBrush x:Key="DiffGutterText" Color="#5A6272" />
 
+            <!-- Syntax. Picked against three backgrounds, not one: a run sits on a plain
+                 row, an added row (#12261A) or a removed row (#2A1416), and a colour that
+                 reads on the first can disappear into the other two. Muted on purpose -
+                 the row's own green or red is the thing being scanned for, and syntax
+                 that shouts competes with it. -->
+            <SolidColorBrush x:Key="SyntaxKeyword" Color="#C48FE0" />
+            <SolidColorBrush x:Key="SyntaxString" Color="#C99A6E" />
+            <SolidColorBrush x:Key="SyntaxComment" Color="#6E7A86" />
+            <SolidColorBrush x:Key="SyntaxNumber" Color="#9FBF7F" />
+            <SolidColorBrush x:Key="SyntaxType" Color="#5FB3B3" />
+            <SolidColorBrush x:Key="SyntaxFunction" Color="#7EA6E0" />
+
             <!-- File status -->
             <SolidColorBrush x:Key="StatusAdded" Color="#3FB950" />
             <SolidColorBrush x:Key="StatusModified" Color="#D29922" />
@@ -136,6 +148,14 @@
             <SolidColorBrush x:Key="DiffHunkText" Color="#0550AE" />
             <SolidColorBrush x:Key="DiffCodeText" Color="#24292F" />
             <SolidColorBrush x:Key="DiffGutterText" Color="#8C959F" />
+
+            <!-- Deepened for a white ground; same three-background rule as dark. -->
+            <SolidColorBrush x:Key="SyntaxKeyword" Color="#8250DF" />
+            <SolidColorBrush x:Key="SyntaxString" Color="#A24E28" />
+            <SolidColorBrush x:Key="SyntaxComment" Color="#6E7781" />
+            <SolidColorBrush x:Key="SyntaxNumber" Color="#3F6E28" />
+            <SolidColorBrush x:Key="SyntaxType" Color="#1B7C83" />
+            <SolidColorBrush x:Key="SyntaxFunction" Color="#0550AE" />
 
             <!-- File status -->
             <SolidColorBrush x:Key="StatusAdded" Color="#1A7F37" />

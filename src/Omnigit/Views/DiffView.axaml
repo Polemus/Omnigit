@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:m="using:Omnigit.Models"
+             xmlns:v="using:Omnigit.Views"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="400"
@@ -80,13 +81,17 @@
                                                Width="17" TextAlignment="Center"
                                                Padding="0,2" />
 
-                                    <!-- Code -->
+                                    <!-- Code. The text is set by SyntaxText, which
+                                         builds it as coloured runs where the file has
+                                         a grammar and as plain text where it does not -
+                                         so this must not also bind Text, or the two
+                                         would fight over the same property. -->
                                     <TextBlock Grid.Column="2"
                                                Classes="diffText"
                                                Classes.add="{Binding IsAdded}"
                                                Classes.remove="{Binding IsRemoved}"
                                                Classes.hunk="{Binding IsHunkHeader}"
-                                               Text="{Binding Text}"
+                                               v:SyntaxText.Line="{Binding}"
                                                Padding="0,2,24,2" />
                                 </Grid>
                             </Border>

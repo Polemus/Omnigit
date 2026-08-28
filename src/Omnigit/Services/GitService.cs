@@ -307,7 +307,7 @@ public sealed partial class GitService : IGitService
                     Status = ToChangeStatus(pec.Status, entry.State),
                     Additions = pec.LinesAdded,
                     Deletions = pec.LinesDeleted,
-                    Diff = UnifiedDiffParser.Parse(pec.Patch),
+                    Diff = UnifiedDiffParser.Parse(pec.Patch, pec.Path),
                 });
             }
             else
@@ -466,7 +466,7 @@ public sealed partial class GitService : IGitService
                 Status = ToChangeStatus(pec.Status, null),
                 Additions = pec.LinesAdded,
                 Deletions = pec.LinesDeleted,
-                Diff = UnifiedDiffParser.Parse(pec.Patch),
+                Diff = UnifiedDiffParser.Parse(pec.Patch, pec.Path),
             })
             .ToList();
     }
@@ -1618,6 +1618,17 @@ public sealed partial class GitService : IGitService
                     Text = $"@@ -0,0 +1,{text.Length} @@",
                 });
 
+                // Highlighted here as well as in UnifiedDiffParser, because a new file
+                // never reaches it - there is no patch to parse, so the rows are built
+                // from the file itself. Missing this is why a whole added file came out
+                // one flat colour while a modified one beside it was coloured.
+                //
+                // No hunk resets: this is the whole file from its first line, so a block
+                // comment or a multi-line string is followed exactly. It is the one diff
+                // in the app that cannot get that wrong.
+                var highlighter = SyntaxHighlighter.For(entry.FilePath);
+                var state = new SyntaxState();
+
                 for (var i = 0; i < text.Length && lines.Count < UnifiedDiffParser.MaxLines; i++)
                 {
                     lines.Add(new DiffLine
@@ -1625,6 +1636,7 @@ public sealed partial class GitService : IGitService
                         Kind = DiffLineKind.Added,
                         Text = text[i],
                         NewNumber = (i + 1).ToString(),
+                        Spans = highlighter is null ? [] : highlighter.Highlight(text[i], state),
                     });
                 }
             }

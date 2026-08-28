@@ -18,7 +18,12 @@ public static class UnifiedDiffParser
     /// <summary>Caps how much of a very large patch we materialise into the UI.</summary>
     public const int MaxLines = 4000;
 
-    public static IReadOnlyList<DiffLine> Parse(string? patchText)
+    /// <param name="path">
+    /// The file the patch is of, used only to pick a syntax grammar. Omit it and the
+    /// diff renders as plain text, which is what a file we ship no grammar for gets
+    /// anyway.
+    /// </param>
+    public static IReadOnlyList<DiffLine> Parse(string? patchText, string? path = null)
     {
         var lines = new List<DiffLine>();
 
@@ -27,6 +32,14 @@ public static class UnifiedDiffParser
 
         var oldNo = 0;
         var newNo = 0;
+
+        // Two states, not one. A removed line and the added line under it are two
+        // versions of the same place in the file, not consecutive lines of one - so
+        // feeding both through a single tokeniser would have the old side's unclosed
+        // string swallow the new side. Context lines are in both files and advance both.
+        var highlighter = SyntaxHighlighter.For(path);
+        var oldState = new SyntaxState();
+        var newState = new SyntaxState();
 
         foreach (var raw in patchText.Split('\n'))
         {
@@ -68,6 +81,13 @@ public static class UnifiedDiffParser
                     newNo = newStart;
                 }
 
+                // A hunk is an extract. Whatever was open above it - a block comment,
+                // a multi-line string - started on lines we were never given, so the
+                // only honest thing is to start again and colour the first lines of a
+                // hunk as code even when they are inside a comment.
+                oldState.Reset();
+                newState.Reset();
+
                 lines.Add(new DiffLine { Kind = DiffLineKind.HunkHeader, Text = line });
                 continue;
             }
@@ -83,6 +103,7 @@ public static class UnifiedDiffParser
                         Kind = DiffLineKind.Added,
                         Text = line[1..],
                         NewNumber = newNo.ToString(),
+                        Spans = Highlight(highlighter, line[1..], newState),
                     });
                     newNo++;
                     break;
@@ -93,17 +114,27 @@ public static class UnifiedDiffParser
                         Kind = DiffLineKind.Removed,
                         Text = line[1..],
                         OldNumber = oldNo.ToString(),
+                        Spans = Highlight(highlighter, line[1..], oldState),
                     });
                     oldNo++;
                     break;
 
                 case ' ':
+                    var context = line[1..];
+
+                    // Tokenised twice on purpose: the run is what the new side renders,
+                    // and the old side has to be walked past the same text or its state
+                    // falls behind by every context line in the hunk.
+                    var spans = Highlight(highlighter, context, newState);
+                    Highlight(highlighter, context, oldState);
+
                     lines.Add(new DiffLine
                     {
                         Kind = DiffLineKind.Context,
-                        Text = line[1..],
+                        Text = context,
                         OldNumber = oldNo.ToString(),
                         NewNumber = newNo.ToString(),
+                        Spans = spans,
                     });
                     oldNo++;
                     newNo++;
@@ -118,6 +149,10 @@ public static class UnifiedDiffParser
 
         return lines;
     }
+
+    private static IReadOnlyList<SyntaxSpan> Highlight(
+        SyntaxHighlighter? highlighter, string text, SyntaxState state)
+        => highlighter is null ? [] : highlighter.Highlight(text, state);
 
     /// <summary>
     /// Reads the starting line numbers out of a hunk header such as
