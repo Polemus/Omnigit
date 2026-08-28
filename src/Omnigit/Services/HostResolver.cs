@@ -23,10 +23,7 @@ public static class HostResolver
     {
         Id = "local",
         Name = "Local only",
-        Kind = HostKind.Gitea,
         BaseUrl = string.Empty,
-        AccentHex = "#6B7385",
-        Badge = "L",
     };
 
     /// <summary>
@@ -84,6 +81,10 @@ public static class HostResolver
     public static GitHost ForDomain(string domain) =>
         Hosts.GetOrAdd(domain, d =>
         {
+            // github.com is named rather than shown as a domain because that is what
+            // people call it. Nothing else is guessed at: what a self-hosted site
+            // actually runs is known only once an account is signed in to it, and the
+            // picker asks the account rather than the domain name.
             var isGitHub = d.Equals("github.com", StringComparison.OrdinalIgnoreCase)
                         || d.EndsWith(".github.com", StringComparison.OrdinalIgnoreCase);
 
@@ -91,13 +92,7 @@ public static class HostResolver
             {
                 Id = d.ToLowerInvariant(),
                 Name = isGitHub ? "GitHub" : d,
-                // Anything that isn't github.com is assumed to be Gitea for now.
-                // Phase 2 confirms it by probing /api/v1/version before we rely on
-                // the API dialect for anything.
-                Kind = isGitHub ? HostKind.GitHub : HostKind.Gitea,
                 BaseUrl = $"https://{d}",
-                AccentHex = isGitHub ? "#3399CC" : "#609926",
-                Badge = isGitHub ? "G" : char.ToUpperInvariant(d[0]).ToString(),
             };
         });
 }

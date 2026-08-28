@@ -27,10 +27,7 @@ public class RepositoryRemovalTests
                 {
                     Id = "github",
                     Name = "GitHub",
-                    Kind = HostKind.GitHub,
                     BaseUrl = "https://github.com",
-                    AccentHex = "#3399CC",
-                    Badge = "GH",
                 },
                 DefaultBranch = "main",
             },

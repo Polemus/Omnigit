@@ -9,12 +9,19 @@ public sealed class HostGroupViewModel
     public required GitHost Host { get; init; }
     public required IReadOnlyList<RepositoryInfo> Repositories { get; init; }
 
+    /// <summary>
+    /// What the site runs, according to the account signed in to it - "Gitea", "GitLab",
+    /// or whatever a user-written manifest calls itself. Null when nobody is signed in
+    /// to this host, which is the honest answer: a domain does not say what it runs.
+    /// </summary>
+    public string? SiteName { get; init; }
+
     public string Header => Host.Name;
 
     /// <summary>
-    /// The kind is only worth printing when it isn't already the name: on github.com both
-    /// are "GitHub" and the heading stutters, whereas "git.homelab.net" gains from being
-    /// labelled Gitea.
+    /// The site is only worth printing when it isn't already the name: on github.com
+    /// both are "GitHub" and the heading stutters, whereas "git.homelab.net" gains from
+    /// being labelled Gitea - once something knows that it is one.
     /// </summary>
     public string SubHeader
     {
@@ -24,7 +31,7 @@ public sealed class HostGroupViewModel
                 ? "1 repository"
                 : $"{Repositories.Count} repositories";
 
-            return Host.KindLabel == Host.Name ? count : $"{Host.KindLabel} · {count}";
+            return SiteName is null || SiteName == Host.Name ? count : $"{SiteName} · {count}";
         }
     }
 }

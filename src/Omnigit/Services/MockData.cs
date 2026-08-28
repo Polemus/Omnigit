@@ -15,20 +15,14 @@ public static class MockData
     {
         Id = "github",
         Name = "GitHub",
-        Kind = HostKind.GitHub,
         BaseUrl = "https://github.com",
-        AccentHex = "#3399CC",
-        Badge = "G",
     };
 
     public static GitHost HomelabGitea { get; } = new()
     {
         Id = "gitea-homelab",
         Name = "git.homelab.net",
-        Kind = HostKind.Gitea,
         BaseUrl = "https://git.homelab.net",
-        AccentHex = "#609926",
-        Badge = "T",
     };
 
     public static IReadOnlyList<GitHost> Hosts { get; } = [GitHubDotCom, HomelabGitea];

@@ -23,7 +23,7 @@ public class HostResolverTests
         Assert.NotNull(identity);
         Assert.Equal("Polemus", identity.Owner);
         Assert.Equal("Omnigit", identity.Name);
-        Assert.Equal(HostKind.GitHub, identity.Host.Kind);
+        Assert.Equal("GitHub", identity.Host.Name);
     }
 
     [Fact]
@@ -40,7 +40,9 @@ public class HostResolverTests
         Assert.NotNull(identity);
         Assert.Equal("team", identity.Owner);
         Assert.Equal("thing", identity.Name);
-        Assert.NotEqual(HostKind.GitHub, identity.Host.Kind);
+        // The domain is the name, because nothing here knows what it runs: only an
+        // account signed in to it can say, and the picker asks that instead.
+        Assert.Equal("git.example.com", identity.Host.Name);
     }
 
     [Fact]

@@ -120,7 +120,6 @@ public sealed class RepositoryInfo
     public string LastFetchedLabel => LastFetched is { } when
         ? $"Last fetched {TimeFormat.Relative(when)}"
         : "Never fetched";
-    public string HostLabel => $"{Host.KindLabel} · {Host.Name}";
 }
 
 public sealed class BranchInfo

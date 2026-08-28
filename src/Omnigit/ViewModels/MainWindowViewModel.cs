@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Controls; // GridLength, for the resizable pane widths below.
 using Avalonia.Threading; // The timer behind the background fetch.
@@ -116,9 +115,6 @@ public partial class MainWindowViewModel : ViewModelBase
             OnPropertyChanged(nameof(DiscardChangesLabel));
         };
 
-        // Same again for the console: the label has to say what Copy would take.
-        SelectedLogEntries.CollectionChanged += (_, _) => OnPropertyChanged(nameof(CopyLogLabel));
-
         foreach (var provider in hosts.Providers)
             Providers.Add(provider);
 
@@ -228,69 +224,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public bool HasLogEntries => _log.Entries.Count > 0;
 
-    /// <summary>The lines picked out in the console, which is what Copy acts on.</summary>
-    public ObservableCollection<ActivityEntry> SelectedLogEntries { get; } = [];
-
-    /// <summary>Names what would be copied, so the menu is not a guess.</summary>
-    public string CopyLogLabel => SelectedLogEntries.Count switch
-    {
-        0 => "Copy the whole log",
-        1 => "Copy line",
-        var many => $"Copy {many} lines",
-    };
-
     [RelayCommand]
     private void ToggleConsole() => IsConsoleExpanded = !IsConsoleExpanded;
-
-    /// <summary>
-    /// The selected lines as plain text, or the whole log when nothing is picked out.
-    /// </summary>
-    /// <remarks>
-    /// Copying nothing because nothing happened to be selected would be a worse answer
-    /// than copying everything: the console is read when something went wrong, and the
-    /// whole of it is what a bug report wants.
-    /// </remarks>
-    [RelayCommand]
-    private async Task CopyLogAsync()
-    {
-        var lines = SelectedLogEntries.Count > 0
-            ? _log.Entries.Where(SelectedLogEntries.Contains).ToList()
-            : [.. _log.Entries];
-
-        if (lines.Count == 0)
-            return;
-
-        var text = new StringBuilder();
-
-        foreach (var entry in lines)
-        {
-            text.Append(entry.Timestamp).Append("  ").AppendLine(entry.Message);
-
-            if (!entry.HasDetail)
-                continue;
-
-            // Detail can be several lines - a stack trace, a server's reply - and each
-            // is indented under its entry so the copy reads the way the console does.
-            foreach (var line in entry.Detail!.Split('\n'))
-                text.Append("          ").AppendLine(line.TrimEnd('\r'));
-        }
-
-        await CopyAsync(text.ToString().TrimEnd(),
-            lines.Count == 1 ? "log line" : $"{lines.Count} log lines");
-    }
-
-    /// <summary>
-    /// Nothing in the UI calls this since the console header lost its Clear button, but
-    /// <see cref="ActivityLog"/> is the only thing holding those entries, so the way to
-    /// empty it stays here rather than being rebuilt from scratch later.
-    /// </summary>
-    [RelayCommand]
-    private void ClearLog()
-    {
-        _log.Clear();
-        OnPropertyChanged(nameof(LatestEntry));
-        OnPropertyChanged(nameof(HasLogEntries));
-    }
 
     private void Log(ActivityLevel level, string message, string? detail = null)
     {
@@ -1542,6 +1477,24 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// What the site on this domain actually runs, taken from the account signed in to
+    /// it. Null when there is none, and null is what gets shown - a heading that says
+    /// nothing beats one that says Gitea about a GitLab.
+    /// </summary>
+    /// <remarks>
+    /// This used to be guessed in <see cref="HostResolver"/>: github.com was GitHub and
+    /// everything else was Gitea. Signing in is the moment a site stops being a domain
+    /// and starts being a known thing, so the answer comes from there.
+    /// </remarks>
+    private string? SiteNameFor(GitHost host)
+    {
+        var account = Accounts.FirstOrDefault(a =>
+            string.Equals(a.BaseUrl.Host, host.Id, StringComparison.OrdinalIgnoreCase));
+
+        return account is null ? null : _hosts.ById(account.ProviderId)?.DisplayName;
+    }
+
+    /// <summary>
     /// Finds the signed-in account matching a remote URL's domain and asks its provider
     /// for git credentials. Null is fine - public HTTPS remotes need no sign-in.
     /// </summary>
@@ -1652,6 +1605,11 @@ public partial class MainWindowViewModel : ViewModelBase
             await _accountStore.RemoveAsync(account);
             Accounts.Remove(account);
             OnPropertyChanged(nameof(HasAccounts));
+
+            // The picker names each host from the account signed in to it, so signing
+            // one out takes that name away with it.
+            RebuildGroups();
+
             Log(ActivityLevel.Info, $"Signed out {account.Login}");
         });
     }
@@ -1666,6 +1624,10 @@ public partial class MainWindowViewModel : ViewModelBase
 
         Accounts.Add(account);
         OnPropertyChanged(nameof(HasAccounts));
+
+        // And signing in is the moment a domain in the picker can start saying what it
+        // is, rather than only where it is.
+        RebuildGroups();
     }
 
     [RelayCommand]
@@ -2968,7 +2930,12 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         var groups = Repositories
             .GroupBy(r => r.Host)
-            .Select(g => new HostGroupViewModel { Host = g.Key, Repositories = g.ToList() })
+            .Select(g => new HostGroupViewModel
+            {
+                Host = g.Key,
+                Repositories = g.ToList(),
+                SiteName = SiteNameFor(g.Key),
+            })
             .OrderBy(g => g.Host.Name, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
