@@ -137,7 +137,9 @@
           Fixed a clone or fetch that failed part-way through being
           reported as a rejected sign-in token, hiding the real reason.
           Windows paths longer than the system allows are now named as
-          the cause when they are.
+          the cause when they are. The activity console can be selected
+          and copied, and there is a Copy button on it that takes the
+          whole log.
         </p>
       </description>
     </release>
