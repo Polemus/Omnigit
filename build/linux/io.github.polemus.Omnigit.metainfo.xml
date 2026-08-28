@@ -130,6 +130,18 @@
   <content_rating type="oars-1.1" />
 
   <releases>
+    <release version="0.4.5" date="2026-08-28">
+      <url type="details">https://github.com/Polemus/Omnigit/releases/tag/v0.4.5</url>
+      <description>
+        <p>
+          Fixed a clone or fetch that failed part-way through being
+          reported as a rejected sign-in token, hiding the real reason;
+          Windows paths longer than the system allows are now named as
+          the cause when they are. The activity console can be selected
+          and copied, and a Copy button on it takes the whole log.
+        </p>
+      </description>
+    </release>
     <release version="0.4.3" date="2026-08-27">
       <url type="details">https://github.com/Polemus/Omnigit/releases/tag/v0.4.3</url>
       <description>
