@@ -116,6 +116,9 @@ public partial class MainWindowViewModel : ViewModelBase
             OnPropertyChanged(nameof(DiscardChangesLabel));
         };
 
+        // Same again for the console: the label has to say what Copy would take.
+        SelectedLogEntries.CollectionChanged += (_, _) => OnPropertyChanged(nameof(CopyLogLabel));
+
         foreach (var provider in hosts.Providers)
             Providers.Add(provider);
 
@@ -225,26 +228,41 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public bool HasLogEntries => _log.Entries.Count > 0;
 
+    /// <summary>The lines picked out in the console, which is what Copy acts on.</summary>
+    public ObservableCollection<ActivityEntry> SelectedLogEntries { get; } = [];
+
+    /// <summary>Names what would be copied, so the menu is not a guess.</summary>
+    public string CopyLogLabel => SelectedLogEntries.Count switch
+    {
+        0 => "Copy the whole log",
+        1 => "Copy line",
+        var many => $"Copy {many} lines",
+    };
+
     [RelayCommand]
     private void ToggleConsole() => IsConsoleExpanded = !IsConsoleExpanded;
 
     /// <summary>
-    /// The whole console as plain text, for pasting into a bug report.
+    /// The selected lines as plain text, or the whole log when nothing is picked out.
     /// </summary>
     /// <remarks>
-    /// Selecting the lines themselves only ever gets one at a time - each is its own
-    /// control, and a selection cannot cross from one to the next - so a failure that
-    /// took several lines to describe would have to be retyped without this.
+    /// Copying nothing because nothing happened to be selected would be a worse answer
+    /// than copying everything: the console is read when something went wrong, and the
+    /// whole of it is what a bug report wants.
     /// </remarks>
     [RelayCommand]
     private async Task CopyLogAsync()
     {
-        if (_log.Entries.Count == 0)
+        var lines = SelectedLogEntries.Count > 0
+            ? _log.Entries.Where(SelectedLogEntries.Contains).ToList()
+            : [.. _log.Entries];
+
+        if (lines.Count == 0)
             return;
 
         var text = new StringBuilder();
 
-        foreach (var entry in _log.Entries)
+        foreach (var entry in lines)
         {
             text.Append(entry.Timestamp).Append("  ").AppendLine(entry.Message);
 
@@ -257,7 +275,8 @@ public partial class MainWindowViewModel : ViewModelBase
                 text.Append("          ").AppendLine(line.TrimEnd('\r'));
         }
 
-        await CopyAsync(text.ToString().TrimEnd(), "activity log");
+        await CopyAsync(text.ToString().TrimEnd(),
+            lines.Count == 1 ? "log line" : $"{lines.Count} log lines");
     }
 
     /// <summary>

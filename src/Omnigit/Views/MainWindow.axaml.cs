@@ -6,6 +6,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Styling;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using Omnigit.ViewModels;
 
 namespace Omnigit.Views;
@@ -84,9 +85,35 @@ public partial class MainWindow : Window
 
         ((INotifyCollectionChanged)model.LogEntries).CollectionChanged += (_, args) =>
         {
-            if (args.Action == NotifyCollectionChangedAction.Add)
-                Dispatcher.UIThread.Post(() => LogScroller.ScrollToEnd(), DispatcherPriority.Background);
+            if (args.Action != NotifyCollectionChangedAction.Add)
+                return;
+
+            Dispatcher.UIThread.Post(() =>
+            {
+                if (model.LogEntries.Count > 0)
+                    LogList.ScrollIntoView(model.LogEntries[^1]);
+            }, DispatcherPriority.Background);
         };
+    }
+
+    /// <summary>
+    /// Right-clicking the log selects the row under the pointer, so the menu acts on
+    /// what was aimed at - unless that row is already part of a selection, which is
+    /// left alone rather than collapsed to the one row. The same rule as the changed
+    /// files list, and the reason a set of lines can be copied in one go.
+    /// </summary>
+    private void OnLogContextRequested(object? sender, ContextRequestedEventArgs e)
+    {
+        if (sender is not ListBox list || e.Source is not Visual visual)
+            return;
+
+        if (visual.FindAncestorOfType<ListBoxItem>(includeSelf: true) is not { DataContext: { } row })
+            return;
+
+        if (list.SelectedItems is { Count: > 1 } selected && selected.Contains(row))
+            return;
+
+        list.SelectedItem = row;
     }
 
     // Flyouts don't dismiss themselves when a templated row is clicked, so these

@@ -778,10 +778,8 @@
 
             <Border Grid.Row="0" Classes="divider" />
 
-            <!-- The header IS the toggle, expanded or not. Copy sits beside it rather
-                 than inside it: a button within a button reads as one target, and this
-                 one must not also collapse the console it just copied. -->
-            <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
+            <!-- The header IS the toggle, expanded or not. -->
+            <Grid Grid.Row="1" ColumnDefinitions="*">
                 <Button Grid.Column="0" Classes="consoleBar"
                         Command="{Binding ToggleConsoleCommand}">
                     <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
@@ -807,17 +805,6 @@
                               IsVisible="{Binding IsConsoleExpanded}" />
                     </Grid>
                 </Button>
-
-                <!-- Selecting text gets one line at a time, since each is its own
-                     control. This is how the whole log leaves the app - which is what
-                     someone reporting a problem actually needs to send. -->
-                <Button Grid.Column="1" Classes="link" Margin="0,0,14,0"
-                        FontSize="12" VerticalAlignment="Center"
-                        Content="Copy"
-                        ToolTip.Tip="Copy the whole log to the clipboard"
-                        IsVisible="{Binding IsConsoleExpanded}"
-                        IsEnabled="{Binding HasLogEntries}"
-                        Command="{Binding CopyLogCommand}" />
             </Grid>
 
             <!-- Expanded log. No fixed height: the row it sits in is what's dragged. -->
@@ -826,40 +813,53 @@
 
                 <Border Grid.Row="0" Background="{DynamicResource SurfaceBackground}"
                         BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0,1,0,0">
-                    <ScrollViewer x:Name="LogScroller" Padding="14,8">
-                        <ItemsControl ItemsSource="{Binding LogEntries}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate x:DataType="svc:ActivityEntry">
-                                    <!-- SelectableTextBlock throughout: an error the user
-                                         cannot copy is one they have to retype into a
-                                         message to us. Selection does not cross from one
-                                         line to the next, since each is its own control -
-                                         Copy in the header is there for the whole lot. -->
-                                    <StackPanel Margin="0,1">
-                                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                                            <SelectableTextBlock Grid.Column="0" Classes="mono"
-                                                       Foreground="{DynamicResource DiffGutterText}"
-                                                       Text="{Binding Timestamp}" />
-                                            <SelectableTextBlock Grid.Column="1"
-                                                       Classes="mono logLine"
-                                                       Classes.trace="{Binding IsTrace}"
-                                                       Classes.success="{Binding IsSuccess}"
-                                                       Classes.warning="{Binding IsWarning}"
-                                                       Classes.error="{Binding IsError}"
-                                                       TextWrapping="Wrap"
-                                                       Text="{Binding Message}" />
-                                        </Grid>
-                                        <SelectableTextBlock Classes="mono" FontSize="11"
-                                                   Margin="72,2,0,6"
-                                                   Foreground="{DynamicResource TextMuted}"
+                    <!-- A list rather than a run of text: an error nobody can copy is one
+                         they have to retype into a message to us, and the unit worth
+                         copying is the line. Multiple, so ctrl- and shift-click pick out
+                         a set of them, and Ctrl+C or the right-click menu takes the lot.
+                         Same right-click handling as the changed files: the row under the
+                         pointer is selected first, unless it is already part of a
+                         selection, which is left alone. -->
+                    <ListBox x:Name="LogList" Classes="plain logList"
+                             ItemsSource="{Binding LogEntries}"
+                             SelectionMode="Multiple"
+                             SelectedItems="{Binding SelectedLogEntries}"
+                             ContextRequested="OnLogContextRequested">
+                        <ListBox.KeyBindings>
+                            <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyLogCommand}" />
+                        </ListBox.KeyBindings>
+                        <ListBox.ContextFlyout>
+                            <MenuFlyout Placement="Pointer">
+                                <MenuItem Header="{Binding CopyLogLabel}"
+                                          Command="{Binding CopyLogCommand}" />
+                            </MenuFlyout>
+                        </ListBox.ContextFlyout>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="svc:ActivityEntry">
+                                <StackPanel Margin="14,1">
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                        <TextBlock Grid.Column="0" Classes="mono"
+                                                   Foreground="{DynamicResource DiffGutterText}"
+                                                   Text="{Binding Timestamp}" />
+                                        <TextBlock Grid.Column="1"
+                                                   Classes="mono logLine"
+                                                   Classes.trace="{Binding IsTrace}"
+                                                   Classes.success="{Binding IsSuccess}"
+                                                   Classes.warning="{Binding IsWarning}"
+                                                   Classes.error="{Binding IsError}"
                                                    TextWrapping="Wrap"
-                                                   IsVisible="{Binding HasDetail}"
-                                                   Text="{Binding Detail}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
+                                                   Text="{Binding Message}" />
+                                    </Grid>
+                                    <TextBlock Classes="mono" FontSize="11"
+                                               Margin="72,2,0,6"
+                                               Foreground="{DynamicResource TextMuted}"
+                                               TextWrapping="Wrap"
+                                               IsVisible="{Binding HasDetail}"
+                                               Text="{Binding Detail}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </Border>
             </Grid>
         </Grid>
