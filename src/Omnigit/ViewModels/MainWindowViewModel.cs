@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Controls; // GridLength, for the resizable pane widths below.
 using Avalonia.Threading; // The timer behind the background fetch.
@@ -226,6 +227,38 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [RelayCommand]
     private void ToggleConsole() => IsConsoleExpanded = !IsConsoleExpanded;
+
+    /// <summary>
+    /// The whole console as plain text, for pasting into a bug report.
+    /// </summary>
+    /// <remarks>
+    /// Selecting the lines themselves only ever gets one at a time - each is its own
+    /// control, and a selection cannot cross from one to the next - so a failure that
+    /// took several lines to describe would have to be retyped without this.
+    /// </remarks>
+    [RelayCommand]
+    private async Task CopyLogAsync()
+    {
+        if (_log.Entries.Count == 0)
+            return;
+
+        var text = new StringBuilder();
+
+        foreach (var entry in _log.Entries)
+        {
+            text.Append(entry.Timestamp).Append("  ").AppendLine(entry.Message);
+
+            if (!entry.HasDetail)
+                continue;
+
+            // Detail can be several lines - a stack trace, a server's reply - and each
+            // is indented under its entry so the copy reads the way the console does.
+            foreach (var line in entry.Detail!.Split('\n'))
+                text.Append("          ").AppendLine(line.TrimEnd('\r'));
+        }
+
+        await CopyAsync(text.ToString().TrimEnd(), "activity log");
+    }
 
     /// <summary>
     /// Nothing in the UI calls this since the console header lost its Clear button, but

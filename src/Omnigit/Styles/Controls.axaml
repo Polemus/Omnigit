@@ -43,7 +43,10 @@
         <Setter Property="Foreground" Value="{DynamicResource TextMuted}" />
     </Style>
 
-    <Style Selector="TextBlock.mono">
+    <!-- :is() rather than the bare type, so SelectableTextBlock gets it too. A plain
+         "TextBlock.mono" selector matches the exact type and silently does nothing for
+         the subclass, leaving the default font on anything the user can select. -->
+    <Style Selector=":is(TextBlock).mono">
         <Setter Property="FontFamily" Value="{DynamicResource MonoFont}" />
         <Setter Property="FontSize" Value="12" />
     </Style>
@@ -541,19 +544,19 @@
         <Setter Property="Background" Value="{DynamicResource StatusDeleted}" />
     </Style>
 
-    <Style Selector="TextBlock.logLine">
+    <Style Selector=":is(TextBlock).logLine">
         <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
     </Style>
-    <Style Selector="TextBlock.logLine.trace">
+    <Style Selector=":is(TextBlock).logLine.trace">
         <Setter Property="Foreground" Value="{DynamicResource TextMuted}" />
     </Style>
-    <Style Selector="TextBlock.logLine.success">
+    <Style Selector=":is(TextBlock).logLine.success">
         <Setter Property="Foreground" Value="{DynamicResource StatusAdded}" />
     </Style>
-    <Style Selector="TextBlock.logLine.warning">
+    <Style Selector=":is(TextBlock).logLine.warning">
         <Setter Property="Foreground" Value="{DynamicResource StatusModified}" />
     </Style>
-    <Style Selector="TextBlock.logLine.error">
+    <Style Selector=":is(TextBlock).logLine.error">
         <Setter Property="Foreground" Value="{DynamicResource StatusDeleted}" />
     </Style>
 
