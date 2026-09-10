@@ -29,3 +29,4 @@ Thumbs.db
 *~
 
 # .vscode/ is deliberately absent from this file — launch.json is checked in.
+CLAUDE.md
