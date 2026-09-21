@@ -8,8 +8,9 @@ anything, or know git.
 Go to the project on Weblate, pick your language, and fill in boxes. Weblate opens a pull
 request here on its own; nobody has to do anything with a file.
 
-<!-- TODO: link the Weblate project here once it is set up; see "Setting it up" below.
-     Until then this paragraph is the only thing in the repository that is not true. -->
+<!-- TODO: link the Weblate project here once it exists. Until then this paragraph is the
+     one thing in the repository that is not yet true; the setup is a maintainer task and
+     lives in CLAUDE.md's roadmap, not here. -->
 
 Three things worth knowing before you start:
 
@@ -121,21 +122,3 @@ Two things a language change does not reach, both on purpose:
 - **`HostResolver.LocalOnly`.** One instance that repositories hold by reference and the
   sidebar groups by; rebuilding it with a new name would orphan everything loaded before
   the change. It follows on the next launch.
-
-## Setting it up on Weblate
-
-Not done yet. The steps, once:
-
-1. Apply for free hosting for libre projects at <https://hosted.weblate.org/hosting/>.
-   Omnigit qualifies: public repository, MIT.
-2. Add a component pointing at this repository, branch `main`:
-   - **File format**: gettext PO
-   - **File mask**: `src/Omnigit/Resources/Locale/*.po`
-   - **Template for new translations**: `src/Omnigit/Resources/Locale/Omnigit.pot`
-   - **Repository push URL**: the fork Weblate should open pull requests from
-3. Turn **off** translation of `qps-ploc`. It is generated, and a person editing it would
-   have their work overwritten by the next `extract.py` run.
-4. Put the component's URL in the "If you want to translate" section above, and in the
-   note under Settings → General.
-
-Only the account holder can do 1 and 2.
