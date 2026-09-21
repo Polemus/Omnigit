@@ -1,16 +1,42 @@
 # Translating Omnigit
 
-Omnigit is translated by the people who use it. You do not need to write code, install
-anything, or know git.
+Omnigit is translated by the people who use it. You do not need to write code or know
+git.
 
 ## If you want to translate
 
-Go to the project on Weblate, pick your language, and fill in boxes. Weblate opens a pull
-request here on its own; nobody has to do anything with a file.
+**The easy way is not available yet.** Omnigit is not on Weblate — a translation site
+where you would pick a language and fill in boxes, with the pull request opened for you.
+It is coming; until then the route below is the one that works, and it asks more of you
+than it should.
 
-<!-- TODO: link the Weblate project here once it exists. Until then this paragraph is the
-     one thing in the repository that is not yet true; the setup is a maintainer task and
-     lives in CLAUDE.md's roadmap, not here. -->
+<!-- TODO: when the Weblate project exists, this becomes "go there and fill in boxes" and
+     the section below becomes the alternative rather than the only way. The setup is a
+     maintainer task and lives in CLAUDE.md's roadmap, not here. -->
+
+### Until then, by hand
+
+You need a text editor and a GitHub account. You do not need git installed, and you do not
+need to know how to use it.
+
+1. **Get [Poedit](https://poedit.net/)** — free, on Windows, macOS and Linux, and made for
+   exactly this. A plain text editor works too, but Poedit writes the file header for you
+   and shows the right number of plural boxes for your language, which are the two things
+   that are fiddly to get right by hand.
+2. **Open `src/Omnigit/Resources/Locale/Omnigit.pot`** from this repository. Poedit will
+   ask which language you are translating into and create the file.
+3. **Fill in what you like.** Nothing has to be finished — see the notes above about `{0}`,
+   context notes and plurals.
+4. **Save it as `<language>.po`** — `af.po`, `de.po`, `pt_BR.po` — using the code Poedit
+   suggests.
+5. **Open a pull request.** On GitHub, go to `src/Omnigit/Resources/Locale/`, press **Add
+   file → Upload files**, drop your `.po` in, and choose *Create a new branch and start a
+   pull request*. GitHub makes the fork and the branch for you.
+
+That is the whole thing. Nobody will ask you to rebase anything.
+
+If a string looks wrong in English, say so in the pull request rather than fixing it in
+your language alone — it is wrong for everybody.
 
 Three things worth knowing before you start:
 

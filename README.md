@@ -210,8 +210,9 @@ Found a security problem? Don't open an issue —
 
 ### Translating
 
-Omnigit is in English, and can be in yours. You do not need to write code, install
-anything or know git — see **[docs/translating.md](docs/translating.md)**.
+Omnigit is in English, and can be in yours. You do not need to write code or know git —
+see **[docs/translating.md](docs/translating.md)**, which is one free editor and a file
+upload until Omnigit is on a translation site.
 
 A language ships at whatever percentage it has reached; anything untranslated shows in
 English, so a partial translation is worth having and worth sending.
