@@ -193,6 +193,7 @@ backlog — say so in an issue before starting on one, so two people don't write
 | [docs/architecture.md](docs/architecture.md) | The layers and *why* they're shaped this way |
 | [docs/notes.md](docs/notes.md) | Decisions that look arbitrary and aren't, plus every Avalonia, libgit2 and code-signing trap already paid for |
 | [docs/host-manifests.md](docs/host-manifests.md) | How to add a hosting site by writing one JSON file |
+| [docs/translating.md](docs/translating.md) | Translating it into your language, and adding a string so it can be translated |
 | [docs/flatpak.md](docs/flatpak.md) | The sandbox, the checked-in NuGet lists, and how a release reaches Flathub |
 | [CONTRIBUTING.md](.github/CONTRIBUTING.md) | What a good pull request looks like |
 | [SECURITY.md](.github/SECURITY.md) | Reporting a vulnerability privately, and what's in scope |
@@ -206,6 +207,14 @@ dotnet test
 
 Found a security problem? Don't open an issue —
 [report it privately](https://github.com/Polemus/Omnigit/security/advisories/new).
+
+### Translating
+
+Omnigit is in English, and can be in yours. You do not need to write code, install
+anything or know git — see **[docs/translating.md](docs/translating.md)**.
+
+A language ships at whatever percentage it has reached; anything untranslated shows in
+English, so a partial translation is worth having and worth sending.
 
 ## Licence
 
