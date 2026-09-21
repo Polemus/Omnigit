@@ -104,7 +104,7 @@ public readonly record struct InstallLocation(
     public string? ManagedBy => Medium switch
     {
         InstallMedium.Flatpak =>
-            "Installed as a Flatpak. Run flatpak update, or let your software centre do it.",
+            Strings.Get("Installed as a Flatpak. Run flatpak update, or let your software centre do it."),
         _ => null,
     };
 }

@@ -107,10 +107,10 @@ public static class Trash
         var code = SHFileOperation(ref operation);
 
         if (code != 0)
-            return new(TrashOutcome.Failed, $"The Recycle Bin refused it (code {code}).");
+            return new(TrashOutcome.Failed, Strings.Format("The Recycle Bin refused it (code {0}).", code));
 
         if (operation.fAnyOperationsAborted)
-            return new(TrashOutcome.Failed, "The delete was cancelled.");
+            return new(TrashOutcome.Failed, Strings.Get("The delete was cancelled."));
 
         return new(TrashOutcome.Trashed);
     }
@@ -132,7 +132,7 @@ public static class Trash
 
         return run.ExitCode == 0
             ? new(TrashOutcome.Trashed)
-            : new(TrashOutcome.Failed, Firstline(run.Error) ?? "The Finder refused it.");
+            : new(TrashOutcome.Failed, Firstline(run.Error) ?? Strings.Get("The Finder refused it."));
     }
 
     // ---- Linux -------------------------------------------------------------
@@ -198,7 +198,8 @@ public static class Trash
             // in that volume's own trash rather than here.
             return new(
                 TrashOutcome.Failed,
-                $"Could not move it to the trash ({ex.Message}). Install gio, or delete it yourself.");
+                Strings.Format("Could not move it to the trash ({0}). Install gio, or delete it yourself.",
+                               ex.Message));
         }
 
         return new(TrashOutcome.Trashed);

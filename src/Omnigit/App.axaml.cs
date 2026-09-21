@@ -67,7 +67,7 @@ public partial class App : Application
             var log = new ActivityLog(logFile);
 
             if (logFile.IsWriting)
-                log.Write(ActivityLevel.Trace, $"Logging to {logFile.Path}");
+                log.Write(ActivityLevel.Trace, Strings.Format("Logging to {0}", logFile.Path));
 
             // Before anything can reach a remote. On Windows this puts git's HTTPS on
             // .NET's stack instead of libgit2's, which cannot survive TLS 1.3 - see
@@ -114,13 +114,13 @@ public partial class App : Application
         switch (result.Outcome)
         {
             case DesktopIntegrationOutcome.Installed:
-                log.Write(ActivityLevel.Info, "Added Omnigit to the desktop menu", result.Detail);
+                log.Write(ActivityLevel.Info, Strings.Get("Added Omnigit to the desktop menu"), result.Detail);
                 break;
 
             case DesktopIntegrationOutcome.Failed:
                 log.Write(
                     ActivityLevel.Warning,
-                    "Couldn't add Omnigit to the desktop menu - it will show a generic icon",
+                    Strings.Get("Couldn't add Omnigit to the desktop menu - it will show a generic icon"),
                     result.Detail);
                 break;
         }

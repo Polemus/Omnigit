@@ -45,7 +45,7 @@ public sealed partial class GitService
             // Inside the try because even looking a tag up validates the name, and a name
             // git will not accept has to come back as our own message either way.
             if (repo.Tags[tagName] is not null)
-                throw new InvalidOperationException($"Tag '{tagName}' already exists.");
+                throw new InvalidOperationException(Strings.Format("Tag '{0}' already exists.", tagName));
 
             // With a message git writes a tag object recording who made it and why;
             // without one the tag is just a name pointing at the commit, which is what
@@ -86,7 +86,7 @@ public sealed partial class GitService
         {
             return new SwitchResult(
                 SwitchOutcome.Conflicts,
-                "Commit or stash your changes before opening an older commit.",
+                Strings.Get("Commit or stash your changes before opening an older commit."),
                 []);
         }
 
@@ -100,7 +100,12 @@ public sealed partial class GitService
     {
         using var repo = new Repository(Discover(path));
 
-        if (NotReady(repo, "revert") is { } refusal)
+        if (NotReady(repo,
+                Strings.Format("Finish or abandon the {0} already in progress before you "
+                               + "revert anything else.", Describe(repo.Info.CurrentOperation)),
+                Strings.Get("Commit or stash your changes before you revert a commit — git needs "
+                            + "a clean working tree to tell its own conflicts from yours."))
+            is { } refusal)
             return refusal;
 
         var commit = Require(repo, sha);
@@ -108,7 +113,7 @@ public sealed partial class GitService
         if (repo.Info.IsHeadDetached)
         {
             return CommitOperationResult.Refused(
-                "Reverting writes a new commit, so check out a branch for it to go on first.");
+                Strings.Get("Reverting writes a new commit, so check out a branch for it to go on first."));
         }
 
         var result = repo.Revert(commit, SignatureFor(repo));
@@ -116,14 +121,17 @@ public sealed partial class GitService
         return result.Status switch
         {
             RevertStatus.Reverted => CommitOperationResult.Ok(
-                $"Reverted {Abbreviate(commit.Sha)} — {Abbreviate(result.Commit.Sha)}"),
+                Strings.Format("Reverted {0} — {1}",
+                               Abbreviate(commit.Sha), Abbreviate(result.Commit.Sha))),
 
             RevertStatus.Conflicts => Conflicted(repo,
-                $"Undoing {Abbreviate(commit.Sha)} clashes with what has changed since"),
+                Strings.Format("Undoing {0} clashes with what has changed since",
+                               Abbreviate(commit.Sha))),
 
             _ => new CommitOperationResult(
                 CommitOperationOutcome.NothingToDo,
-                $"{Abbreviate(commit.Sha)} has already been undone — nothing to revert.",
+                Strings.Format("{0} has already been undone — nothing to revert.",
+                               Abbreviate(commit.Sha)),
                 []),
         };
     }
@@ -141,7 +149,12 @@ public sealed partial class GitService
     {
         using var repo = new Repository(Discover(path));
 
-        if (NotReady(repo, "cherry-pick") is { } refusal)
+        if (NotReady(repo,
+                Strings.Format("Finish or abandon the {0} already in progress before you "
+                               + "copy a commit anywhere else.", Describe(repo.Info.CurrentOperation)),
+                Strings.Get("Commit or stash your changes before you copy a commit — git needs "
+                            + "a clean working tree to tell its own conflicts from yours."))
+            is { } refusal)
             return refusal;
 
         var commit = Require(repo, sha);
@@ -155,8 +168,8 @@ public sealed partial class GitService
             if (CheckedOutElsewhere(repo, target) is { } worktree)
             {
                 return CommitOperationResult.Refused(
-                    $"{target} is already checked out in {worktree}. Switch that copy to "
-                    + "another branch first, or remove it.");
+                    Strings.Format("{0} is already checked out in {1}. Switch that copy to "
+                                   + "another branch first, or remove it.", target, worktree));
             }
 
             // Adopt for the same reason the branch picker checks one out: the target list
@@ -164,7 +177,8 @@ public sealed partial class GitService
             // remote. Copying a commit onto one means creating it here first.
             var branch = repo.Branches[target]
                          ?? Adopt(repo, target)
-                         ?? throw new InvalidOperationException($"Branch '{target}' not found.");
+                         ?? throw new InvalidOperationException(
+                                Strings.Format("Branch '{0}' not found.", target));
 
             Commands.Checkout(repo, branch);
         }
@@ -175,9 +189,11 @@ public sealed partial class GitService
         return result.Status switch
         {
             CherryPickStatus.CherryPicked => CommitOperationResult.Ok(
-                $"Copied {Abbreviate(commit.Sha)} onto {onto} — {Abbreviate(result.Commit.Sha)}"),
+                Strings.Format("Copied {0} onto {1} — {2}",
+                               Abbreviate(commit.Sha), onto, Abbreviate(result.Commit.Sha))),
 
-            _ => Conflicted(repo, $"Copying {Abbreviate(commit.Sha)} onto {onto} hit conflicts"),
+            _ => Conflicted(repo, Strings.Format("Copying {0} onto {1} hit conflicts",
+                                                 Abbreviate(commit.Sha), onto)),
         };
     }
 
@@ -236,7 +252,8 @@ public sealed partial class GitService
         }
 
         if (repo.Lookup<Blob>(keep.Id) is not { } blob)
-            throw new InvalidOperationException($"The chosen version of {file} is missing from the repository.");
+            throw new InvalidOperationException(
+                Strings.Format("The chosen version of {0} is missing from the repository.", file));
 
         Directory.CreateDirectory(Path.GetDirectoryName(full)!);
 
@@ -333,21 +350,20 @@ public sealed partial class GitService
     /// Why the repository can't take another operation right now, or null if it can.
     /// Checked up front so a refusal changes nothing at all.
     /// </summary>
-    private static CommitOperationResult? NotReady(Repository repo, string what)
+    /// <param name="busy">
+    /// What to say when another operation is already under way. Built by the caller,
+    /// because it used to be one sentence with a bare English verb - "revert",
+    /// "cherry-pick" - dropped into it, and a verb in a slot is the shape that does not
+    /// survive a language which inflects.
+    /// </param>
+    /// <param name="dirty">The same, for a working tree with changes in it.</param>
+    private static CommitOperationResult? NotReady(Repository repo, string busy, string dirty)
     {
         if (repo.Info.CurrentOperation != CurrentOperation.None)
-        {
-            return CommitOperationResult.Refused(
-                $"Finish or abandon the {Describe(repo.Info.CurrentOperation)} already in progress "
-                + $"before you {what} anything else.");
-        }
+            return CommitOperationResult.Refused(busy);
 
         if (ChangedPaths(repo).Count > 0)
-        {
-            return CommitOperationResult.Refused(
-                $"Commit or stash your changes before you {what} a commit — git needs a clean "
-                + "working tree to tell its own conflicts from yours.");
-        }
+            return CommitOperationResult.Refused(dirty);
 
         return null;
     }
@@ -356,12 +372,15 @@ public sealed partial class GitService
     {
         var paths = ConflictedPaths(repo);
 
-        var names = string.Join(", ", paths.Take(3))
-                    + (paths.Count > 3 ? $" and {paths.Count - 3} more" : string.Empty);
+        var names = string.Join(Strings.Particular("between items of a list", ", "), paths.Take(3))
+                    + (paths.Count > 3
+                        ? Strings.Plural(" and {0} more", " and {0} more", paths.Count - 3)
+                        : string.Empty);
 
         return new CommitOperationResult(
             CommitOperationOutcome.Conflicts,
-            $"{what}: {names}. Choose a version for each, then commit — or abandon it.",
+            Strings.Format("{0}: {1}. Choose a version for each, then commit — or abandon it.",
+                           what, names),
             paths);
     }
 
@@ -381,7 +400,8 @@ public sealed partial class GitService
 
     private static Commit Require(Repository repo, string sha)
         => repo.Lookup<Commit>(sha)
-           ?? throw new InvalidOperationException($"Commit {Abbreviate(sha)} is not in this repository.");
+           ?? throw new InvalidOperationException(
+                  Strings.Format("Commit {0} is not in this repository.", Abbreviate(sha)));
 
     private static Signature SignatureFor(Repository repo)
         => repo.Config.BuildSignature(DateTimeOffset.Now)
@@ -404,10 +424,10 @@ public sealed partial class GitService
     private static string Describe(CurrentOperation operation)
         => ToOperation(operation) switch
         {
-            RepositoryOperation.Merge => "merge",
-            RepositoryOperation.Revert => "revert",
-            RepositoryOperation.CherryPick => "cherry-pick",
-            RepositoryOperation.Rebase => "rebase",
-            _ => "operation",
+            RepositoryOperation.Merge => Strings.Get("merge"),
+            RepositoryOperation.Revert => Strings.Get("revert"),
+            RepositoryOperation.CherryPick => Strings.Get("cherry-pick"),
+            RepositoryOperation.Rebase => Strings.Get("rebase"),
+            _ => Strings.Get("operation"),
         };
 }

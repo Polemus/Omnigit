@@ -61,12 +61,25 @@ public static class Strings
     /// catalogue's own business - English asks for two, Japanese wants one and Arabic six,
     /// and the .po header says which.
     /// </remarks>
-    public static string Plural(string one, string many, int count)
+    /// <param name="rest">
+    /// Anything else the sentence names, from {1} onwards. The count is always {0}, so a
+    /// translation can move it anywhere in the sentence without the call site changing -
+    /// which is the point, since a pluralized noun phrase spliced into a sentence is the
+    /// shape this whole exercise exists to remove.
+    /// </param>
+    public static string Plural(string one, string many, int count, params object?[] rest)
     {
         var form = _catalogue.Lookup(one, count)
                    ?? (count == 1 ? one : many);
 
-        return string.Format(CultureInfo.InvariantCulture, form, count);
+        if (rest.Length == 0)
+            return string.Format(CultureInfo.InvariantCulture, form, count);
+
+        var arguments = new object?[rest.Length + 1];
+        arguments[0] = count;
+        rest.CopyTo(arguments, 1);
+
+        return string.Format(CultureInfo.InvariantCulture, form, arguments);
     }
 
     /// <summary>

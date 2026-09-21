@@ -103,7 +103,8 @@ public static class DesktopIntegration
         var dataHome = DataHome();
         var source = Path.Combine(appDir, "usr", "share", "applications", $"{AppId}.desktop");
         if (!File.Exists(source))
-            return new(DesktopIntegrationOutcome.Failed, $"no desktop entry at {source}");
+            return new(DesktopIntegrationOutcome.Failed,
+                Strings.Format("no desktop entry at {0}", source));
 
         var target = Path.Combine(dataHome, "applications", $"{AppId}.desktop");
         var entry = Localise(File.ReadAllText(source), appImage);

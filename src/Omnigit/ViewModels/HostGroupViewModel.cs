@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Omnigit.Models;
+using Omnigit.Services;
 
 namespace Omnigit.ViewModels;
 
@@ -27,9 +28,9 @@ public sealed class HostGroupViewModel
     {
         get
         {
-            var count = Repositories.Count == 1
-                ? "1 repository"
-                : $"{Repositories.Count} repositories";
+            // The count decides which form, so there is no branch here any more: what was
+            // an if for English's two cases is the catalogue's business now.
+            var count = Strings.Plural("{0} repository", "{0} repositories", Repositories.Count);
 
             return SiteName is null || SiteName == Host.Name ? count : $"{SiteName} · {count}";
         }

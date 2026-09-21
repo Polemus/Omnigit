@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Omnigit.Models;
+using Omnigit.Services;
 
 namespace Omnigit.ViewModels;
 
@@ -46,7 +47,7 @@ public partial class FileChangeViewModel : ViewModelBase
     /// <summary>Trailing slash, so the pattern matches the directory and not a file of the same name.</summary>
     public string IgnoreFolderPattern => $"{Model.Directory}/";
 
-    public string IgnoreFolderLabel => $"Ignore folder ({Model.Directory}/)";
+    public string IgnoreFolderLabel => Strings.Format("Ignore folder ({0}/)", Model.Directory);
 
     /// <summary>Empty for a file with no extension, e.g. LICENSE or Makefile.</summary>
     public string Extension
@@ -64,5 +65,5 @@ public partial class FileChangeViewModel : ViewModelBase
 
     public string IgnoreExtensionPattern => $"*.{Extension}";
 
-    public string IgnoreExtensionLabel => $"Ignore all .{Extension} files";
+    public string IgnoreExtensionLabel => Strings.Format("Ignore all .{0} files", Extension);
 }

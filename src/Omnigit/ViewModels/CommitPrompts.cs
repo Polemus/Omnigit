@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Omnigit.Models;
+using Omnigit.Services;
 
 namespace Omnigit.ViewModels;
 
@@ -76,7 +77,7 @@ public sealed partial class CherryPickDraftViewModel : CommitPromptViewModel
 
     public bool CanApply => !string.IsNullOrWhiteSpace(TargetBranch);
 
-    public string EmptyLabel => "There is no other branch to copy this onto. Make one first.";
+    public string EmptyLabel => Strings.Get("There is no other branch to copy this onto. Make one first.");
 }
 
 /// <summary>
@@ -109,18 +110,18 @@ public sealed partial class ResetDraftViewModel(CommitInfo commit) : CommitPromp
 
     public string Explanation => Kind switch
     {
-        ResetKind.Soft =>
-            $"Everything committed after {ShortSha} comes back as changes ready to commit again. "
-            + "Nothing is lost.",
+        ResetKind.Soft => Strings.Format(
+            "Everything committed after {0} comes back as changes ready to commit again. "
+            + "Nothing is lost.", ShortSha),
 
-        ResetKind.Hard =>
-            $"Everything committed after {ShortSha}, and everything uncommitted, is thrown away. "
-            + "This cannot be undone.",
+        ResetKind.Hard => Strings.Format(
+            "Everything committed after {0}, and everything uncommitted, is thrown away. "
+            + "This cannot be undone.", ShortSha),
 
-        _ =>
-            $"Everything committed after {ShortSha} comes back as changes in your working tree, "
-            + "unstaged. Nothing is lost.",
+        _ => Strings.Format(
+            "Everything committed after {0} comes back as changes in your working tree, "
+            + "unstaged. Nothing is lost.", ShortSha),
     };
 
-    public string ConfirmLabel => IsHard ? "Reset and discard" : "Reset";
+    public string ConfirmLabel => IsHard ? Strings.Get("Reset and discard") : Strings.Get("Reset");
 }

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Omnigit.Services;
 
 namespace Omnigit.ViewModels;
 
@@ -72,25 +73,33 @@ public partial class BranchSwitchViewModel : ObservableObject
     }
 
     public string Title => Create
-        ? $"Create {TargetBranch} from {FromBranch}"
-        : $"Switch to {TargetBranch}";
+        ? Strings.Format("Create {0} from {1}", TargetBranch, FromBranch)
+        : Strings.Format("Switch to {0}", TargetBranch);
 
     public string Summary
     {
         get
         {
             var total = Files.Count;
-            var label = $"{total} uncommitted change{(total == 1 ? "" : "s")}";
 
+            // Whole sentences rather than a pluralized noun phrase built once and dropped
+            // into either of them: "{0} uncommitted changes" cannot be declined on its own,
+            // and where it sits in the sentence is the translation's business.
             return LeaveEverything
-                ? $"{label} will be stashed on {FromBranch}."
-                : $"{BringCount} of {label} will come with you; the rest is stashed on {FromBranch}.";
+                ? Strings.Plural(
+                    "{0} uncommitted change will be stashed on {1}.",
+                    "{0} uncommitted changes will be stashed on {1}.",
+                    total, FromBranch)
+                : Strings.Plural(
+                    "{1} of {0} uncommitted change will come with you; the rest is stashed on {2}.",
+                    "{1} of {0} uncommitted changes will come with you; the rest is stashed on {2}.",
+                    total, BringCount, FromBranch);
         }
     }
 
     public string ConfirmLabel => LeaveEverything
-        ? "Stash and switch"
-        : "Switch";
+        ? Strings.Get("Stash and switch")
+        : Strings.Get("Switch");
 
     /// <summary>Null means "bring everything", which lets the service do a plain checkout.</summary>
     public IReadOnlyList<string>? BringPaths()

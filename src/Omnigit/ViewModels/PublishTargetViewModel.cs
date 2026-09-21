@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Omnigit.HostProviders;
+using Omnigit.Services;
 
 namespace Omnigit.ViewModels;
 
@@ -24,7 +25,11 @@ namespace Omnigit.ViewModels;
 public partial class PublishTargetViewModel : ObservableObject
 {
     /// <summary>What the "don't publish this anywhere" entry reads as.</summary>
-    public const string NowhereLabel = "Nowhere yet — just on this machine";
+    /// <summary>
+    /// A property rather than a const: a const is baked into every call site at compile
+    /// time, which is exactly the wrong thing for a string that changes with the language.
+    /// </summary>
+    public static string NowhereLabel => Strings.Get("Nowhere yet — just on this machine");
 
     public PublishTargetViewModel(IEnumerable<HostAccount> accounts, bool allowNone)
     {

@@ -260,6 +260,30 @@ public class LocalizationTests
         Assert.Null(Parse(po).Lookup("{0} minute ago", 1));
     }
 
+    /// <summary>
+    /// Two English words spelled the same that mean different things. The context is a
+    /// note to the translator and never reaches the screen, so a catalogue that has not
+    /// translated the pair still falls back to the English that was asked for.
+    /// </summary>
+    [Fact]
+    public void A_context_keeps_two_identical_English_strings_apart()
+    {
+        var po = Germanic +
+            """
+            msgctxt "between items of a list"
+            msgid ", "
+            msgstr "، "
+
+            msgid ", "
+            msgstr "COMMA"
+            """;
+
+        var catalogue = Parse(po);
+
+        Assert.Equal("، ", catalogue.Lookup("between items of a list\u0004, "));
+        Assert.Equal("COMMA", catalogue.Lookup(", "));
+    }
+
     // ---- the facade --------------------------------------------------------
 
     [Fact]

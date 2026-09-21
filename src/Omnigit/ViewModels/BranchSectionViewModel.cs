@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Omnigit.Models;
+using Omnigit.Services;
 
 namespace Omnigit.ViewModels;
 
@@ -62,24 +63,24 @@ public sealed class BranchSectionViewModel
 
         if (filter.Length == 0)
         {
-            Add("Default branch", local.Where(b => b.IsDefault));
+            Add(Strings.Get("Default branch"), local.Where(b => b.IsDefault));
 
             var rest = local.Where(b => !b.IsDefault).ToList();
 
-            Add("Recent branches", rest.Take(RecentCount));
-            Add("Other branches", rest.Skip(RecentCount)
+            Add(Strings.Get("Recent branches"), rest.Take(RecentCount));
+            Add(Strings.Get("Other branches"), rest.Skip(RecentCount)
                 .OrderBy(b => b.Name, StringComparer.OrdinalIgnoreCase));
         }
         else
         {
             // One list while filtering: the groups exist to shorten a long list, and the
             // filter has already done that.
-            Add("Branches", local);
+            Add(Strings.Get("Branches"), local);
         }
 
         // Last, and under their own heading: checking one of these out creates a branch
         // here, which is a different thing from switching to one that already exists.
-        Add("On the remote only", matching
+        Add(Strings.Get("On the remote only"), matching
             .Where(b => b.IsRemoteOnly)
             .OrderBy(b => b.Name, StringComparer.OrdinalIgnoreCase));
 

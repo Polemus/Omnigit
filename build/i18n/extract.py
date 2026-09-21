@@ -53,15 +53,28 @@ msgstr ""
 # One C# string literal: "..." with \\-escapes. Verbatim (@"") and raw (\"\"\") literals are
 # not matched on purpose - a sentence written in one would be silently skipped, so the
 # scan reports any call whose first argument it could not read rather than dropping it.
-LITERAL = r'"((?:[^"\\]|\\.)*)"'
+LITERAL = r'"(?:[^"\\]|\\.)*"'
 WS = r"\s*"
 
+# A long sentence is naturally written as "..." + "..." across two lines, and reading only
+# the first half would put a msgid in the template that no lookup can ever match - the app
+# would ask for the whole sentence and the catalogue would hold half of it. So a run of
+# literals joined by + is one string, exactly as the compiler sees it.
+JOINED = "(" + LITERAL + "(?:" + WS + r"\+" + WS + LITERAL + ")*)"
+
 CALLS = [
-    (re.compile(r"Strings\.Get\(" + WS + LITERAL), 1),
-    (re.compile(r"Strings\.Format\(" + WS + LITERAL), 1),
-    (re.compile(r"Strings\.Particular\(" + WS + LITERAL + WS + "," + WS + LITERAL), 2),
-    (re.compile(r"Strings\.Plural\(" + WS + LITERAL + WS + "," + WS + LITERAL), 2),
+    (re.compile(r"Strings\.Get\(" + WS + JOINED), 1),
+    (re.compile(r"Strings\.Format\(" + WS + JOINED), 1),
+    (re.compile(r"Strings\.Particular\(" + WS + JOINED + WS + "," + WS + JOINED), 2),
+    (re.compile(r"Strings\.Plural\(" + WS + JOINED + WS + "," + WS + JOINED), 2),
 ]
+
+PIECE = re.compile(LITERAL)
+
+
+def literal(source: str) -> str:
+    """One C# string, or a run of them joined by +, as the compiler would see it."""
+    return "".join(unescape(piece[1:-1]) for piece in PIECE.findall(source))
 
 # Any Strings.* call whose arguments this scan did not manage to read.
 SUSPECT = re.compile(r"Strings\.(Get|Format|Plural|Particular)\(")
@@ -149,11 +162,11 @@ def collect() -> tuple[dict[tuple[str, str], Entry], list[str]]:
                 line = text.count("\n", 0, match.start()) + 1
                 where = f"{rel}:{line}"
                 seen_spans.append(match.span())
-                one = unescape(match.group(1))
+                one = literal(match.group(1))
                 if pattern.pattern.startswith(r"Strings\.Particular"):
-                    add(unescape(match.group(2)), where, context=one)
+                    add(literal(match.group(2)), where, context=one)
                 elif arity == 2:
-                    add(one, where, plural=unescape(match.group(2)))
+                    add(one, where, plural=literal(match.group(2)))
                 else:
                     add(one, where)
 

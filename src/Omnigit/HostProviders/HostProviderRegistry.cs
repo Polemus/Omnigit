@@ -192,7 +192,7 @@ public sealed class HostProviderRegistry
                 var manifest = JsonSerializer.Deserialize<HostManifest>(stream, ManifestJson);
                 if (manifest is null || string.IsNullOrWhiteSpace(manifest.Id))
                 {
-                    _warnings.Add($"Built-in manifest '{name}' is missing an id.");
+                    _warnings.Add(Strings.Format("Built-in manifest '{0}' is missing an id.", name));
                     continue;
                 }
 
@@ -203,7 +203,7 @@ public sealed class HostProviderRegistry
             }
             catch (JsonException ex)
             {
-                _warnings.Add($"Built-in manifest '{name}' is not valid JSON: {ex.Message}");
+                _warnings.Add(Strings.Format("Built-in manifest '{0}' is not valid JSON: {1}", name, ex.Message));
             }
         }
     }
@@ -220,7 +220,7 @@ public sealed class HostProviderRegistry
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            _warnings.Add($"Could not read {UserManifestDirectory}: {ex.Message}");
+            _warnings.Add(Strings.Format("Could not read {0}: {1}", UserManifestDirectory, ex.Message));
             return;
         }
 
@@ -233,13 +233,14 @@ public sealed class HostProviderRegistry
 
                 if (manifest is null || string.IsNullOrWhiteSpace(manifest.Id))
                 {
-                    _warnings.Add($"{Path.GetFileName(file)} is missing an \"id\".");
+                    _warnings.Add(Strings.Format("{0} is missing an \"id\".", Path.GetFileName(file)));
                     continue;
                 }
 
                 if (string.IsNullOrWhiteSpace(manifest.Endpoints.CurrentUser))
                 {
-                    _warnings.Add($"{Path.GetFileName(file)} has no endpoints.currentUser, so sign-in cannot work.");
+                    _warnings.Add(Strings.Format(
+                        "{0} has no endpoints.currentUser, so sign-in cannot work.", Path.GetFileName(file)));
                     continue;
                 }
 
@@ -247,18 +248,19 @@ public sealed class HostProviderRegistry
                 if (ById(manifest.Id) is { } existing)
                 {
                     _providers.Remove(existing);
-                    _warnings.Add($"{Path.GetFileName(file)} overrides the built-in '{manifest.Id}' provider.");
+                    _warnings.Add(Strings.Format("{0} overrides the built-in '{1}' provider.",
+                        Path.GetFileName(file), manifest.Id));
                 }
 
                 _providers.Add(new ManifestHostProvider(manifest, http));
             }
             catch (JsonException ex)
             {
-                _warnings.Add($"{Path.GetFileName(file)} is not valid JSON: {ex.Message}");
+                _warnings.Add(Strings.Format("{0} is not valid JSON: {1}", Path.GetFileName(file), ex.Message));
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
-                _warnings.Add($"Could not read {Path.GetFileName(file)}: {ex.Message}");
+                _warnings.Add(Strings.Format("Could not read {0}: {1}", Path.GetFileName(file), ex.Message));
             }
         }
     }

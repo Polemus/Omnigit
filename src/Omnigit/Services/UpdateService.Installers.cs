@@ -74,7 +74,7 @@ public sealed partial class UpdateService
         {
             return new(
                 UpdateApplyOutcome.Failed,
-                "No supported package manager was found to install it with.");
+                Strings.Get("No supported package manager was found to install it with."));
         }
 
         var (program, arguments) = command;
@@ -86,7 +86,7 @@ public sealed partial class UpdateService
             // 126 is polkit's own: the dialog was dismissed, or the user is not
             // authorised. Saying "cancelled" beats reporting a number.
             var why = run.ExitCode == 126
-                ? "The password prompt was dismissed."
+                ? Strings.Get("The password prompt was dismissed.")
                 : Summary(run) ?? $"{program} exited {run.ExitCode}.";
 
             return new(UpdateApplyOutcome.Failed, why);
@@ -163,7 +163,7 @@ public sealed partial class UpdateService
         var scope = IsPerMachine(target) ? "/ALLUSERS" : "/CURRENTUSER";
 
         if (!Spawn(installer, ["/SILENT", "/SUPPRESSMSGBOXES", "/NORESTART", scope, "/RELAUNCH=1"]))
-            return new(UpdateApplyOutcome.Failed, $"Could not start {asset.Name}.");
+            return new(UpdateApplyOutcome.Failed, Strings.Format("Could not start {0}.", asset.Name));
 
         return new(UpdateApplyOutcome.Applied, target);
     }
@@ -222,7 +222,8 @@ public sealed partial class UpdateService
     {
         var parent = Path.GetDirectoryName(target);
         if (string.IsNullOrEmpty(parent))
-            return new(UpdateApplyOutcome.Failed, $"cannot tell what {target} sits inside");
+            return new(UpdateApplyOutcome.Failed,
+                Strings.Format("cannot tell what {0} sits inside", target));
 
         var archive = Path.Combine(StagingDirectory(), asset.Name);
         var staged = target + ".new";
@@ -344,7 +345,8 @@ public sealed partial class UpdateService
         ]);
 
         if (!started)
-            return new(UpdateApplyOutcome.Failed, "Could not start the helper that completes the update.");
+            return new(UpdateApplyOutcome.Failed,
+                Strings.Get("Could not start the helper that completes the update."));
 
         return new(UpdateApplyOutcome.Applied, target);
     }
@@ -472,7 +474,8 @@ public sealed partial class UpdateService
                 cancel).ConfigureAwait(false);
 
             if (attach.ExitCode != 0)
-                return new(UpdateApplyOutcome.Failed, Summary(attach) ?? "Could not open the disk image.");
+                return new(UpdateApplyOutcome.Failed,
+                    Summary(attach) ?? Strings.Get("Could not open the disk image."));
 
             mounted = true;
 
@@ -488,7 +491,8 @@ public sealed partial class UpdateService
 
             var copy = await RunAsync("/usr/bin/ditto", [bundle, staged], cancel).ConfigureAwait(false);
             if (copy.ExitCode != 0)
-                return new(UpdateApplyOutcome.Failed, Summary(copy) ?? "Could not copy the application.");
+                return new(UpdateApplyOutcome.Failed,
+                    Summary(copy) ?? Strings.Get("Could not copy the application."));
 
             var previous = target + ".old";
             if (Directory.Exists(previous))

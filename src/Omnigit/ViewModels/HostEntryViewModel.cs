@@ -1,5 +1,6 @@
 using System.Linq;
 using Omnigit.HostProviders;
+using Omnigit.Services;
 
 namespace Omnigit.ViewModels;
 
@@ -16,13 +17,13 @@ public sealed class HostEntryViewModel(IHostProvider provider, bool isUserDefine
     public bool IsBuiltInCode { get; } = provider is GitHubProvider;
 
     public string SourceLabel => IsUserDefined
-        ? "Added by you"
+        ? Strings.Get("Added by you")
         : IsBuiltInCode
-            ? "Built in (code)"
-            : "Built in (manifest)";
+            ? Strings.Get("Built in (code)")
+            : Strings.Get("Built in (manifest)");
 
     /// <summary>Browser sign-in can't be described by a manifest, so say so plainly.</summary>
     public string AuthLabel => provider.Capabilities.AuthMethods.Contains(AuthMethod.BrowserDeviceLogin)
-        ? "Token or browser"
-        : "Token";
+        ? Strings.Get("Token or browser")
+        : Strings.Get("Token");
 }

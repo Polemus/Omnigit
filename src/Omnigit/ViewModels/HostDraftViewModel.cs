@@ -160,7 +160,9 @@ public partial class HostDraftViewModel : ObservableObject
                            && !string.IsNullOrWhiteSpace(DisplayName)
                            && !string.IsNullOrWhiteSpace(CurrentUserEndpoint);
 
-    public string Title => IsEditing ? $"Editing {DisplayName}" : "Add a hosting site";
+    public string Title => IsEditing
+        ? Strings.Format("Editing {0}", DisplayName)
+        : Strings.Get("Add a hosting site");
 
     // ---- Testing it against a real server -----------------------------------
     // A manifest is only right about a server that exists, so the form carries the
@@ -202,7 +204,7 @@ public partial class HostDraftViewModel : ObservableObject
         TestPassed = report.Passed;
         TestSummary = report.Passed
             ? "Everything Omnigit could check works."
-            : "Something is wrong — see below.";
+            : Strings.Get("Something is wrong — see below.");
     }
 
     /// <summary>Starts from Gitea's shape, which most self-hosted forges follow.</summary>

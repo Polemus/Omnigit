@@ -1,4 +1,5 @@
 using Omnigit.HostProviders;
+using Omnigit.Services;
 
 namespace Omnigit.ViewModels;
 
@@ -15,12 +16,12 @@ public sealed class RemoteRepositoryViewModel(RemoteRepository model, HostAccoun
     public string CloneUrl => Model.CloneUrl;
 
     public string Description => string.IsNullOrWhiteSpace(Model.Description)
-        ? "No description"
+        ? Strings.Get("No description")
         : Model.Description!;
 
     public bool IsPrivate => Model.IsPrivate;
 
-    public string VisibilityLabel => Model.IsPrivate ? "Private" : "Public";
+    public string VisibilityLabel => Model.IsPrivate ? Strings.Get("Private") : Strings.Get("Public");
 
     public string UpdatedLabel => Model.UpdatedAt is { } when
         ? Models.TimeFormat.Relative(when)

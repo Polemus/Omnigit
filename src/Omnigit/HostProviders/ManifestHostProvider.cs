@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Omnigit.Services;
 
 namespace Omnigit.HostProviders;
 
@@ -85,8 +86,8 @@ public sealed class ManifestHostProvider(HostManifest manifest, HttpClient http)
 
     public Task<DeviceLogin> StartBrowserLoginAsync(Uri baseUrl, CancellationToken cancellationToken)
         => throw new NotSupportedException(
-            $"{DisplayName} is defined by a manifest, which can only describe token sign-in. "
-            + "Create a personal access token on the site and paste it in.");
+            Strings.Format("{0} is defined by a manifest, which can only describe token sign-in. "
+                           + "Create a personal access token on the site and paste it in.", DisplayName));
 
     public Task<HostAccount> CompleteBrowserLoginAsync(Uri baseUrl, DeviceLogin login, CancellationToken cancellationToken)
         => throw new NotSupportedException(
@@ -190,8 +191,9 @@ public sealed class ManifestHostProvider(HostManifest manifest, HttpClient http)
         if (manifest.CreateRepository is not { } rule || string.IsNullOrEmpty(rule.Path))
         {
             throw new NotSupportedException(
-                $"{DisplayName}'s manifest has no createRepository block, so Omnigit does not "
-                + "know how to make a repository there. Create it on the site and add the remote.");
+                Strings.Format("{0}'s manifest has no createRepository block, so Omnigit does not "
+                               + "know how to make a repository there. Create it on the site and add the remote.",
+                               DisplayName));
         }
 
         var owner = repository.Owner;
@@ -358,7 +360,7 @@ public sealed class ManifestHostProvider(HostManifest manifest, HttpClient http)
         }
         catch (HttpRequestException ex)
         {
-            throw new HostProviderException($"Could not reach {url}: {ex.Message}", ex);
+            throw new HostProviderException(Strings.Format("Could not reach {0}: {1}", url, ex.Message), ex);
         }
 
         using (response)
@@ -366,12 +368,14 @@ public sealed class ManifestHostProvider(HostManifest manifest, HttpClient http)
             var text = await response.Content.ReadAsStringAsync(cancellationToken);
 
             if (response.StatusCode is HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden)
-                throw new HostProviderException("The token was rejected. Check it has not expired and has the right scopes.");
+                throw new HostProviderException(
+                    Strings.Get("The token was rejected. Check it has not expired and has the right scopes."));
 
             if (!response.IsSuccessStatusCode)
             {
                 throw new HostProviderException(
-                    Explain(text) ?? $"{url} returned {(int)response.StatusCode} {response.ReasonPhrase}.");
+                    Explain(text) ?? Strings.Format("{0} returned {1} {2}.",
+                                                    url, (int)response.StatusCode, response.ReasonPhrase));
             }
 
             try
@@ -453,16 +457,18 @@ public sealed class ManifestHostProvider(HostManifest manifest, HttpClient http)
         {
             // The whole URL, not just the host: when this is wrong it is nearly always
             // the path that is wrong, and the host alone gives nothing to correct.
-            throw new HostProviderException($"Could not reach {url}: {ex.Message}", ex);
+            throw new HostProviderException(Strings.Format("Could not reach {0}: {1}", url, ex.Message), ex);
         }
 
         using (response)
         {
             if (response.StatusCode is HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden)
-                throw new HostProviderException("The token was rejected. Check it has not expired and has the right scopes.");
+                throw new HostProviderException(
+                    Strings.Get("The token was rejected. Check it has not expired and has the right scopes."));
 
             if (!response.IsSuccessStatusCode)
-                throw new HostProviderException($"{url} returned {(int)response.StatusCode} {response.ReasonPhrase}.");
+                throw new HostProviderException(Strings.Format("{0} returned {1} {2}.",
+                    url, (int)response.StatusCode, response.ReasonPhrase));
 
             // Read before the response is disposed at the end of this block.
             var next = response.Headers.TryGetValues("Link", out var link)

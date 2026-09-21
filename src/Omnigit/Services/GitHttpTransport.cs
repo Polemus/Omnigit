@@ -354,8 +354,8 @@ public sealed class GitHttpTransport : RpcSmartSubtransport
 
         response.Dispose();
         throw new HttpRequestException(
-            $"{endpoint.Uri.Host} answered with {type} rather than the git protocol — "
-            + "is that the repository's clone URL?");
+            Strings.Format("{0} answered with {1} rather than the git protocol — "
+                           + "is that the repository's clone URL?", endpoint.Uri.Host, type));
     }
 
     /// <summary>One request and its response, which is what libgit2 thinks is a socket.</summary>

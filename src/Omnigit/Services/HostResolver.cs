@@ -22,7 +22,13 @@ public static class HostResolver
     public static GitHost LocalOnly { get; } = new()
     {
         Id = "local",
-        Name = "Local only",
+        // Read once, when this type is first touched, which is after App.Initialize has
+        // chosen the language. It is the one label in the app that a language change does
+        // not follow until the next launch, and deliberately: this is a single instance
+        // that repositories hold by reference and the sidebar groups by, so rebuilding it
+        // with a new name would leave every repository loaded before the change pointing
+        // at a host the new one no longer equals.
+        Name = Strings.Get("Local only"),
         BaseUrl = string.Empty,
     };
 

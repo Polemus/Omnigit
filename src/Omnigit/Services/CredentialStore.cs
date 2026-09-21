@@ -81,7 +81,8 @@ internal static class ProcessRunner
             info.ArgumentList.Add(argument);
 
         using var process = Process.Start(info)
-                            ?? throw new InvalidOperationException($"Could not start {file}.");
+                            ?? throw new InvalidOperationException(
+                                   Strings.Format("Could not start {0}.", file));
 
         if (stdin is not null)
         {
@@ -99,7 +100,7 @@ internal static class ProcessRunner
 /// <summary>Linux: libsecret, which is GNOME Keyring or KWallet behind the scenes.</summary>
 public sealed class SecretToolCredentialStore : ICredentialStore
 {
-    public string Description => "system keyring (libsecret)";
+    public string Description => Strings.Get("system keyring (libsecret)");
     public bool IsSecure => true;
 
     /// <summary>What the service attribute was before the app was renamed.</summary>
@@ -138,7 +139,7 @@ public sealed class SecretToolCredentialStore : ICredentialStore
             stdin: secret);
 
         if (exitCode != 0)
-            throw new InvalidOperationException("Could not save the token to the system keyring.");
+            throw new InvalidOperationException(Strings.Get("Could not save the token to the system keyring."));
     }
 
     public async Task DeleteAsync(string key)
@@ -190,7 +191,7 @@ public sealed class MacKeychainCredentialStore : ICredentialStore
             "security", ["add-generic-password", "-a", key, "-s", "Omnigit", "-w", secret, "-U"]);
 
         if (exitCode != 0)
-            throw new InvalidOperationException("Could not save the token to the Keychain.");
+            throw new InvalidOperationException(Strings.Get("Could not save the token to the Keychain."));
     }
 
     public async Task DeleteAsync(string key)
@@ -209,7 +210,7 @@ public sealed class DpapiCredentialStore : ICredentialStore
 {
     private readonly string _directory = AppPaths.In("credentials");
 
-    public string Description => "Windows DPAPI";
+    public string Description => Strings.Get("Windows DPAPI");
     public bool IsSecure => true;
 
     public Task<string?> GetAsync(string key)
@@ -266,7 +267,7 @@ public sealed class FileCredentialStore : ICredentialStore
 {
     private readonly string _directory = AppPaths.In("credentials");
 
-    public string Description => "a local file (no system keyring found)";
+    public string Description => Strings.Get("a local file (no system keyring found)");
     public bool IsSecure => false;
 
     public async Task<string?> GetAsync(string key)

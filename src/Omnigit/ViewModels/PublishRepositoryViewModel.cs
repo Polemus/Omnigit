@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Omnigit.HostProviders;
+using Omnigit.Services;
 
 namespace Omnigit.ViewModels;
 
@@ -48,8 +49,9 @@ public partial class PublishRepositoryViewModel : ObservableObject
 
     /// <summary>What is about to happen, named in full so it can be read back before pressing.</summary>
     public string SummaryLabel => Target is { Owner: { } owner, HasSite: true }
-        ? $"Creates {owner.Login}/{Name.Trim()} on {Target.SiteHost}, points origin at it and pushes."
-        : "Omnigit creates it empty on the site, points origin at it and pushes what is here.";
+        ? Strings.Format("Creates {0}/{1} on {2}, points origin at it and pushes.",
+                         owner.Login, Name.Trim(), Target.SiteHost)
+        : Strings.Get("Omnigit creates it empty on the site, points origin at it and pushes what is here.");
 
     public NewRepository? ToRequest() => Target.ToRequest(Name, Description);
 }

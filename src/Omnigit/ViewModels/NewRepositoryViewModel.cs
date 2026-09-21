@@ -103,8 +103,8 @@ public partial class NewRepositoryViewModel : ObservableObject
         : Path.Combine(ParentPath.Trim(), Name.Trim() is { Length: > 0 } name ? name : Unnamed);
 
     public string PathLabel => string.IsNullOrEmpty(TargetPath)
-        ? "Choose where to put it."
-        : $"It will be created at {TargetPath}";
+        ? Strings.Get("Choose where to put it.")
+        : Strings.Format("It will be created at {0}", TargetPath);
 
     /// <summary>
     /// What is wrong with the answers so far, or empty. Said out loud rather than left
@@ -121,7 +121,7 @@ public partial class NewRepositoryViewModel : ObservableObject
                 return string.Empty;
 
             if (name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
-                return "That name has characters a folder can't have in it.";
+                return Strings.Get("That name has characters a folder can't have in it.");
 
             // A directory with something in it is the one git itself refuses, and the
             // one worth naming: an empty folder made a moment ago in the picker is fine.
@@ -148,13 +148,15 @@ public partial class NewRepositoryViewModel : ObservableObject
     /// chosen - it reaches the network and creates something on someone else's server -
     /// and a button that says the same thing either way hides that until afterwards.
     /// </summary>
-    public string CreateButtonLabel => Publish.HasSite ? "Create and publish" : "Create repository";
+    public string CreateButtonLabel =>
+        Publish.HasSite ? Strings.Get("Create and publish") : Strings.Get("Create repository");
 
     /// <summary>The sentence above the buttons, which is a different one per destination.</summary>
     public string SummaryLabel => Publish.HasSite
-        ? $"Omnigit creates it here, then on {Publish.SiteHost}, and pushes what it committed."
-        : "Omnigit creates it here and commits whatever you asked for above. "
-          + "Publishing it to a site later is the sync button.";
+        ? Strings.Format("Omnigit creates it here, then on {0}, and pushes what it committed.",
+                         Publish.SiteHost)
+        : Strings.Get("Omnigit creates it here and commits whatever you asked for above. "
+                      + "Publishing it to a site later is the sync button.");
 
     /// <summary>
     /// The files to write before the first commit, as relative path and contents. Empty

@@ -113,11 +113,11 @@ public sealed partial class UpdateViewModel : ViewModelBase
                 InstallMedium.Flatpak => "Flatpak",
                 InstallMedium.DebPackage => "Debian package",
                 InstallMedium.RpmPackage => "RPM package",
-                InstallMedium.LinuxTarball => "portable build",
-                InstallMedium.WindowsInstaller => "installed build",
-                InstallMedium.WindowsPortable => "portable build",
-                InstallMedium.MacAppBundle => "app bundle",
-                _ => "local build",
+                InstallMedium.LinuxTarball => Strings.Get("portable build"),
+                InstallMedium.WindowsInstaller => Strings.Get("installed build"),
+                InstallMedium.WindowsPortable => Strings.Get("portable build"),
+                InstallMedium.MacAppBundle => Strings.Get("app bundle"),
+                _ => Strings.Get("local build"),
             };
 
             return AppVersion.Commit is { } commit ? $"{medium} · {commit}" : medium;
@@ -136,8 +136,9 @@ public sealed partial class UpdateViewModel : ViewModelBase
     public string? ElevationNotice => _update.Location switch
     {
         { NeedsElevation: false } => null,
-        { Medium: InstallMedium.WindowsInstaller } => "Windows will ask for permission to install it.",
-        _ => "You will be asked for your password to install it.",
+        { Medium: InstallMedium.WindowsInstaller } =>
+            Strings.Get("Windows will ask for permission to install it."),
+        _ => Strings.Get("You will be asked for your password to install it."),
     };
 
     public bool NeedsElevation => ElevationNotice is not null;
@@ -204,19 +205,19 @@ public sealed partial class UpdateViewModel : ViewModelBase
 
     public string StatusLine => Stage switch
     {
-        UpdateStage.Checking => "Checking for updates…",
-        UpdateStage.UpToDate => "Omnigit is up to date.",
-        UpdateStage.Available => $"Omnigit {AvailableVersion} is available.",
-        UpdateStage.Downloading => $"Downloading Omnigit {AvailableVersion}…",
+        UpdateStage.Checking => Strings.Get("Checking for updates…"),
+        UpdateStage.UpToDate => Strings.Get("Omnigit is up to date."),
+        UpdateStage.Available => Strings.Format("Omnigit {0} is available.", AvailableVersion),
+        UpdateStage.Downloading => Strings.Format("Downloading Omnigit {0}…", AvailableVersion),
 
         // Named for what is actually happening, which for a package install is usually
         // waiting on a password box that may have opened on another screen. Saying
         // "Downloading" through this is how the wait reads as a hang.
         UpdateStage.Installing => NeedsElevation
-            ? "Waiting for permission — check for a password prompt, it may be behind this window."
-            : $"Installing Omnigit {AvailableVersion}…",
-        UpdateStage.Applied => $"Updated to {AvailableVersion}. Restarting…",
-        UpdateStage.Failed => "Could not check for updates.",
+            ? Strings.Get("Waiting for permission — check for a password prompt, it may be behind this window.")
+            : Strings.Format("Installing Omnigit {0}…", AvailableVersion),
+        UpdateStage.Applied => Strings.Format("Updated to {0}. Restarting…", AvailableVersion),
+        UpdateStage.Failed => Strings.Get("Could not check for updates."),
         _ => string.Empty,
     };
 
@@ -293,7 +294,7 @@ public sealed partial class UpdateViewModel : ViewModelBase
                 AvailableVersion = release.Version.ToString(3);
                 Notes = release.Notes;
                 Stage = UpdateStage.Available;
-                _log.Write(ActivityLevel.Info, $"Omnigit {AvailableVersion} is available.");
+                _log.Write(ActivityLevel.Info, Strings.Format("Omnigit {0} is available.", AvailableVersion));
                 break;
 
             case UpdateCheckOutcome.UpToDate:
@@ -303,7 +304,8 @@ public sealed partial class UpdateViewModel : ViewModelBase
                 Notes = null;
                 Stage = UpdateStage.UpToDate;
                 if (announce)
-                    _log.Write(ActivityLevel.Success, $"Omnigit {CurrentVersion} is up to date.");
+                    _log.Write(ActivityLevel.Success,
+                        Strings.Format("Omnigit {0} is up to date.", CurrentVersion));
                 break;
 
             default:
@@ -315,7 +317,7 @@ public sealed partial class UpdateViewModel : ViewModelBase
                 Stage = announce ? UpdateStage.Failed : UpdateStage.Idle;
                 _log.Write(
                     announce ? ActivityLevel.Warning : ActivityLevel.Trace,
-                    "Update check failed.",
+                    Strings.Get("Update check failed."),
                     result.Detail);
                 break;
         }
@@ -336,7 +338,7 @@ public sealed partial class UpdateViewModel : ViewModelBase
         Progress = 0;
         Detail = null;
 
-        _log.Write(ActivityLevel.Info, $"Downloading Omnigit {AvailableVersion}…");
+        _log.Write(ActivityLevel.Info, Strings.Format("Downloading Omnigit {0}…", AvailableVersion));
 
         var progress = new Progress<UpdateProgress>(report =>
         {
@@ -364,12 +366,13 @@ public sealed partial class UpdateViewModel : ViewModelBase
         {
             Detail = result.Detail;
             Stage = UpdateStage.Failed;
-            _log.Write(ActivityLevel.Error, "The update could not be installed.", result.Detail);
+            _log.Write(ActivityLevel.Error, Strings.Get("The update could not be installed."), result.Detail);
             return;
         }
 
         Stage = UpdateStage.Applied;
-        _log.Write(ActivityLevel.Success, $"Updated to Omnigit {AvailableVersion}. Restarting.");
+        _log.Write(ActivityLevel.Success,
+            Strings.Format("Updated to Omnigit {0}. Restarting.", AvailableVersion));
 
         // Straight into the new one. The button said "Update now", and stopping here to
         // ask a second time would make the one-click promise into a two-click one. What
@@ -377,7 +380,7 @@ public sealed partial class UpdateViewModel : ViewModelBase
         // everything else Omnigit knows is in the repository or in a settings file.
         if (!_update.Relaunch())
         {
-            Detail = "Omnigit was updated, but could not start the new copy. Launch it yourself.";
+            Detail = Strings.Get("Omnigit was updated, but could not start the new copy. Launch it yourself.");
             Stage = UpdateStage.Failed;
             return;
         }

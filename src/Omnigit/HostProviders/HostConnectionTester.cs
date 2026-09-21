@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Omnigit.Services;
 
 namespace Omnigit.HostProviders;
 
@@ -101,13 +102,13 @@ public sealed class HostConnectionTester(HttpClient http)
     private async Task<ProbeStep> RecogniseAsync(
         HostManifest manifest, Uri baseUrl, CancellationToken cancellationToken)
     {
-        const string name = "Recognising the site";
+        var name = Strings.Get("Recognising the site");
 
         if (manifest.Recognise is not { } rule || string.IsNullOrWhiteSpace(rule.Path))
         {
             return new ProbeStep(name, ProbeOutcome.Skipped,
-                "No recognise path, so Omnigit can't tell this site apart from any other. "
-                + "Repositories cloned from it won't be grouped under it.");
+                Strings.Get("No recognise path, so Omnigit can't tell this site apart from any other. "
+                            + "Repositories cloned from it won't be grouped under it."));
         }
 
         var url = Combine(baseUrl, rule.Path);
@@ -159,7 +160,8 @@ public sealed class HostConnectionTester(HttpClient http)
         }
         catch (HttpRequestException ex)
         {
-            return new ProbeStep(name, ProbeOutcome.Failed, $"Could not reach {url}: {ex.Message}");
+            return new ProbeStep(name, ProbeOutcome.Failed,
+                Strings.Format("Could not reach {0}: {1}", url, ex.Message));
         }
     }
 
@@ -170,15 +172,16 @@ public sealed class HostConnectionTester(HttpClient http)
         string? token,
         CancellationToken cancellationToken)
     {
-        const string name = "Signing in";
+        var name = Strings.Get("Signing in");
 
         if (string.IsNullOrWhiteSpace(manifest.Endpoints.CurrentUser))
-            return (new ProbeStep(name, ProbeOutcome.Failed, "No current-user endpoint, so sign-in cannot work."), null);
+            return (new ProbeStep(name, ProbeOutcome.Failed,
+                Strings.Get("No current-user endpoint, so sign-in cannot work.")), null);
 
         if (string.IsNullOrWhiteSpace(token))
         {
             return (new ProbeStep(name, ProbeOutcome.Skipped,
-                "Paste a token above to check the sign-in endpoint and the field names."), null);
+                Strings.Get("Paste a token above to check the sign-in endpoint and the field names.")), null);
         }
 
         try
@@ -186,11 +189,12 @@ public sealed class HostConnectionTester(HttpClient http)
             var account = await provider.SignInWithTokenAsync(baseUrl, token.Trim(), cancellationToken);
 
             return (new ProbeStep(name, ProbeOutcome.Passed,
-                $"Signed in as {account.Login} ({account.DisplayName})."), account);
+                Strings.Format("Signed in as {0} ({1}).", account.Login, account.DisplayName)), account);
         }
         catch (OperationCanceledException)
         {
-            return (new ProbeStep(name, ProbeOutcome.Failed, "The sign-in request timed out."), null);
+            return (new ProbeStep(name, ProbeOutcome.Failed,
+                Strings.Get("The sign-in request timed out.")), null);
         }
         catch (HostProviderException ex)
         {
@@ -204,16 +208,16 @@ public sealed class HostConnectionTester(HttpClient http)
         HostAccount? account,
         CancellationToken cancellationToken)
     {
-        const string name = "Listing repositories";
+        var name = Strings.Get("Listing repositories");
 
         if (string.IsNullOrWhiteSpace(manifest.Endpoints.Repositories))
         {
             return new ProbeStep(name, ProbeOutcome.Skipped,
-                "No repositories endpoint. Sign-in will still work; browsing and cloning won't.");
+                Strings.Get("No repositories endpoint. Sign-in will still work; browsing and cloning won't."));
         }
 
         if (account is null)
-            return new ProbeStep(name, ProbeOutcome.Skipped, "Needs a working sign-in first.");
+            return new ProbeStep(name, ProbeOutcome.Skipped, Strings.Get("Needs a working sign-in first."));
 
         try
         {
@@ -224,19 +228,21 @@ public sealed class HostConnectionTester(HttpClient http)
                 // An empty list is ambiguous: it means either the account really has no
                 // repositories, or the name/clone-url mappings dropped every one of them.
                 return new ProbeStep(name, ProbeOutcome.Passed,
-                    "The endpoint answered, but listed no repositories. If the account has some, "
-                    + "check the name and clone URL mappings.");
+                    Strings.Get("The endpoint answered, but listed no repositories. If the account has some, "
+                                + "check the name and clone URL mappings."));
             }
 
             var first = repositories[0];
 
             return new ProbeStep(name, ProbeOutcome.Passed,
-                $"Found {repositories.Count} repositor{(repositories.Count == 1 ? "y" : "ies")}, "
-                + $"e.g. {first.Owner}/{first.Name} at {first.CloneUrl}.");
+                Strings.Plural(
+                    "Found {0} repository, e.g. {1}/{2} at {3}.",
+                    "Found {0} repositories, e.g. {1}/{2} at {3}.",
+                    repositories.Count, first.Owner, first.Name, first.CloneUrl));
         }
         catch (OperationCanceledException)
         {
-            return new ProbeStep(name, ProbeOutcome.Failed, "The repository request timed out.");
+            return new ProbeStep(name, ProbeOutcome.Failed, Strings.Get("The repository request timed out."));
         }
         catch (HostProviderException ex)
         {

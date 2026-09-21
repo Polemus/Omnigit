@@ -475,7 +475,7 @@ public sealed partial class GitService : IGitService
     {
         var staged = paths.ToList();
         if (staged.Count == 0)
-            throw new InvalidOperationException("Nothing selected to commit.");
+            throw new InvalidOperationException(Strings.Get("Nothing selected to commit."));
 
         if (string.IsNullOrWhiteSpace(summary))
             throw new InvalidOperationException("A commit summary is required.");
@@ -501,7 +501,8 @@ public sealed partial class GitService : IGitService
 
         var branch = repo.Branches[branchName]
                      ?? Adopt(repo, branchName)
-                     ?? throw new InvalidOperationException($"Branch '{branchName}' not found.");
+                     ?? throw new InvalidOperationException(
+                            Strings.Format("Branch '{0}' not found.", branchName));
 
         Commands.Checkout(repo, branch);
     }
@@ -517,10 +518,10 @@ public sealed partial class GitService : IGitService
 
         // An empty repository has no HEAD commit to branch from.
         if (repo.Head.Tip is null)
-            throw new InvalidOperationException("Commit something before creating a branch.");
+            throw new InvalidOperationException(Strings.Get("Commit something before creating a branch."));
 
         if (repo.Branches[name] is not null)
-            throw new InvalidOperationException($"Branch '{name}' already exists.");
+            throw new InvalidOperationException(Strings.Format("Branch '{0}' already exists.", name));
 
         var branch = repo.CreateBranch(name);
         Commands.Checkout(repo, branch);
@@ -551,8 +552,8 @@ public sealed partial class GitService : IGitService
         {
             return new SwitchResult(
                 SwitchOutcome.CheckedOutElsewhere,
-                $"{branchName} is already checked out in {worktree}. Switch that copy to "
-                + "another branch first, or remove it.",
+                Strings.Format("{0} is already checked out in {1}. Switch that copy to "
+                               + "another branch first, or remove it.", branchName, worktree),
                 []);
         }
 
@@ -567,13 +568,23 @@ public sealed partial class GitService : IGitService
         // behind is stashed first, which makes it clean by the time checkout runs.
         if (Conflicting(repo, bring, branchName, create, startPoint) is { Count: > 0 } conflicts)
         {
-            var names = string.Join(", ", conflicts.Take(3))
-                        + (conflicts.Count > 3 ? $" and {conflicts.Count - 3} more" : string.Empty);
+            var names = string.Join(Strings.Particular("between items of a list", ", "),
+                                    conflicts.Take(3))
+                        + (conflicts.Count > 3
+                            ? Strings.Plural(" and {0} more", " and {0} more", conflicts.Count - 3)
+                            : string.Empty);
 
+            // Keyed on how many conflicted, because English says "it" for one file and
+            // "them" for several - which this sentence had to get wrong in one direction
+            // whichever way it was written.
             return new SwitchResult(
                 SwitchOutcome.Conflicts,
-                $"{names} changed on both branches, so bringing it across would overwrite "
-                + $"work on {branchName}. Leave it behind to stash it instead.",
+                Strings.Plural(
+                    "{1} changed on both branches, so bringing it across would overwrite "
+                    + "work on {2}. Leave it behind to stash it instead.",
+                    "{1} changed on both branches, so bringing them across would overwrite "
+                    + "work on {2}. Leave them behind to stash them instead.",
+                    conflicts.Count, names, branchName),
                 conflicts);
         }
 
@@ -711,10 +722,10 @@ public sealed partial class GitService : IGitService
         if (create)
         {
             if (repo.Head.Tip is null)
-                throw new InvalidOperationException("Commit something before creating a branch.");
+                throw new InvalidOperationException(Strings.Get("Commit something before creating a branch."));
 
             if (repo.Branches[branchName] is not null)
-                throw new InvalidOperationException($"Branch '{branchName}' already exists.");
+                throw new InvalidOperationException(Strings.Format("Branch '{0}' already exists.", branchName));
 
             // Without a start point this is "git checkout -b": branch from where we are.
             var created = startPoint is null
@@ -727,7 +738,8 @@ public sealed partial class GitService : IGitService
 
         var branch = repo.Branches[branchName]
                      ?? Adopt(repo, branchName)
-                     ?? throw new InvalidOperationException($"Branch '{branchName}' not found.");
+                     ?? throw new InvalidOperationException(
+                            Strings.Format("Branch '{0}' not found.", branchName));
 
         Commands.Checkout(repo, branch);
     }
@@ -868,13 +880,15 @@ public sealed partial class GitService : IGitService
         var status = repo.Stashes.Pop(index);
 
         if (status == StashApplyStatus.Conflicts)
-            throw new InvalidOperationException("Restoring the stash caused conflicts — resolve them before continuing.");
+            throw new InvalidOperationException(
+                Strings.Get("Restoring the stash caused conflicts — resolve them before continuing."));
 
         if (status == StashApplyStatus.UncommittedChanges)
-            throw new InvalidOperationException("Commit or revert your current changes before restoring the stash.");
+            throw new InvalidOperationException(
+                Strings.Get("Commit or revert your current changes before restoring the stash."));
 
         if (status == StashApplyStatus.NotFound)
-            throw new InvalidOperationException("That stash no longer exists.");
+            throw new InvalidOperationException(Strings.Get("That stash no longer exists."));
     }
 
     public void DropStash(string path, int index)
@@ -891,7 +905,7 @@ public sealed partial class GitService : IGitService
         using var repo = new Repository(Discover(path));
 
         if (repo.Head.Tip is null)
-            throw new InvalidOperationException("There is no commit to amend.");
+            throw new InvalidOperationException(Strings.Get("There is no commit to amend."));
 
         var staged = paths.ToList();
         if (staged.Count > 0)
@@ -1083,7 +1097,7 @@ public sealed partial class GitService : IGitService
             return failure;
         }
 
-        return SyncResult.Ok($"Cloned into {targetPath}");
+        return SyncResult.Ok(Strings.Format("Cloned into {0}", targetPath));
     }
 
     /// <summary>Best-effort cleanup of a half-written clone; failing to tidy is not an error.</summary>
@@ -1105,7 +1119,7 @@ public sealed partial class GitService : IGitService
         using var repo = new Repository(Discover(path));
 
         if (FindRemote(repo) is not { } remote)
-            return NoRemote("fetch from");
+            return NoRemote(Strings.Get("This repository has no remote to fetch from."));
 
         var refSpecs = remote.FetchRefSpecs.Select(r => r.Specification).ToList();
         var probe = new AuthProbe { Host = HostOf(remote), HadCredentials = credentials is not null };
@@ -1124,8 +1138,10 @@ public sealed partial class GitService : IGitService
         var behind = Standing(repo, repo.Head).Behind;
 
         return SyncResult.Ok(behind > 0
-            ? $"Fetched from {remote.Name} — {behind} commit{(behind == 1 ? "" : "s")} to pull"
-            : $"Fetched from {remote.Name} — already up to date");
+            ? Strings.Plural(
+                "Fetched from {1} — {0} commit to pull",
+                "Fetched from {1} — {0} commits to pull", behind, remote.Name)
+            : Strings.Format("Fetched from {0} — already up to date", remote.Name));
     }
 
     /// <summary>
@@ -1150,7 +1166,9 @@ public sealed partial class GitService : IGitService
         var local = $"pr/{number}";
 
         if (FindRemote(repo) is not { } remote)
-            return new PullRequestFetch(NoRemote("fetch a pull request from"), local, false, false);
+            return new PullRequestFetch(
+                NoRemote(Strings.Get("This repository has no remote to fetch a pull request from.")),
+                local, false, false);
 
         var head = WebLinks.PullRequestRef(number, refSpecTemplate);
         var mirror = $"refs/remotes/{remote.Name}/pr/{number}";
@@ -1172,14 +1190,15 @@ public sealed partial class GitService : IGitService
         {
             return new PullRequestFetch(
                 new SyncResult(SyncOutcome.Failed,
-                    $"The remote has no {head} — the pull request may have been merged or closed."),
+                    Strings.Format("The remote has no {0} — the pull request may have been merged or closed.",
+                                   head)),
                 local, false, false);
         }
 
         var branch = repo.Branches[local];
 
         if (branch is null)
-            return new PullRequestFetch(SyncResult.Ok($"Fetched pull request #{number}"), local, IsNew: true, IsStale: false);
+            return new PullRequestFetch(SyncResult.Ok(Strings.Format("Fetched pull request #{0}", number)), local, IsNew: true, IsStale: false);
 
         // Already here from a previous checkout. Fast-forwarding it is safe only while
         // it is strictly behind what was just fetched; anything else means the pull
@@ -1192,7 +1211,7 @@ public sealed partial class GitService : IGitService
         if (!behind)
         {
             return new PullRequestFetch(
-                SyncResult.Ok($"Fetched pull request #{number}"), local,
+                SyncResult.Ok(Strings.Format("Fetched pull request #{0}", number)), local,
                 IsNew: false, IsStale: branch.Tip?.Sha != fetched.Sha);
         }
 
@@ -1204,7 +1223,7 @@ public sealed partial class GitService : IGitService
             if (ChangedPaths(repo).Count > 0)
             {
                 return new PullRequestFetch(
-                    SyncResult.Ok($"Fetched pull request #{number}"),
+                    SyncResult.Ok(Strings.Format("Fetched pull request #{0}", number)),
                     local, IsNew: false, IsStale: true);
             }
 
@@ -1217,7 +1236,7 @@ public sealed partial class GitService : IGitService
             repo.Refs.UpdateTarget("HEAD", branch.CanonicalName);
 
         return new PullRequestFetch(
-            SyncResult.Ok($"Updated {local} to the latest on pull request #{number}"),
+            SyncResult.Ok(Strings.Format("Updated {0} to the latest on pull request #{1}", local, number)),
             local, IsNew: false, IsStale: false);
     }
 
@@ -1230,7 +1249,7 @@ public sealed partial class GitService : IGitService
 
         var remote = FindRemote(repo);
         if (remote is null)
-            return NoRemote("pull from");
+            return NoRemote(Strings.Get("This repository has no remote to pull from."));
 
         // Commands.Pull needs an upstream to merge from. A branch already on the remote
         // may still have none - see EnsureTracking - and the remote-tracking ref is the
@@ -1252,12 +1271,12 @@ public sealed partial class GitService : IGitService
 
         return result?.Status switch
         {
-            MergeStatus.UpToDate => SyncResult.Ok("Already up to date"),
+            MergeStatus.UpToDate => SyncResult.Ok(Strings.Get("Already up to date")),
             MergeStatus.FastForward => SyncResult.Ok($"Fast-forwarded to {Short(result.Commit)}"),
-            MergeStatus.NonFastForward => SyncResult.Ok($"Merged to {Short(result.Commit)}"),
+            MergeStatus.NonFastForward => SyncResult.Ok(Strings.Format("Merged to {0}", Short(result.Commit))),
             MergeStatus.Conflicts => new SyncResult(SyncOutcome.Failed,
-                "Pulled with conflicts — resolve them before committing"),
-            _ => SyncResult.Ok("Pull finished"),
+                Strings.Get("Pulled with conflicts — resolve them before committing")),
+            _ => SyncResult.Ok(Strings.Get("Pull finished")),
         };
     }
 
@@ -1267,10 +1286,10 @@ public sealed partial class GitService : IGitService
 
         var branch = repo.Head;
         if (branch is null)
-            return new SyncResult(SyncOutcome.Failed, "No branch is checked out.");
+            return new SyncResult(SyncOutcome.Failed, Strings.Get("No branch is checked out."));
 
         if (FindRemote(repo) is not { } remote)
-            return NoRemote("push to");
+            return NoRemote(Strings.Get("This repository has no remote to push to."));
 
         // Covers both a branch created locally and one pushed without -u.
         branch = EnsureTracking(repo, branch, remote);
@@ -1305,7 +1324,7 @@ public sealed partial class GitService : IGitService
         if (rejection is not null)
             return new SyncResult(SyncOutcome.Failed, rejection);
 
-        return SyncResult.Ok($"Pushed {branch.FriendlyName} to {remote.Name}"
+        return SyncResult.Ok(Strings.Format("Pushed {0} to {1}", branch.FriendlyName, remote.Name)
                              + (pushed > 0 ? $" ({pushed} objects)" : string.Empty));
     }
 
@@ -1473,16 +1492,17 @@ public sealed partial class GitService : IGitService
             if (!probe.TransferBegan && probe.HadCredentials && IsAuthFailure(message))
             {
                 return new SyncResult(SyncOutcome.CredentialsRejected,
-                    $"{probe.Host} rejected the saved credentials. The token may have expired "
-                    + "or lost its scopes — sign in again on the Accounts screen.");
+                    Strings.Format("{0} rejected the saved credentials. The token may have expired "
+                                   + "or lost its scopes — sign in again on the Accounts screen.",
+                                   probe.Host));
             }
 
             if (!probe.TransferBegan && !probe.HadCredentials
                 && (probe.WasAsked || IsAuthFailure(message)))
             {
                 return new SyncResult(SyncOutcome.NotSignedIn,
-                    $"{probe.Host} needs you to be signed in. Open the Accounts screen and add "
-                    + $"an account for {probe.Host}, then try again.");
+                    Strings.Format("{0} needs you to be signed in. Open the Accounts screen and add "
+                                   + "an account for {0}, then try again.", probe.Host));
             }
 
             return new SyncResult(SyncOutcome.Failed, $"{probe.Host}: {message}{Hint(message)}");
@@ -1522,18 +1542,20 @@ public sealed partial class GitService : IGitService
         if (OperatingSystem.IsWindows()
             && message.Contains("decrypt tls message", StringComparison.OrdinalIgnoreCase))
         {
-            return " — a bug in libgit2's TLS 1.3 support on Windows, not a problem with "
-                   + "your sign-in or this repository. Trying again often gets through, and "
-                   + "git on the command line is unaffected; the server side fix is to stop "
-                   + "offering TLS 1.3 on that host.";
+            return Strings.Get(" — a bug in libgit2's TLS 1.3 support on Windows, not a problem with "
+                               + "your sign-in or this repository. Trying again often gets through, and "
+                               + "git on the command line is unaffected; the server side fix is to stop "
+                               + "offering TLS 1.3 on that host.");
         }
 
         if (OperatingSystem.IsWindows()
             && message.Contains("too long", StringComparison.OrdinalIgnoreCase))
         {
-            return " — a path in this repository is longer than Windows allows by default. "
-                   + "Run \"git config --global core.longpaths true\", enable Win32 long paths "
-                   + "in Windows, and clone somewhere with a shorter path.";
+            // The command stays exactly as it is inside the translated sentence: it is
+            // something the user types, not something they read.
+            return Strings.Get(" — a path in this repository is longer than Windows allows by default. "
+                               + "Run \"git config --global core.longpaths true\", enable Win32 long paths "
+                               + "in Windows, and clone somewhere with a shorter path.");
         }
 
         return string.Empty;
@@ -1622,8 +1644,18 @@ public sealed partial class GitService : IGitService
         return repo.Branches[branch.FriendlyName];
     }
 
-    private static SyncResult NoRemote(string what)
-        => new(SyncOutcome.NoRemote, $"This repository has no remote to {what}.");
+    /// <summary>
+    /// Takes the whole sentence rather than the verb to put in one.
+    /// </summary>
+    /// <remarks>
+    /// This used to be NoRemote("fetch from"), building "This repository has no remote to
+    /// {what}." around a bare English verb phrase. English will take a verb dropped into a
+    /// slot like that and most languages will not - the verb has to agree with the
+    /// sentence, and the sentence is not there to agree with at the call site. Four
+    /// complete sentences read as duplication in C# and are the only translatable shape.
+    /// </remarks>
+    private static SyncResult NoRemote(string sentence)
+        => new(SyncOutcome.NoRemote, sentence);
 
     /// <summary>
     /// Whether libgit2's own message says this was an authentication failure.
@@ -1704,18 +1736,18 @@ public sealed partial class GitService : IGitService
                 {
                     Kind = DiffLineKind.HunkHeader,
                     Text = LooksBinary(full)
-                        ? "Binary file - no preview"
-                        : $"File too large to preview ({info.Length / 1024} KB)",
+                        ? Strings.Get("Binary file - no preview")
+                        : Strings.Format("File too large to preview ({0} KB)", info.Length / 1024),
                 });
             }
         }
         catch (IOException)
         {
-            lines.Add(new DiffLine { Kind = DiffLineKind.HunkHeader, Text = "Unable to read file" });
+            lines.Add(new DiffLine { Kind = DiffLineKind.HunkHeader, Text = Strings.Get("Unable to read file") });
         }
         catch (UnauthorizedAccessException)
         {
-            lines.Add(new DiffLine { Kind = DiffLineKind.HunkHeader, Text = "Permission denied" });
+            lines.Add(new DiffLine { Kind = DiffLineKind.HunkHeader, Text = Strings.Get("Permission denied") });
         }
 
         return new FileChange

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Omnigit.Services;
 
 namespace Omnigit.HostProviders;
 
@@ -88,10 +89,12 @@ public sealed class GitHubProvider(HttpClient http, string? configuredClientId) 
         if (ClientIdFor(baseUrl) is not { } clientId)
         {
             throw new HostProviderException(
-                $"Browser sign-in to {baseUrl.Host} needs an OAuth App registered on that server, "
-                + "which identifies Omnigit to it and cannot be shared or invented. Register one at "
-                + "Settings → Developer settings → OAuth Apps (tick 'Enable Device Flow'), then set "
-                + "OMNIGIT_GITHUB_CLIENT_ID. A personal access token works without any of that.");
+                Strings.Format(
+                    "Browser sign-in to {0} needs an OAuth App registered on that server, "
+                    + "which identifies Omnigit to it and cannot be shared or invented. Register one at "
+                    + "Settings → Developer settings → OAuth Apps (tick 'Enable Device Flow'), then set "
+                    + "OMNIGIT_GITHUB_CLIENT_ID. A personal access token works without any of that.",
+                    baseUrl.Host));
         }
 
         using var content = Form(new Dictionary<string, string>
@@ -104,7 +107,8 @@ public sealed class GitHubProvider(HttpClient http, string? configuredClientId) 
         var root = document.RootElement;
 
         if (root.TryGetProperty("error", out var error))
-            throw new HostProviderException($"GitHub refused the sign-in request: {error.GetString()}");
+            throw new HostProviderException(
+                Strings.Format("GitHub refused the sign-in request: {0}", error.GetString()));
 
         var verification = root.TryGetProperty("verification_uri", out var v) ? v.GetString() : null;
 
@@ -125,7 +129,8 @@ public sealed class GitHubProvider(HttpClient http, string? configuredClientId) 
         // Start already refused if there were no id for this server, so this cannot be null;
         // asking again keeps the two halves of the flow reading the same value.
         var clientId = ClientIdFor(baseUrl)
-            ?? throw new HostProviderException($"Browser sign-in is not configured for {baseUrl.Host}.");
+            ?? throw new HostProviderException(
+                   Strings.Format("Browser sign-in is not configured for {0}.", baseUrl.Host));
 
         var delay = TimeSpan.FromSeconds(Math.Max(1, login.IntervalSeconds));
 
@@ -165,17 +170,18 @@ public sealed class GitHubProvider(HttpClient http, string? configuredClientId) 
                     continue;
 
                 case "expired_token":
-                    throw new HostProviderException("The sign-in code expired. Start again.");
+                    throw new HostProviderException(Strings.Get("The sign-in code expired. Start again."));
 
                 case "access_denied":
-                    throw new HostProviderException("Sign-in was declined in the browser.");
+                    throw new HostProviderException(Strings.Get("Sign-in was declined in the browser."));
 
                 default:
-                    throw new HostProviderException($"GitHub sign-in failed: {error ?? "unknown error"}");
+                    throw new HostProviderException(Strings.Format("GitHub sign-in failed: {0}",
+                        error ?? Strings.Get("unknown error")));
             }
         }
 
-        throw new HostProviderException("The sign-in code expired. Start again.");
+        throw new HostProviderException(Strings.Get("The sign-in code expired. Start again."));
     }
 
     public async Task<IReadOnlyList<RemoteRepository>> ListRepositoriesAsync(
@@ -441,7 +447,8 @@ public sealed class GitHubProvider(HttpClient http, string? configuredClientId) 
         }
         catch (HttpRequestException ex)
         {
-            throw new HostProviderException($"Could not reach {request.RequestUri?.Host}: {ex.Message}", ex);
+            throw new HostProviderException(
+                Strings.Format("Could not reach {0}: {1}", request.RequestUri?.Host, ex.Message), ex);
         }
 
         using (response)
@@ -449,7 +456,7 @@ public sealed class GitHubProvider(HttpClient http, string? configuredClientId) 
             if (response.StatusCode is HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden)
             {
                 throw new HostProviderException(
-                    "GitHub rejected the token. Check it has not expired and carries the 'repo' scope.");
+                    Strings.Get("GitHub rejected the token. Check it has not expired and carries the 'repo' scope."));
             }
 
             // Read before the response is disposed at the end of this block.
@@ -466,7 +473,8 @@ public sealed class GitHubProvider(HttpClient http, string? configuredClientId) 
             catch (JsonException ex)
             {
                 throw new HostProviderException(
-                    $"GitHub returned {(int)response.StatusCode} with a body that isn't JSON.", ex);
+                    Strings.Format("GitHub returned {0} with a body that isn't JSON.",
+                                   (int)response.StatusCode), ex);
             }
         }
     }
@@ -519,7 +527,8 @@ public sealed class GitHubProvider(HttpClient http, string? configuredClientId) 
         }
         catch (HttpRequestException ex)
         {
-            throw new HostProviderException($"Could not reach {url.Host}: {ex.Message}", ex);
+            throw new HostProviderException(
+                Strings.Format("Could not reach {0}: {1}", url.Host, ex.Message), ex);
         }
 
         using (response)
@@ -529,13 +538,14 @@ public sealed class GitHubProvider(HttpClient http, string? configuredClientId) 
             if (response.StatusCode is HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden)
             {
                 throw new HostProviderException(
-                    "GitHub rejected the token. Check it has not expired and carries the 'repo' scope.");
+                    Strings.Get("GitHub rejected the token. Check it has not expired and carries the 'repo' scope."));
             }
 
             if (!response.IsSuccessStatusCode)
             {
                 throw new HostProviderException(
-                    Explain(text) ?? $"GitHub returned {(int)response.StatusCode} {response.ReasonPhrase}.");
+                    Explain(text) ?? Strings.Format("GitHub returned {0} {1}.",
+                                                    (int)response.StatusCode, response.ReasonPhrase));
             }
 
             try

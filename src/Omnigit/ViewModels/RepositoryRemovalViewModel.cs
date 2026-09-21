@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Omnigit.Models;
+using Omnigit.Services;
 
 namespace Omnigit.ViewModels;
 
@@ -36,14 +37,14 @@ public sealed class RepositoryRemovalViewModel
 
     public required int Stashes { get; init; }
 
-    public string Title => $"Delete {Repository.Name}?";
+    public string Title => Strings.Format("Delete {0}?", Repository.Name);
 
     /// <summary>
     /// Named for what actually happens. "Delete" would be a lie about the Recycle Bin and
     /// an alarm about nothing; "Move to trash" says both that it goes and that it can
     /// come back.
     /// </summary>
-    public string ConfirmLabel => "Move to trash";
+    public string ConfirmLabel => Strings.Get("Move to trash");
 
     public bool HasWarnings => Warnings.Count > 0;
 
@@ -59,38 +60,49 @@ public sealed class RepositoryRemovalViewModel
             var warnings = new List<string>();
 
             if (UncommittedChanges > 0)
-                warnings.Add(Count(UncommittedChanges, "uncommitted change", "uncommitted changes"));
+                warnings.Add(Strings.Plural("{0} uncommitted change", "{0} uncommitted changes", UncommittedChanges));
 
             if (UnpushedCommits > 0)
-                warnings.Add(Count(UnpushedCommits, "unpushed commit", "unpushed commits"));
+                warnings.Add(Strings.Plural("{0} unpushed commit", "{0} unpushed commits", UnpushedCommits));
 
             if (UnpublishedBranches > 0)
-                warnings.Add("a branch that is on no server");
+                warnings.Add(Strings.Get("a branch that is on no server"));
 
             if (Stashes > 0)
-                warnings.Add(Count(Stashes, "stash", "stashes"));
+                warnings.Add(Strings.Plural("{0} stash", "{0} stashes", Stashes));
 
             return warnings;
         }
     }
 
+    /// <summary>
+    /// One sentence with the list dropped into it, rather than a sentence built by
+    /// concatenating a prefix and a suffix around it. The placeholder is the whole of
+    /// what makes this translatable: the list is the object of the sentence, and plenty
+    /// of languages do not put an object where English does.
+    /// </summary>
     public string WarningSummary => Warnings.Count == 0
         ? string.Empty
-        : "This clone holds " + Join(Warnings) + " — none of which are on the remote.";
+        : Strings.Format("This clone holds {0} — none of which are on the remote.", Join(Warnings));
 
     public string Summary => HasWarnings
-        ? "The whole folder goes to the trash, where you can put it back from."
-        : "The whole folder goes to the trash. Everything in it has been pushed, so the "
-          + "remote still has it either way.";
-
-    private static string Count(int n, string one, string many) =>
-        $"{n} {(n == 1 ? one : many)}";
+        ? Strings.Get("The whole folder goes to the trash, where you can put it back from.")
+        : Strings.Get("The whole folder goes to the trash. Everything in it has been pushed, "
+                      + "so the remote still has it either way.");
 
     /// <summary>"a, b and c" - an Oxford-comma-free list, because it is read aloud in the head.</summary>
+    /// <remarks>
+    /// The joining words are translated, and the two-item case is a string of its own
+    /// rather than the general case with one item: several languages join a pair
+    /// differently from a longer list, and none of them can say so through a separator
+    /// that is only ever a comma.
+    /// </remarks>
     private static string Join(IReadOnlyList<string> parts) => parts.Count switch
     {
         1 => parts[0],
-        2 => $"{parts[0]} and {parts[1]}",
-        _ => string.Join(", ", parts.Take(parts.Count - 1)) + " and " + parts[^1],
+        2 => Strings.Format("{0} and {1}", parts[0], parts[1]),
+        _ => Strings.Format("{0} and {1}",
+                 string.Join(Strings.Particular("between items of a list", ", "), parts.Take(parts.Count - 1)),
+                 parts[^1]),
     };
 }

@@ -208,7 +208,8 @@ public sealed partial class UpdateService : IUpdateService
 
             var release = ReadRelease(json.RootElement);
             if (release is null)
-                return new(UpdateCheckOutcome.Failed, Detail: "The newest release has no version in its tag.");
+                return new(UpdateCheckOutcome.Failed,
+                    Detail: Strings.Get("The newest release has no version in its tag."));
 
             return AppVersion.IsNewerThanCurrent(release.Version)
                 ? new(UpdateCheckOutcome.UpdateAvailable, release)
@@ -312,7 +313,8 @@ public sealed partial class UpdateService : IUpdateService
     {
         var directory = Path.GetDirectoryName(target);
         if (string.IsNullOrEmpty(directory))
-            return new(UpdateApplyOutcome.Failed, $"cannot tell what directory {target} is in");
+            return new(UpdateApplyOutcome.Failed,
+                Strings.Format("cannot tell what directory {0} is in", target));
 
         var staged = Path.Combine(directory, $".{Path.GetFileName(target)}.update");
 

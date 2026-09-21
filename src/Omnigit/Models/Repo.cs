@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 
+using Omnigit.Services;
+
 namespace Omnigit.Models;
 
 /// <summary>A local clone, plus the remote it tracks.</summary>
@@ -103,7 +105,7 @@ public sealed class RepositoryInfo
     /// thing the icon and the detail line only hint at.
     /// </summary>
     public string SidebarTooltip => IsWorktree && WorktreeOf.Length > 0
-        ? $"Linked worktree of {WorktreeOf}\n{LocalPath}"
+        ? Strings.Format("Linked worktree of {0}\n{1}", WorktreeOf, LocalPath)
         : LocalPath;
 
     /// <summary>
@@ -115,11 +117,18 @@ public sealed class RepositoryInfo
         ? Host.Name
         : $"{Owner} · {Host.Name}";
     public bool HasVisibility => IsPrivate.HasValue;
-    public string VisibilityLabel => IsPrivate == true ? "Private" : "Public";
+    // Two calls rather than one around a conditional: the extractor reads literals, so a
+    // string chosen before the call is a string no translator is ever offered.
+    public string VisibilityLabel => IsPrivate == true ? Strings.Get("Private") : Strings.Get("Public");
 
+    /// <summary>
+    /// A whole sentence with the time in it, rather than the English word "Last fetched"
+    /// glued onto an already-built phrase. The placeholder is what lets a language put
+    /// the time first, which several do.
+    /// </summary>
     public string LastFetchedLabel => LastFetched is { } when
-        ? $"Last fetched {TimeFormat.Relative(when)}"
-        : "Never fetched";
+        ? Strings.Format("Last fetched {0}", TimeFormat.Relative(when))
+        : Strings.Get("Never fetched");
 }
 
 public sealed class BranchInfo
@@ -166,7 +175,7 @@ public sealed class BranchInfo
     /// another worktree holds, where clicking the row leads.
     /// </summary>
     public string PickerDetail =>
-        IsCheckedOutElsewhere ? $"Open {CheckedOutIn}" : LastCommitSummary;
+        IsCheckedOutElsewhere ? Strings.Format("Open {0}", CheckedOutIn) : LastCommitSummary;
 
     public string RelativeTime => TimeFormat.Relative(LastCommitAt);
 }
@@ -254,7 +263,7 @@ public sealed class CommitInfo
     public string RelativeTime => TimeFormat.Relative(CommittedAt);
 
     public string FilesChangedLabel =>
-        FilesChanged == 1 ? "1 file changed" : $"{FilesChanged} files changed";
+        Strings.Plural("{0} file changed", "{0} files changed", FilesChanged);
 }
 
 /// <summary>One changed path in the working tree, with its rendered diff.</summary>
@@ -285,6 +294,11 @@ public sealed class FileChange
     }
 
     /// <summary>Single-letter status marker, matching git's short format.</summary>
+    /// <remarks>
+    /// Not translated, for the same reason the diff tokens are not: these are git's own
+    /// letters, and someone reading them here is reading what `git status --short` prints
+    /// in every language.
+    /// </remarks>
     public string StatusGlyph => Status switch
     {
         ChangeStatus.Added => "A",
