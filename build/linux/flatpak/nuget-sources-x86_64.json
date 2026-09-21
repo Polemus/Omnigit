@@ -411,10 +411,10 @@
     },
     {
         "type": "file",
-        "url": "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.protecteddata/10.0.11/system.security.cryptography.protecteddata.10.0.11.nupkg",
-        "sha512": "71ed0a46663116b76cc4e25295308d36a4711447a4a0f739d9c8421cb89c61b00297a383e7393be324ddbf4678b217a306e278293e599379c9376145411e3a01",
+        "url": "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.protecteddata/10.0.12/system.security.cryptography.protecteddata.10.0.12.nupkg",
+        "sha512": "d253cf547c73d457a1871446b6a0a05192248566c75a96daceff65a6c7b3c7fcb1f1e2be1c844dc527be25eb92c52da52a2e4e0f1e5cf6721e659e3e7408c721",
         "dest": "nuget-sources",
-        "dest-filename": "system.security.cryptography.protecteddata.10.0.11.nupkg",
+        "dest-filename": "system.security.cryptography.protecteddata.10.0.12.nupkg",
         "only-arches": [
             "x86_64"
         ]
