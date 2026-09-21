@@ -39,6 +39,13 @@
                       LogicalName="Omnigit.Resources.Gitignore.%(Filename)%(Extension)" />
     <EmbeddedResource Include="Resources\Licences\*.txt"
                       LogicalName="Omnigit.Resources.Licences.%(Filename)%(Extension)" />
+
+    <!-- Translations, one gettext catalogue per language. LogicalName for the same
+         reason as above: a locale code is not an identifier, so pt-BR.po would be
+         embedded as pt_BR and Strings.Use would never find it. There is no en.po -
+         the English is in the source, and is the key. -->
+    <EmbeddedResource Include="Resources\Locale\*.po"
+                      LogicalName="Omnigit.Resources.Locale.%(Filename)%(Extension)" />
   </ItemGroup>
 
   <ItemGroup>

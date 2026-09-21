@@ -176,7 +176,7 @@
                     <Button Grid.Column="1" x:Name="AddRepositoryButton"
                             Classes="addButton" VerticalAlignment="Center"
                             Margin="10,0,0,0"
-                            ToolTip.Tip="Add a repository">
+                            ToolTip.Tip="{Loc 'Add a repository'}">
                         <Path Data="{DynamicResource IconPlus}" Width="16" Height="16"
                               Stretch="None" StrokeLineCap="Round" Fill="Transparent" />
                         <Button.Flyout>
@@ -481,7 +481,7 @@
                             ToolTip.Tip="{Binding GraphButtonLabel}">
                         <Path Classes="icon" Data="{DynamicResource IconGraph}" />
                     </Button>
-                    <Button Classes="iconButton" Click="OnToggleTheme" ToolTip.Tip="Toggle theme">
+                    <Button Classes="iconButton" Click="OnToggleTheme" ToolTip.Tip="{Loc 'Toggle theme'}">
                         <Path Classes="icon" Data="{DynamicResource IconMoon}" x:Name="ThemeIcon" />
                     </Button>
                     <Button Classes="iconButton" Command="{Binding ToggleSettingsCommand}"
@@ -538,7 +538,7 @@
                                    Text="{Binding PendingDiscardSummary}" />
                         <StackPanel Orientation="Horizontal" Spacing="9"
                                     HorizontalAlignment="Right">
-                            <Button Classes="secondary" Content="Cancel"
+                            <Button Classes="secondary" Content="{Loc 'Cancel'}"
                                     Command="{Binding CancelDiscardCommand}" />
                             <Button Classes="primary" Content="Discard changes"
                                     Command="{Binding ConfirmDiscardCommand}" />
@@ -580,7 +580,7 @@
 
                                     <StackPanel Orientation="Horizontal" Spacing="9"
                                                 HorizontalAlignment="Right">
-                                        <Button Classes="secondary" Content="Cancel"
+                                        <Button Classes="secondary" Content="{Loc 'Cancel'}"
                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).CancelRemovalCommand}" />
                                         <Button Classes="primary" Content="{Binding ConfirmLabel}"
                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).ConfirmRemovalCommand}" />
@@ -655,7 +655,7 @@
 
                                     <StackPanel Orientation="Horizontal" Spacing="10"
                                                 HorizontalAlignment="Right">
-                                        <Button Classes="secondary" Content="Cancel"
+                                        <Button Classes="secondary" Content="{Loc 'Cancel'}"
                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).CancelBranchSwitchCommand}" />
                                         <Button Classes="primary" Content="{Binding ConfirmLabel}"
                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).ConfirmBranchSwitchCommand}" />
@@ -745,7 +745,7 @@
 
                                     <StackPanel Orientation="Horizontal" Spacing="10"
                                                 HorizontalAlignment="Right">
-                                        <Button Classes="secondary" Content="Cancel"
+                                        <Button Classes="secondary" Content="{Loc 'Cancel'}"
                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).CancelNewRepositoryCommand}" />
 
                                         <!-- The verb changes with the destination: one
@@ -796,7 +796,7 @@
 
                                     <StackPanel Orientation="Horizontal" Spacing="10"
                                                 HorizontalAlignment="Right">
-                                        <Button Classes="secondary" Content="Cancel"
+                                        <Button Classes="secondary" Content="{Loc 'Cancel'}"
                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).CancelPublishCommand}" />
                                         <Button Classes="primary" Content="Publish repository"
                                                 IsEnabled="{Binding CanPublish}"
@@ -828,7 +828,7 @@
                                                Text="The new branch starts here and is checked out. Nothing already committed changes." />
                                     <StackPanel Orientation="Horizontal" Spacing="10"
                                                 HorizontalAlignment="Right">
-                                        <Button Classes="secondary" Content="Cancel"
+                                        <Button Classes="secondary" Content="{Loc 'Cancel'}"
                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).CancelBranchFromCommitCommand}" />
                                         <Button Classes="primary" Content="Create branch"
                                                 IsEnabled="{Binding CanCreate}"
@@ -864,7 +864,7 @@
                                                Text="A message makes it an annotated tag, recording who made it and when. The tag stays local until you push." />
                                     <StackPanel Orientation="Horizontal" Spacing="10"
                                                 HorizontalAlignment="Right">
-                                        <Button Classes="secondary" Content="Cancel"
+                                        <Button Classes="secondary" Content="{Loc 'Cancel'}"
                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).CancelTagCommand}" />
                                         <Button Classes="primary" Content="Create tag"
                                                 IsEnabled="{Binding CanCreate}"
@@ -905,7 +905,7 @@
 
                                     <StackPanel Orientation="Horizontal" Spacing="10"
                                                 HorizontalAlignment="Right">
-                                        <Button Classes="secondary" Content="Cancel"
+                                        <Button Classes="secondary" Content="{Loc 'Cancel'}"
                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).CancelCherryPickCommand}" />
                                         <Button Classes="primary" Content="Copy it across"
                                                 IsEnabled="{Binding CanApply}"
@@ -956,7 +956,7 @@
 
                                     <StackPanel Orientation="Horizontal" Spacing="10"
                                                 HorizontalAlignment="Right">
-                                        <Button Classes="secondary" Content="Cancel"
+                                        <Button Classes="secondary" Content="{Loc 'Cancel'}"
                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).CancelResetCommand}" />
                                         <Button Classes="primary" Content="{Binding ConfirmLabel}"
                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).ConfirmResetCommand}" />
