@@ -21,7 +21,19 @@ public sealed class GitHubProvider(HttpClient http, string? configuredClientId) 
     private const string DeviceGrantType = "urn:ietf:params:oauth:grant-type:device_code";
 
     /// <summary>Scopes needed to list repositories and to push over HTTPS.</summary>
-    private const string Scopes = "repo read:org";
+    /// <remarks>
+    /// <c>workflow</c> is not optional for a git client, and Omnigit proved it on itself:
+    /// GitHub refuses to let an OAuth token create or update anything under
+    /// <c>.github/workflows/</c> without it, so a push carrying a workflow change uploads
+    /// every object and is then rejected at the ref update - "refusing to allow an OAuth
+    /// App to create or update workflow ... without `workflow` scope". Omnigit could not
+    /// push its own CI. GitHub Desktop asks for the same three for the same reason.
+    ///
+    /// A token already issued keeps the scopes it was issued with, so this reaches an
+    /// existing account only after signing out and back in. Worth a line in the release
+    /// notes rather than leaving people to find it.
+    /// </remarks>
+    private const string Scopes = "repo workflow read:org";
 
     /// <summary>
     /// Omnigit's own OAuth App, registered on github.com. A client id is public by design:

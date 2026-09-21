@@ -211,11 +211,11 @@ msgstr ""
 msgid "Bring my changes with me"
 msgstr ""
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:133
+#: src/Omnigit/HostProviders/GitHubProvider.cs:145
 msgid "Browser sign-in is not configured for {0}."
 msgstr ""
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:92
+#: src/Omnigit/HostProviders/GitHubProvider.cs:104
 msgid "Browser sign-in to {0} needs an OAuth App registered on that server, which identifies Omnigit to it and cannot be shared or invented. Register one at Settings → Developer settings → OAuth Apps (tick 'Enable Device Flow'), then set OMNIGIT_GITHUB_CLIENT_ID. A personal access token works without any of that."
 msgstr ""
 
@@ -476,8 +476,8 @@ msgstr ""
 msgid "Could not reach the clipboard"
 msgstr ""
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:451
-#: src/Omnigit/HostProviders/GitHubProvider.cs:531
+#: src/Omnigit/HostProviders/GitHubProvider.cs:463
+#: src/Omnigit/HostProviders/GitHubProvider.cs:543
 #: src/Omnigit/HostProviders/HostConnectionTester.cs:164
 #: src/Omnigit/HostProviders/ManifestHostProvider.cs:363
 #: src/Omnigit/HostProviders/ManifestHostProvider.cs:460
@@ -810,24 +810,24 @@ msgstr ""
 msgid "General"
 msgstr ""
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:111
+#: src/Omnigit/HostProviders/GitHubProvider.cs:123
 msgid "GitHub refused the sign-in request: {0}"
 msgstr ""
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:459
-#: src/Omnigit/HostProviders/GitHubProvider.cs:541
+#: src/Omnigit/HostProviders/GitHubProvider.cs:471
+#: src/Omnigit/HostProviders/GitHubProvider.cs:553
 msgid "GitHub rejected the token. Check it has not expired and carries the 'repo' scope."
 msgstr ""
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:476
+#: src/Omnigit/HostProviders/GitHubProvider.cs:488
 msgid "GitHub returned {0} with a body that isn't JSON."
 msgstr ""
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:547
+#: src/Omnigit/HostProviders/GitHubProvider.cs:559
 msgid "GitHub returned {0} {1}."
 msgstr ""
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:179
+#: src/Omnigit/HostProviders/GitHubProvider.cs:191
 msgid "GitHub sign-in failed: {0}"
 msgstr ""
 
@@ -1479,7 +1479,7 @@ msgstr ""
 msgid "Sign out"
 msgstr ""
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:176
+#: src/Omnigit/HostProviders/GitHubProvider.cs:188
 msgid "Sign-in was declined in the browser."
 msgstr ""
 
@@ -1641,8 +1641,8 @@ msgstr ""
 msgid "The repository request timed out."
 msgstr ""
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:173
-#: src/Omnigit/HostProviders/GitHubProvider.cs:184
+#: src/Omnigit/HostProviders/GitHubProvider.cs:185
+#: src/Omnigit/HostProviders/GitHubProvider.cs:196
 msgid "The sign-in code expired. Start again."
 msgstr ""
 
@@ -1960,7 +1960,7 @@ msgstr ""
 msgid "token (optional)"
 msgstr ""
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:180
+#: src/Omnigit/HostProviders/GitHubProvider.cs:192
 msgid "unknown error"
 msgstr ""
 

@@ -212,11 +212,11 @@ msgstr "[!!Ƀŗåñçĥéš ··!!]"
 msgid "Bring my changes with me"
 msgstr "[!!Ƀŗïñğ ṁý çĥåñğéš ŵïţĥ ṁé ·······!!]"
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:133
+#: src/Omnigit/HostProviders/GitHubProvider.cs:145
 msgid "Browser sign-in is not configured for {0}."
 msgstr "[!!Ƀŗöŵšéŗ šïğñ-ïñ ïš ñöţ çöñƒïğûŗéđ ƒöŗ {0}. ·············!!]"
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:92
+#: src/Omnigit/HostProviders/GitHubProvider.cs:104
 msgid "Browser sign-in to {0} needs an OAuth App registered on that server, which identifies Omnigit to it and cannot be shared or invented. Register one at Settings → Developer settings → OAuth Apps (tick 'Enable Device Flow'), then set OMNIGIT_GITHUB_CLIENT_ID. A personal access token works without any of that."
 msgstr "[!!Ƀŗöŵšéŗ šïğñ-ïñ ţö {0} ñééđš åñ ÖÅûţĥ Åþþ ŗéğïšţéŗéđ öñ ţĥåţ šéŗṽéŗ, ŵĥïçĥ ïđéñţïƒïéš Öṁñïğïţ ţö ïţ åñđ çåññöţ ƀé šĥåŗéđ öŗ ïñṽéñţéđ. Ŗéğïšţéŗ öñé åţ Šéţţïñğš → Đéṽéļöþéŗ šéţţïñğš → ÖÅûţĥ Åþþš (ţïçķ 'Éñåƀļé Đéṽïçé Ƒļöŵ'), ţĥéñ šéţ ÖṀÑÏĞÏŢ_ĞÏŢĤÛɃ_ÇĻÏÉÑŢ_ÏĐ. Å þéŗšöñåļ åççéšš ţöķéñ ŵöŗķš ŵïţĥöûţ åñý öƒ ţĥåţ. ····························································································!!]"
 
@@ -477,8 +477,8 @@ msgstr "[!!Çöûļđ ñöţ öþéñ ţĥé đïšķ ïṁåğé. ······�
 msgid "Could not reach the clipboard"
 msgstr "[!!Çöûļđ ñöţ ŗéåçĥ ţĥé çļïþƀöåŗđ ·········!!]"
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:451
-#: src/Omnigit/HostProviders/GitHubProvider.cs:531
+#: src/Omnigit/HostProviders/GitHubProvider.cs:463
+#: src/Omnigit/HostProviders/GitHubProvider.cs:543
 #: src/Omnigit/HostProviders/HostConnectionTester.cs:164
 #: src/Omnigit/HostProviders/ManifestHostProvider.cs:363
 #: src/Omnigit/HostProviders/ManifestHostProvider.cs:460
@@ -811,24 +811,24 @@ msgstr "[!!ĞÏŢ ÏĞÑÖŖÉ ···!!]"
 msgid "General"
 msgstr "[!!Ğéñéŗåļ ··!!]"
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:111
+#: src/Omnigit/HostProviders/GitHubProvider.cs:123
 msgid "GitHub refused the sign-in request: {0}"
 msgstr "[!!ĞïţĤûƀ ŗéƒûšéđ ţĥé šïğñ-ïñ ŗéǫûéšţ: {0} ············!!]"
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:459
-#: src/Omnigit/HostProviders/GitHubProvider.cs:541
+#: src/Omnigit/HostProviders/GitHubProvider.cs:471
+#: src/Omnigit/HostProviders/GitHubProvider.cs:553
 msgid "GitHub rejected the token. Check it has not expired and carries the 'repo' scope."
 msgstr "[!!ĞïţĤûƀ ŗéĵéçţéđ ţĥé ţöķéñ. Çĥéçķ ïţ ĥåš ñöţ éẋþïŗéđ åñđ çåŗŗïéš ţĥé 'ŗéþö' šçöþé. ························!!]"
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:476
+#: src/Omnigit/HostProviders/GitHubProvider.cs:488
 msgid "GitHub returned {0} with a body that isn't JSON."
 msgstr "[!!ĞïţĤûƀ ŗéţûŗñéđ {0} ŵïţĥ å ƀöđý ţĥåţ ïšñ'ţ ĴŠÖÑ. ··············!!]"
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:547
+#: src/Omnigit/HostProviders/GitHubProvider.cs:559
 msgid "GitHub returned {0} {1}."
 msgstr "[!!ĞïţĤûƀ ŗéţûŗñéđ {0} {1}. ·······!!]"
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:179
+#: src/Omnigit/HostProviders/GitHubProvider.cs:191
 msgid "GitHub sign-in failed: {0}"
 msgstr "[!!ĞïţĤûƀ šïğñ-ïñ ƒåïļéđ: {0} ········!!]"
 
@@ -1480,7 +1480,7 @@ msgstr "[!!Šïğñ ïñ ŵïţĥ ƀŗöŵšéŗ ······!!]"
 msgid "Sign out"
 msgstr "[!!Šïğñ öûţ ··!!]"
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:176
+#: src/Omnigit/HostProviders/GitHubProvider.cs:188
 msgid "Sign-in was declined in the browser."
 msgstr "[!!Šïğñ-ïñ ŵåš đéçļïñéđ ïñ ţĥé ƀŗöŵšéŗ. ···········!!]"
 
@@ -1642,8 +1642,8 @@ msgstr "[!!Ţĥé ŗéṁöţé ĥåš ñö {0} — ţĥé þûļļ ŗéǫûéš
 msgid "The repository request timed out."
 msgstr "[!!Ţĥé ŗéþöšïţöŗý ŗéǫûéšţ ţïṁéđ öûţ. ··········!!]"
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:173
-#: src/Omnigit/HostProviders/GitHubProvider.cs:184
+#: src/Omnigit/HostProviders/GitHubProvider.cs:185
+#: src/Omnigit/HostProviders/GitHubProvider.cs:196
 msgid "The sign-in code expired. Start again."
 msgstr "[!!Ţĥé šïğñ-ïñ çöđé éẋþïŗéđ. Šţåŗţ åğåïñ. ···········!!]"
 
@@ -1961,7 +1961,7 @@ msgstr "[!!ţĥïš ƀŗåñçĥ ···!!]"
 msgid "token (optional)"
 msgstr "[!!ţöķéñ (öþţïöñåļ) ·····!!]"
 
-#: src/Omnigit/HostProviders/GitHubProvider.cs:180
+#: src/Omnigit/HostProviders/GitHubProvider.cs:192
 msgid "unknown error"
 msgstr "[!!ûñķñöŵñ éŗŗöŗ ····!!]"
 
