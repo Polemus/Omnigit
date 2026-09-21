@@ -68,6 +68,19 @@ SUSPECT = re.compile(r"Strings\.(Get|Format|Plural|Particular)\(")
 
 LOC = re.compile(r"\{Loc" + WS + r"'((?:[^'\\]|\\.)*)'" + WS + r"\}")
 
+# The element form, used where a sentence contains an apostrophe or a quote and so cannot
+# sit inside the markup extension's own string. Key is an ordinary XML attribute there,
+# so XML entities have to be undone - the attribute is the only place &quot; appears.
+LOC_ELEMENT = re.compile(r"<Loc\s+Key=\"([^\"]*)\"")
+
+ENTITIES = {"&quot;": '"', "&apos;": "'", "&lt;": "<", "&gt;": ">", "&amp;": "&"}
+
+
+def unentity(value: str) -> str:
+    for entity, character in ENTITIES.items():
+        value = value.replace(entity, character)
+    return value
+
 
 class Entry:
     """One msgid, with wherever it was found and its plural if it has one."""
@@ -154,7 +167,11 @@ def collect() -> tuple[dict[tuple[str, str], Entry], list[str]]:
         rel = path.relative_to(ROOT).as_posix()
         for match in LOC.finditer(text):
             line = text.count("\n", 0, match.start()) + 1
-            add(match.group(1).replace("\\'", "'"), f"{rel}:{line}")
+            add(unentity(match.group(1).replace("\\'", "'")), f"{rel}:{line}")
+
+        for match in LOC_ELEMENT.finditer(text):
+            line = text.count("\n", 0, match.start()) + 1
+            add(unentity(match.group(1)), f"{rel}:{line}")
 
     return found, unreadable
 

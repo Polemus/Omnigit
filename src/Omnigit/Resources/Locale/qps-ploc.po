@@ -12,9 +12,120 @@ msgstr ""
 "Language: qps-ploc\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: src/Omnigit/Views/SettingsView.axaml:529
+#: src/Omnigit/Views/SettingsView.axaml:532
+msgid "(empty for true/false)"
+msgstr "[!!(éṁþţý ƒöŗ ţŗûé/ƒåļšé) ·······!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:504
+msgid "(leave empty for a name)"
+msgstr "[!!(ļéåṽé éṁþţý ƒöŗ å ñåṁé) ·······!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:492
+msgid "(leave empty for true/false)"
+msgstr "[!!(ļéåṽé éṁþţý ƒöŗ ţŗûé/ƒåļšé) ········!!]"
+
+#: src/Omnigit/Views/CloneView.axaml:25
+msgid "..."
+msgstr "[!!... ·!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:695
+msgid "A git client that talks to more than one hosting site. MIT licensed."
+msgstr "[!!Å ğïţ çļïéñţ ţĥåţ ţåļķš ţö ṁöŗé ţĥåñ öñé ĥöšţïñğ šïţé. ṀÏŢ ļïçéñšéđ. ····················!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:297
+msgid "A hosting site is described by data, never by code, so a description you got from someone else can never read the tokens held for your other sites. Adding one here writes exactly the same JSON file you could drop in the hosts folder yourself."
+msgstr "[!!Å ĥöšţïñğ šïţé ïš đéšçŗïƀéđ ƀý đåţå, ñéṽéŗ ƀý çöđé, šö å đéšçŗïþţïöñ ýöû ğöţ ƒŗöṁ šöṁéöñé éļšé çåñ ñéṽéŗ ŗéåđ ţĥé ţöķéñš ĥéļđ ƒöŗ ýöûŗ öţĥéŗ šïţéš. Åđđïñğ öñé ĥéŗé ŵŗïţéš éẋåçţļý ţĥé šåṁé ĴŠÖÑ ƒïļé ýöû çöûļđ đŗöþ ïñ ţĥé ĥöšţš ƒöļđéŗ ýöûŗšéļƒ. ·········································································!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:864
+msgid "A message makes it an annotated tag, recording who made it and when. The tag stays local until you push."
+msgstr "[!!Å ṁéššåğé ṁåķéš ïţ åñ åññöţåţéđ ţåğ, ŗéçöŗđïñğ ŵĥö ṁåđé ïţ åñđ ŵĥéñ. Ţĥé ţåğ šţåýš ļöçåļ ûñţïļ ýöû þûšĥ. ·······························!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:200
+msgid "ADD AN ACCOUNT"
+msgstr "[!!ÅĐĐ ÅÑ ÅÇÇÖÛÑŢ ····!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:984
+#: src/Omnigit/Views/RepositoryView.axaml:254
+msgid "Abandon it"
+msgstr "[!!Åƀåñđöñ ïţ ···!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:977
+msgid "Abandon this?"
+msgstr "[!!Åƀåñđöñ ţĥïš? ····!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:62
+msgid "About"
+msgstr "[!!Åƀöûţ ··!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:693
+msgid "About Omnigit"
+msgstr "[!!Åƀöûţ Öṁñïğïţ ····!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:448
+msgid "Account: login, display name, avatar"
+msgstr "[!!Åççöûñţ: ļöğïñ, đïšþļåý ñåṁé, åṽåţåŗ ···········!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:36
+#: src/Omnigit/Views/SettingsView.axaml:128
+msgid "Accounts"
+msgstr "[!!Åççöûñţš ··!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:357
+msgid "Add a GitLab-like site"
+msgstr "[!!Åđđ å ĞïţĻåƀ-ļïķé šïţé ·······!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:234
+msgid "Add a hosting site…"
+msgstr "[!!Åđđ å ĥöšţïñğ šïţé… ······!!]"
+
 #: src/Omnigit/Views/MainWindow.axaml:179
 msgid "Add a repository"
 msgstr "[!!Åđđ å ŗéþöšïţöŗý ·····!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:355
+msgid "Add a site"
+msgstr "[!!Åđđ å šïţé ···!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:212
+msgid "Add local repository…"
+msgstr "[!!Åđđ ļöçåļ ŗéþöšïţöŗý… ······!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:624
+msgid "All files"
+msgstr "[!!Åļļ ƒïļéš ···!!]"
+
+#: src/Omnigit/Views/CloneView.axaml:96
+msgid "Already added"
+msgstr "[!!Åļŗéåđý åđđéđ ····!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:384
+msgid "Amend this commit…"
+msgstr "[!!Åṁéñđ ţĥïš çöṁṁïţ… ·····!!]"
+
+#: src/Omnigit/Views/CloneView.axaml:49
+msgid "Asking every signed-in site…"
+msgstr "[!!Åšķïñğ éṽéŗý šïğñéđ-ïñ šïţé… ········!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:69
+msgid "Asking which organisations you belong to…"
+msgstr "[!!Åšķïñğ ŵĥïçĥ öŗğåñïšåţïöñš ýöû ƀéļöñğ ţö… ············!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:826
+msgid "Branch name"
+msgstr "[!!Ƀŗåñçĥ ñåṁé ···!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:271
+msgid "Branches"
+msgstr "[!!Ƀŗåñçĥéš ··!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:614
+msgid "Bring my changes with me"
+msgstr "[!!Ƀŗïñğ ṁý çĥåñğéš ŵïţĥ ṁé ·······!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:431
+msgid "CREATING A REPOSITORY"
+msgstr "[!!ÇŖÉÅŢÏÑĞ Å ŖÉÞÖŠÏŢÖŖÝ ······!!]"
 
 #: src/Omnigit/Views/MainWindow.axaml:541
 #: src/Omnigit/Views/MainWindow.axaml:583
@@ -25,30 +136,596 @@ msgstr "[!!Åđđ å ŗéþöšïţöŗý ·····!!]"
 #: src/Omnigit/Views/MainWindow.axaml:867
 #: src/Omnigit/Views/MainWindow.axaml:908
 #: src/Omnigit/Views/MainWindow.axaml:959
+#: src/Omnigit/Views/RepositoryView.axaml:512
+#: src/Omnigit/Views/SettingsView.axaml:673
 msgid "Cancel"
 msgstr "[!!Çåñçéļ ··!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:169
+msgid "Changes"
+msgstr "[!!Çĥåñğéš ··!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:756
+msgid "Check for updates"
+msgstr "[!!Çĥéçķ ƒöŗ ûþđåţéš ·····!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:580
+msgid "Checking a pull request out fetches this ref from the remote, so a contributor's fork needs no remote of its own."
+msgstr "[!!Çĥéçķïñğ å þûļļ ŗéǫûéšţ öûţ ƒéţçĥéš ţĥïš ŗéƒ ƒŗöṁ ţĥé ŗéṁöţé, šö å çöñţŗïƀûţöŗ'š ƒöŗķ ñééđš ñö ŗéṁöţé öƒ ïţš öŵñ. ··································!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:621
+msgid "Choose which files come with you"
+msgstr "[!!Çĥööšé ŵĥïçĥ ƒïļéš çöṁé ŵïţĥ ýöû ··········!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:707
+msgid "Choose…"
+msgstr "[!!Çĥööšé… ··!!]"
+
+#: src/Omnigit/Views/CloneView.axaml:88
+msgid "Clone"
+msgstr "[!!Çļöñé ··!!]"
+
+#: src/Omnigit/Views/CloneView.axaml:23
+msgid "Clone a repository"
+msgstr "[!!Çļöñé å ŗéþöšïţöŗý ·····!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:222
+msgid "Clone repository…"
+msgstr "[!!Çļöñé ŗéþöšïţöŗý… ·····!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:1062
+msgid "Copy"
+msgstr "[!!Çöþý ·!!]"
+
+#: src/Omnigit/Views/GraphView.axaml:51
+#: src/Omnigit/Views/RepositoryView.axaml:402
+msgid "Copy SHA"
+msgstr "[!!Çöþý ŠĤÅ ··!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:273
+msgid "Copy code"
+msgstr "[!!Çöþý çöđé ···!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:315
+msgid "Copy file path"
+msgstr "[!!Çöþý ƒïļé þåţĥ ····!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:910
+msgid "Copy it across"
+msgstr "[!!Çöþý ïţ åçŗöšš ····!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:398
+msgid "Copy onto another branch…"
+msgstr "[!!Çöþý öñţö åñöţĥéŗ ƀŗåñçĥ… ········!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:101
+msgid "Copy path"
+msgstr "[!!Çöþý þåţĥ ···!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:319
+msgid "Copy relative file path"
+msgstr "[!!Çöþý ŗéļåţïṽé ƒïļé þåţĥ ·······!!]"
+
+#: src/Omnigit/Views/GraphView.axaml:52
+#: src/Omnigit/Views/RepositoryView.axaml:404
+msgid "Copy summary"
+msgstr "[!!Çöþý šûṁṁåŗý ····!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:406
+msgid "Copy tag"
+msgstr "[!!Çöþý ţåğ ··!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:889
+msgid "Copy this commit to another branch"
+msgstr "[!!Çöþý ţĥïš çöṁṁïţ ţö åñöţĥéŗ ƀŗåñçĥ ··········!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:420
+msgid "Create"
+msgstr "[!!Çŗéåţé ··!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:394
+msgid "Create a branch from here…"
+msgstr "[!!Çŗéåţé å ƀŗåñçĥ ƒŗöṁ ĥéŗé… ········!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:685
+msgid "Create a new repository"
+msgstr "[!!Çŗéåţé å ñéŵ ŗéþöšïţöŗý ·······!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:396
+msgid "Create a tag…"
+msgstr "[!!Çŗéåţé å ţåğ… ····!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:833
+msgid "Create branch"
+msgstr "[!!Çŗéåţé ƀŗåñçĥ ····!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:438
+msgid "Create pull request"
+msgstr "[!!Çŗéåţé þûļļ ŗéǫûéšţ ······!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:869
+msgid "Create tag"
+msgstr "[!!Çŗéåţé ţåğ ···!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:457
+msgid "Ctrl+P to push · Ctrl+Shift+P to pull · Ctrl+Shift+F to fetch"
+msgstr "[!!Çţŗļ+Þ ţö þûšĥ · Çţŗļ+Šĥïƒţ+Þ ţö þûļļ · Çţŗļ+Šĥïƒţ+Ƒ ţö ƒéţçĥ ··················!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:383
+msgid "Current"
+msgstr "[!!Çûŗŗéñţ ··!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:695
+#: src/Omnigit/Views/MainWindow.axaml:785
+msgid "DESCRIPTION"
+msgstr "[!!ĐÉŠÇŖÏÞŢÏÖÑ ···!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:497
+msgid "Description"
+msgstr "[!!Đéšçŗïþţïöñ ···!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:487
+msgid "Discard"
+msgstr "[!!Đïšçåŗđ ··!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:543
+msgid "Discard changes"
+msgstr "[!!Đïšçåŗđ çĥåñğéš ····!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:380
+msgid "Display name"
+msgstr "[!!Đïšþļåý ñåṁé ····!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:415
+msgid "ENDPOINTS"
+msgstr "[!!ÉÑĐÞÖÏÑŢŠ ···!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:336
+msgid "Edit"
+msgstr "[!!Éđïţ ·!!]"
+
+#: src/Omnigit/Views/CloneView.axaml:29
+msgid "Everything your signed-in accounts can see, from every hosting site at once. Cloning uses that site's own token, so private repositories work without touching a terminal."
+msgstr "[!!Éṽéŗýţĥïñğ ýöûŗ šïğñéđ-ïñ åççöûñţš çåñ šéé, ƒŗöṁ éṽéŗý ĥöšţïñğ šïţé åţ öñçé. Çļöñïñğ ûšéš ţĥåţ šïţé'š öŵñ ţöķéñ, šö þŗïṽåţé ŗéþöšïţöŗïéš ŵöŗķ ŵïţĥöûţ ţöûçĥïñğ å ţéŗṁïñåļ. ···················································!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:336
+msgid "Filter branches, here or on the remote"
+msgstr "[!!Ƒïļţéŗ ƀŗåñçĥéš, ĥéŗé öŗ öñ ţĥé ŗéṁöţé ···········!!]"
+
+#: src/Omnigit/Views/CloneView.axaml:38
+msgid "Filter by name or description"
+msgstr "[!!Ƒïļţéŗ ƀý ñåṁé öŗ đéšçŗïþţïöñ ·········!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:510
+msgid "Fixing the last commit instead of adding a new one."
+msgstr "[!!Ƒïẋïñğ ţĥé ļåšţ çöṁṁïţ ïñšţéåđ öƒ åđđïñğ å ñéŵ öñé. ···············!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:719
+msgid "GIT IGNORE"
+msgstr "[!!ĞÏŢ ÏĞÑÖŖÉ ···!!]"
 
 #: src/Omnigit/Views/SettingsView.axaml:28
 #: src/Omnigit/Views/SettingsView.axaml:82
 msgid "General"
 msgstr "[!!Ğéñéŗåļ ··!!]"
 
+#: src/Omnigit/Views/RepositoryView.axaml:178
+msgid "History"
+msgstr "[!!Ĥïšţöŗý ··!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:306
+msgid "Host description problems"
+msgstr "[!!Ĥöšţ đéšçŗïþţïöñ þŗöƀļéṁš ········!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:44
+#: src/Omnigit/Views/SettingsView.axaml:295
+msgid "Hosting sites"
+msgstr "[!!Ĥöšţïñğ šïţéš ····!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:242
+msgid "I fixed it"
+msgstr "[!!Ï ƒïẋéđ ïţ ···!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:372
+msgid "Id"
+msgstr "[!!Ïđ ·!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:292
+msgid "Ignore file (add to .gitignore)"
+msgstr "[!!Ïğñöŗé ƒïļé (åđđ ţö .ğïţïğñöŗé) ·········!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:313
+msgid "KNOWN SITES"
+msgstr "[!!ĶÑÖŴÑ ŠÏŢÉŠ ···!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:982
+msgid "Keep going"
+msgstr "[!!Ķééþ ğöïñğ ···!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:234
+msgid "Keep mine"
+msgstr "[!!Ķééþ ṁïñé ···!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:943
+msgid "Keep the changes in my working tree"
+msgstr "[!!Ķééþ ţĥé çĥåñğéš ïñ ṁý ŵöŗķïñğ ţŗéé ··········!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:939
+msgid "Keep the changes, ready to commit"
+msgstr "[!!Ķééþ ţĥé çĥåñğéš, ŗéåđý ţö çöṁṁïţ ··········!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:80
+msgid "Keep this code private"
+msgstr "[!!Ķééþ ţĥïš çöđé þŗïṽåţé ·······!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:725
+msgid "LICENCE"
+msgstr "[!!ĻÏÇÉÑÇÉ ··!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:702
+msgid "LOCAL PATH"
+msgstr "[!!ĻÖÇÅĻ ÞÅŢĤ ···!!]"
+
 #: src/Omnigit/Views/SettingsView.axaml:98
 msgid "Language"
 msgstr "[!!Ļåñğûåğé ··!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:618
+msgid "Leave everything here (stash it)"
+msgstr "[!!Ļéåṽé éṽéŗýţĥïñğ ĥéŗé (šţåšĥ ïţ) ··········!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:377
+msgid "Lower case, no spaces. Names the file, and replaces a built-in site if it matches one."
+msgstr "[!!Ļöŵéŗ çåšé, ñö šþåçéš. Ñåṁéš ţĥé ƒïļé, åñđ ŗéþļåçéš å ƀûïļţ-ïñ šïţé ïƒ ïţ ṁåţçĥéš öñé. ··························!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:201
+msgid "Make a branch here"
+msgstr "[!!Ṁåķé å ƀŗåñçĥ ĥéŗé ·····!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:931
+msgid "Move the branch back to this commit"
+msgstr "[!!Ṁöṽé ţĥé ƀŗåñçĥ ƀåçķ ţö ţĥïš çöṁṁïţ ··········!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:688
+#: src/Omnigit/Views/MainWindow.axaml:779
+msgid "NAME"
+msgstr "[!!ÑÅṀÉ ·!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:626
+msgid "Neither the address nor the token is saved. Without a token only the recognise check can run."
+msgstr "[!!Ñéïţĥéŗ ţĥé åđđŗéšš ñöŗ ţĥé ţöķéñ ïš šåṽéđ. Ŵïţĥöûţ å ţöķéñ öñļý ţĥé ŗéçöğñïšé çĥéçķ çåñ ŗûñ. ····························!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:821
+msgid "New branch from this commit"
+msgstr "[!!Ñéŵ ƀŗåñçĥ ƒŗöṁ ţĥïš çöṁṁïţ ········!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:419
+msgid "New branch name"
+msgstr "[!!Ñéŵ ƀŗåñçĥ ñåṁé ····!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:522
+msgid "New repository: the body key for privacy, and — only if the site wants a word rather than true/false — the words for private and public."
+msgstr "[!!Ñéŵ ŗéþöšïţöŗý: ţĥé ƀöđý ķéý ƒöŗ þŗïṽåçý, åñđ — öñļý ïƒ ţĥé šïţé ŵåñţš å ŵöŗđ ŗåţĥéŗ ţĥåñ ţŗûé/ƒåļšé — ţĥé ŵöŗđš ƒöŗ þŗïṽåţé åñđ þûƀļïç. ·········································!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:538
+msgid "New repository: the body key naming the owner, and whether to send its id or its name. Only for a site that POSTs to one address for everything."
+msgstr "[!!Ñéŵ ŗéþöšïţöŗý: ţĥé ƀöđý ķéý ñåṁïñğ ţĥé öŵñéŗ, åñđ ŵĥéţĥéŗ ţö šéñđ ïţš ïđ öŗ ïţš ñåṁé. Öñļý ƒöŗ å šïţé ţĥåţ ÞÖŠŢš ţö öñé åđđŗéšš ƒöŗ éṽéŗýţĥïñğ. ···········································!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:509
+msgid "New repository: the body keys for its name and description"
+msgstr "[!!Ñéŵ ŗéþöšïţöŗý: ţĥé ƀöđý ķéýš ƒöŗ ïţš ñåṁé åñđ đéšçŗïþţïöñ ·················!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:195
+msgid "New repository…"
+msgstr "[!!Ñéŵ ŗéþöšïţöŗý… ····!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:162
+msgid "No accounts yet. Sign in below to fetch and push."
+msgstr "[!!Ñö åççöûñţš ýéţ. Šïğñ ïñ ƀéļöŵ ţö ƒéţçĥ åñđ þûšĥ. ···············!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:544
+msgid "No local changes."
+msgstr "[!!Ñö ļöçåļ çĥåñğéš. ·····!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:46
+msgid "No repositories yet. Use + in the header to add or clone one."
+msgstr "[!!Ñö ŗéþöšïţöŗïéš ýéţ. Ûšé + ïñ ţĥé ĥéåđéŗ ţö åđđ öŗ çļöñé öñé. ··················!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:154
+msgid "No system keyring was found, so tokens are written to a file readable by anything running as you. Install libsecret (secret-tool) for encrypted storage."
+msgstr "[!!Ñö šýšţéṁ ķéýŗïñğ ŵåš ƒöûñđ, šö ţöķéñš åŗé ŵŗïţţéñ ţö å ƒïļé ŗéåđåƀļé ƀý åñýţĥïñğ ŗûññïñğ åš ýöû. Ïñšţåļļ ļïƀšéçŗéţ (šéçŗéţ-ţööļ) ƒöŗ éñçŗýþţéđ šţöŗåğé. ··············································!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:55
+msgid "OWNER"
+msgstr "[!!ÖŴÑÉŖ ··!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:772
+msgid "Omnigit checks for a new release once a day. Nothing is downloaded until you press Update now."
+msgstr "[!!Öṁñïğïţ çĥéçķš ƒöŗ å ñéŵ ŗéļéåšé öñçé å đåý. Ñöţĥïñğ ïš đöŵñļöåđéđ ûñţïļ ýöû þŗéšš Ûþđåţé ñöŵ. ····························!!]"
 
 #: src/Omnigit/Views/SettingsView.axaml:114
 msgid "Omnigit is translated by the people who use it. To add or fix a language, see the link in the README."
 msgstr "[!!Öṁñïğïţ ïš ţŗåñšļåţéđ ƀý ţĥé þéöþļé ŵĥö ûšé ïţ. Ţö åđđ öŗ ƒïẋ å ļåñğûåğé, šéé ţĥé ļïñķ ïñ ţĥé ŖÉÅĐṀÉ. ······························!!]"
 
+#: src/Omnigit/Views/SettingsView.axaml:389
+msgid "Omnigit probes this path and checks the field exists, rather than guessing from the domain name."
+msgstr "[!!Öṁñïğïţ þŗöƀéš ţĥïš þåţĥ åñđ çĥéçķš ţĥé ƒïéļđ éẋïšţš, ŗåţĥéŗ ţĥåñ ğûéššïñğ ƒŗöṁ ţĥé đöṁåïñ ñåṁé. ·····························!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:904
+msgid "Omnigit switches to that branch and applies the same change there as a new commit. If it clashes with what is already there, you finish it on the Changes tab."
+msgstr "[!!Öṁñïğïţ šŵïţçĥéš ţö ţĥåţ ƀŗåñçĥ åñđ åþþļïéš ţĥé šåṁé çĥåñğé ţĥéŗé åš å ñéŵ çöṁṁïţ. Ïƒ ïţ çļåšĥéš ŵïţĥ ŵĥåţ ïš åļŗéåđý ţĥéŗé, ýöû ƒïñïšĥ ïţ öñ ţĥé Çĥåñğéš ţåƀ. ···············································!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:130
+msgid "Omnigit talks to any number of hosting sites at once. Each keeps its own credentials, so a self-hosted Gitea behind your own domain works exactly like GitHub.com."
+msgstr "[!!Öṁñïğïţ ţåļķš ţö åñý ñûṁƀéŗ öƒ ĥöšţïñğ šïţéš åţ öñçé. Éåçĥ ķééþš ïţš öŵñ çŗéđéñţïåļš, šö å šéļƒ-ĥöšţéđ Ğïţéå ƀéĥïñđ ýöûŗ öŵñ đöṁåïñ ŵöŗķš éẋåçţļý ļïķé ĞïţĤûƀ.çöṁ. ·················································!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:309
+msgid "Open in your default app"
+msgstr "[!!Öþéñ ïñ ýöûŗ đéƒåûļţ åþþ ·······!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:388
+msgid "Open this commit"
+msgstr "[!!Öþéñ ţĥïš çöṁṁïţ ·····!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:263
+msgid "Open this page in your browser"
+msgstr "[!!Öþéñ ţĥïš þåğé ïñ ýöûŗ ƀŗöŵšéŗ ·········!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:497
+msgid "Organisation: name, id — the id only for a site that addresses one by number"
+msgstr "[!!Öŗğåñïšåţïöñ: ñåṁé, ïđ — ţĥé ïđ öñļý ƒöŗ å šïţé ţĥåţ åđđŗéššéš öñé ƀý ñûṁƀéŗ ·······················!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:427
+msgid "Organisations — leave empty if the site has none"
+msgstr "[!!Öŗğåñïšåţïöñš — ļéåṽé éṁþţý ïƒ ţĥé šïţé ĥåš ñöñé ··············!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:34
+msgid "PUBLISH TO"
+msgstr "[!!ÞÛɃĻÏŠĤ ŢÖ ···!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:231
+msgid "Paste your token"
+msgstr "[!!Þåšţé ýöûŗ ţöķéñ ·····!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:227
+msgid "Personal access token"
+msgstr "[!!Þéŗšöñåļ åççéšš ţöķéñ ······!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:485
+msgid "Private repositories: the field, and — only if the site sends a word rather than true/false — the word that means private."
+msgstr "[!!Þŗïṽåţé ŗéþöšïţöŗïéš: ţĥé ƒïéļđ, åñđ — öñļý ïƒ ţĥé šïţé šéñđš å ŵöŗđ ŗåţĥéŗ ţĥåñ ţŗûé/ƒåļšé — ţĥé ŵöŗđ ţĥåţ ṁéåñš þŗïṽåţé. ·····································!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:776
+#: src/Omnigit/Views/MainWindow.axaml:801
+msgid "Publish repository"
+msgstr "[!!Þûƀļïšĥ ŗéþöšïţöŗý ·····!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:550
+msgid "Pull request: number, title, author, draft"
+msgstr "[!!Þûļļ ŗéǫûéšţ: ñûṁƀéŗ, ţïţļé, åûţĥöŗ, đŗåƒţ ·············!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:564
+msgid "Pull request: source branch, target branch, updated at, page URL"
+msgstr "[!!Þûļļ ŗéǫûéšţ: šöûŗçé ƀŗåñçĥ, ţåŗğéţ ƀŗåñçĥ, ûþđåţéđ åţ, þåğé ÛŖĻ ···················!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:278
+msgid "Pull requests"
+msgstr "[!!Þûļļ ŗéǫûéšţš ····!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:387
+msgid "RECOGNISING THE SITE"
+msgstr "[!!ŖÉÇÖĞÑÏŠÏÑĞ ŢĤÉ ŠÏŢÉ ······!!]"
+
+#: src/Omnigit/Views/GraphView.axaml:40
+msgid "Reading the history…"
+msgstr "[!!Ŗéåđïñğ ţĥé ĥïšţöŗý… ······!!]"
+
+#: src/Omnigit/Views/CloneView.axaml:39
+#: src/Omnigit/Views/MainWindow.axaml:435
+msgid "Refresh"
+msgstr "[!!Ŗéƒŗéšĥ ··!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:760
+msgid "Release notes on GitHub"
+msgstr "[!!Ŗéļéåšé ñöţéš öñ ĞïţĤûƀ ·······!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:342
+msgid "Remove"
+msgstr "[!!Ŗéṁöṽé ··!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:91
+msgid "Remove from Omnigit"
+msgstr "[!!Ŗéṁöṽé ƒŗöṁ Öṁñïğïţ ······!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:94
+msgid "Remove from this computer…"
+msgstr "[!!Ŗéṁöṽé ƒŗöṁ ţĥïš çöṁþûţéŗ… ········!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:474
+msgid "Repository: description, updated at"
+msgstr "[!!Ŗéþöšïţöŗý: đéšçŗïþţïöñ, ûþđåţéđ åţ ··········!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:460
+msgid "Repository: name, owner, clone URL, default branch"
+msgstr "[!!Ŗéþöšïţöŗý: ñåṁé, öŵñéŗ, çļöñé ÛŖĻ, đéƒåûļţ ƀŗåñçĥ ···············!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:386
+msgid "Reset the branch to here…"
+msgstr "[!!Ŗéšéţ ţĥé ƀŗåñçĥ ţö ĥéŗé… ········!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:484
+msgid "Restore"
+msgstr "[!!Ŗéšţöŗé ··!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:26
+msgid "SETTINGS"
+msgstr "[!!ŠÉŢŢÏÑĞŠ ··!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:159
+msgid "SIGNED IN"
+msgstr "[!!ŠÏĞÑÉĐ ÏÑ ···!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:670
+msgid "Save site"
+msgstr "[!!Šåṽé šïţé ···!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:1063
+msgid "Select all"
+msgstr "[!!Šéļéçţ åļļ ···!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:219
+msgid "Server URL"
+msgstr "[!!Šéŗṽéŗ ÛŖĻ ···!!]"
+
 #: src/Omnigit/Views/SettingsView.axaml:84
 msgid "Settings that apply to Omnigit itself rather than to one repository."
 msgstr "[!!Šéţţïñğš ţĥåţ åþþļý ţö Öṁñïğïţ ïţšéļƒ ŗåţĥéŗ ţĥåñ ţö öñé ŗéþöšïţöŗý. ····················!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:98
+msgid "Show in file manager"
+msgstr "[!!Šĥöŵ ïñ ƒïļé ṁåñåğéŗ ······!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:325
+msgid "Show in your file manager"
+msgstr "[!!Šĥöŵ ïñ ýöûŗ ƒïļé ṁåñåğéŗ ········!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:237
+msgid "Sign in"
+msgstr "[!!Šïğñ ïñ ··!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:239
+msgid "Sign in with browser"
+msgstr "[!!Šïğñ ïñ ŵïţĥ ƀŗöŵšéŗ ······!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:187
+msgid "Sign out"
+msgstr "[!!Šïğñ öûţ ··!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:206
+msgid "Site"
+msgstr "[!!Šïţé ·!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:683
+msgid "Sites added here are written to the hosts folder as JSON. You can still edit those files by hand — see docs/host-manifests.md."
+msgstr "[!!Šïţéš åđđéđ ĥéŗé åŗé ŵŗïţţéñ ţö ţĥé ĥöšţš ƒöļđéŗ åš ĴŠÖÑ. Ýöû çåñ šţïļļ éđïţ ţĥöšé ƒïļéš ƀý ĥåñđ — šéé đöçš/ĥöšţ-ṁåñïƒéšţš.ṁđ. ······································!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:714
+msgid "Start it with a README"
+msgstr "[!!Šţåŗţ ïţ ŵïţĥ å ŖÉÅĐṀÉ ·······!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:624
+msgid "TEST IT AGAINST A SERVER"
+msgstr "[!!ŢÉŠŢ ÏŢ ÅĞÅÏÑŠŢ Å ŠÉŖṼÉŖ ·······!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:401
+msgid "TOKEN HEADER"
+msgstr "[!!ŢÖĶÉÑ ĤÉÅĐÉŖ ····!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:858
+msgid "Tag name, e.g. v1.2.0"
+msgstr "[!!Ţåğ ñåṁé, é.ğ. ṽ1.2.0 ······!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:853
+msgid "Tag this commit"
+msgstr "[!!Ţåğ ţĥïš çöṁṁïţ ····!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:238
+msgid "Take theirs"
+msgstr "[!!Ţåķé ţĥéïŗš ···!!]"
 
 #: src/Omnigit/Views/SettingsView.axaml:100
 msgid "Takes effect straight away. Anything not yet translated stays in English."
 msgstr "[!!Ţåķéš éƒƒéçţ šţŗåïğĥţ åŵåý. Åñýţĥïñğ ñöţ ýéţ ţŗåñšļåţéđ šţåýš ïñ Éñğļïšĥ. ······················!!]"
 
+#: src/Omnigit/Views/SettingsView.axaml:635
+msgid "Test connection"
+msgstr "[!!Ţéšţ çöññéçţïöñ ····!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:640
+msgid "Testing…"
+msgstr "[!!Ţéšţïñğ… ··!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:706
+msgid "The folder to create it inside"
+msgstr "[!!Ţĥé ƒöļđéŗ ţö çŗéåţé ïţ ïñšïđé ·········!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:828
+msgid "The new branch starts here and is checked out. Nothing already committed changes."
+msgstr "[!!Ţĥé ñéŵ ƀŗåñçĥ šţåŗţš ĥéŗé åñđ ïš çĥéçķéđ öûţ. Ñöţĥïñğ åļŗéåđý çöṁṁïţţéđ çĥåñğéš. ························!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:947
+msgid "Throw the changes away"
+msgstr "[!!Ţĥŗöŵ ţĥé çĥåñğéš åŵåý ·······!!]"
+
 #: src/Omnigit/Views/MainWindow.axaml:484
 msgid "Toggle theme"
 msgstr "[!!Ţöğğļé ţĥéṁé ····!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:390
+msgid "Undo this commit"
+msgstr "[!!Ûñđö ţĥïš çöṁṁïţ ·····!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:752
+msgid "Update now"
+msgstr "[!!Ûþđåţé ñöŵ ···!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:277
+msgid "Waiting for approval…"
+msgstr "[!!Ŵåïţïñğ ƒöŗ åþþŗöṽåļ… ······!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:589
+msgid "What git gets for HTTPS: username, password"
+msgstr "[!!Ŵĥåţ ğïţ ğéţš ƒöŗ ĤŢŢÞŠ: ûšéŗñåṁé, þåššŵöŗđ ·············!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:698
+#: src/Omnigit/Views/MainWindow.axaml:788
+msgid "What it is (optional)"
+msgstr "[!!Ŵĥåţ ïţ ïš (öþţïöñåļ) ······!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:861
+msgid "What it marks (optional)"
+msgstr "[!!Ŵĥåţ ïţ ṁåŗķš (öþţïöñåļ) ·······!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:612
+msgid "Where \"Create pull request\" sends a browser. Opening one is left to the site's own form, which asks for reviewers and templates this app knows nothing about."
+msgstr "[!!Ŵĥéŗé \"Çŗéåţé þûļļ ŗéǫûéšţ\" šéñđš å ƀŗöŵšéŗ. Öþéñïñğ öñé ïš ļéƒţ ţö ţĥé šïţé'š öŵñ ƒöŗṁ, ŵĥïçĥ åšķš ƒöŗ ŗéṽïéŵéŗš åñđ ţéṁþļåţéš ţĥïš åþþ ķñöŵš ñöţĥïñğ åƀöûţ. ···············································!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:601
+msgid "Where \"View on this site\" sends a browser. Leave it alone unless the site puts its commits somewhere unusual."
+msgstr "[!!Ŵĥéŗé \"Ṽïéŵ öñ ţĥïš šïţé\" šéñđš å ƀŗöŵšéŗ. Ļéåṽé ïţ åļöñé ûñļéšš ţĥé šïţé þûţš ïţš çöṁṁïţš šöṁéŵĥéŗé ûñûšûåļ. ·································!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:434
+msgid "Where Omnigit POSTs a new repository, and the address for one an organisation owns. Leave the first empty and Omnigit won't offer to publish to this site."
+msgstr "[!!Ŵĥéŗé Öṁñïğïţ ÞÖŠŢš å ñéŵ ŗéþöšïţöŗý, åñđ ţĥé åđđŗéšš ƒöŗ öñé åñ öŗğåñïšåţïöñ öŵñš. Ļéåṽé ţĥé ƒïŗšţ éṁþţý åñđ Öṁñïğïţ ŵöñ'ţ öƒƒéŗ ţö þûƀļïšĥ ţö ţĥïš šïţé. ··············································!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:445
+msgid "Where the values sit in the responses"
+msgstr "[!!Ŵĥéŗé ţĥé ṽåļûéš šïţ ïñ ţĥé ŗéšþöñšéš ···········!!]"
+
+#: src/Omnigit/Views/MainWindow.axaml:152
+#: src/Omnigit/Views/MainWindow.axaml:387
+#: src/Omnigit/Views/RepositoryView.axaml:140
+msgid "Worktree"
+msgstr "[!!Ŵöŗķţŗéé ··!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:198
+msgid "You are looking at one commit rather than a branch. Anything committed here belongs to no branch, and is easy to lose track of."
+msgstr "[!!Ýöû åŗé ļööķïñğ åţ öñé çöṁṁïţ ŗåţĥéŗ ţĥåñ å ƀŗåñçĥ. Åñýţĥïñğ çöṁṁïţţéđ ĥéŗé ƀéļöñğš ţö ñö ƀŗåñçĥ, åñđ ïš éåšý ţö ļöšé ţŗåçķ öƒ. ······································!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:255
+msgid "Your browser should have opened with the code already copied. If not:"
+msgstr "[!!Ýöûŗ ƀŗöŵšéŗ šĥöûļđ ĥåṽé öþéñéđ ŵïţĥ ţĥé çöđé åļŗéåđý çöþïéđ. Ïƒ ñöţ: ·····················!!]"
+
+#: src/Omnigit/Views/RepositoryView.axaml:595
+msgid "committed"
+msgstr "[!!çöṁṁïţţéđ ···!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:634
+msgid "token (optional)"
+msgstr "[!!ţöķéñ (öþţïöñåļ) ·····!!]"
+
+#: src/Omnigit/Views/CloneView.axaml:21
+#: src/Omnigit/Views/GraphView.axaml:31
+#: src/Omnigit/Views/SettingsView.axaml:24
+msgid "← Back to repository"
+msgstr "[!!← Ƀåçķ ţö ŗéþöšïţöŗý ······!!]"

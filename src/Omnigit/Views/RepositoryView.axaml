@@ -43,7 +43,7 @@
                         <TextBlock Grid.Row="1" Classes="caption" Margin="14,10"
                                    TextWrapping="Wrap"
                                    IsVisible="{Binding !HasRepositories}"
-                                   Text="No repositories yet. Use + in the header to add or clone one." />
+                                   Text="{Loc 'No repositories yet. Use + in the header to add or clone one.'}" />
 
                         <ScrollViewer Grid.Row="1" MaxHeight="320" Padding="0,4,0,8"
                                       IsVisible="{Binding HasRepositories}">
@@ -88,17 +88,17 @@
                                                                  ellipsis. -->
                                                             <Button.ContextFlyout>
                                                                 <MenuFlyout Placement="Pointer">
-                                                                    <MenuItem Header="Remove from Omnigit"
+                                                                    <MenuItem Header="{Loc 'Remove from Omnigit'}"
                                                                               Command="{Binding #SidebarRoot.((vm:MainWindowViewModel)DataContext).RemoveRepositoryCommand}"
                                                                               CommandParameter="{Binding}" />
-                                                                    <MenuItem Header="Remove from this computer…"
+                                                                    <MenuItem Header="{Loc 'Remove from this computer…'}"
                                                                               Command="{Binding #SidebarRoot.((vm:MainWindowViewModel)DataContext).AskDeleteRepositoryCommand}"
                                                                               CommandParameter="{Binding}" />
                                                                     <Separator />
-                                                                    <MenuItem Header="Show in file manager"
+                                                                    <MenuItem Header="{Loc 'Show in file manager'}"
                                                                               Command="{Binding #SidebarRoot.((vm:MainWindowViewModel)DataContext).ShowRepositoryInFileManagerCommand}"
                                                                               CommandParameter="{Binding}" />
-                                                                    <MenuItem Header="Copy path"
+                                                                    <MenuItem Header="{Loc 'Copy path'}"
                                                                               Command="{Binding #SidebarRoot.((vm:MainWindowViewModel)DataContext).CopyRepositoryPathCommand}"
                                                                               CommandParameter="{Binding}" />
                                                                 </MenuFlyout>
@@ -137,7 +137,7 @@
                                                                             Orientation="Horizontal" Spacing="5">
                                                                     <Border Classes="chip"
                                                                             IsVisible="{Binding IsWorktree}">
-                                                                        <TextBlock Classes="muted" Text="Worktree" />
+                                                                        <TextBlock Classes="muted" Text="{Loc 'Worktree'}" />
                                                                     </Border>
                                                                     <Border Classes="chip"
                                                                             IsVisible="{Binding HasVisibility}">
@@ -166,7 +166,7 @@
                             Classes.active="{Binding IsChangesTab}"
                             Command="{Binding ShowChangesTabCommand}">
                         <StackPanel Orientation="Horizontal" Spacing="7" HorizontalAlignment="Center">
-                            <TextBlock Text="Changes" />
+                            <TextBlock Text="{Loc 'Changes'}" />
                             <Border Classes="chip" Padding="6,1">
                                 <TextBlock Classes="muted" Text="{Binding Changes.Count}" />
                             </Border>
@@ -175,7 +175,7 @@
                     <Button Grid.Column="1" Classes="tab"
                             Classes.active="{Binding IsHistoryTab}"
                             Command="{Binding ShowHistoryTabCommand}"
-                            Content="History" />
+                            Content="{Loc 'History'}" />
                 </Grid>
 
                 <Border Grid.Row="4" Classes="divider" />
@@ -195,10 +195,10 @@
                                 IsVisible="{Binding IsDetachedHead}">
                             <StackPanel Spacing="8">
                                 <TextBlock Classes="caption" TextWrapping="Wrap"
-                                           Text="You are looking at one commit rather than a branch. Anything committed here belongs to no branch, and is easy to lose track of." />
+                                           Text="{Loc 'You are looking at one commit rather than a branch. Anything committed here belongs to no branch, and is easy to lose track of.'}" />
                                 <StackPanel Orientation="Horizontal" Spacing="8">
                                     <Button Classes="secondary" Padding="9,4" FontSize="12"
-                                            Content="Make a branch here"
+                                            Content="{Loc 'Make a branch here'}"
                                             Command="{Binding BranchFromHereCommand}" />
                                 </StackPanel>
                             </StackPanel>
@@ -231,15 +231,15 @@
                                                                ToolTip.Tip="{Binding}" />
                                                     <StackPanel Orientation="Horizontal" Spacing="6">
                                                         <Button Classes="secondary" Padding="8,3" FontSize="12"
-                                                                Content="Keep mine"
+                                                                Content="{Loc 'Keep mine'}"
                                                                 Command="{Binding #SidebarRoot.((vm:MainWindowViewModel)DataContext).KeepMineCommand}"
                                                                 CommandParameter="{Binding}" />
                                                         <Button Classes="secondary" Padding="8,3" FontSize="12"
-                                                                Content="Take theirs"
+                                                                Content="{Loc 'Take theirs'}"
                                                                 Command="{Binding #SidebarRoot.((vm:MainWindowViewModel)DataContext).KeepTheirsCommand}"
                                                                 CommandParameter="{Binding}" />
                                                         <Button Classes="secondary" Padding="8,3" FontSize="12"
-                                                                Content="I fixed it"
+                                                                Content="{Loc 'I fixed it'}"
                                                                 Command="{Binding #SidebarRoot.((vm:MainWindowViewModel)DataContext).MarkResolvedCommand}"
                                                                 CommandParameter="{Binding}" />
                                                     </StackPanel>
@@ -251,7 +251,7 @@
 
                                 <Button Classes="secondary" Padding="9,4" FontSize="12"
                                         HorizontalAlignment="Left"
-                                        Content="Abandon it"
+                                        Content="{Loc 'Abandon it'}"
                                         Command="{Binding AskAbortOperationCommand}" />
                             </StackPanel>
                         </Border>
@@ -289,7 +289,7 @@
                                          is offered only where it means something besides:
                                          no folder entry for a file at the root, no
                                          extension entry for a Makefile. -->
-                                    <MenuItem Header="Ignore file (add to .gitignore)"
+                                    <MenuItem Header="{Loc 'Ignore file (add to .gitignore)'}"
                                               IsVisible="{Binding IsOneChangeSelected}"
                                               Command="{Binding IgnoreCommand}"
                                               CommandParameter="{Binding SelectedChange.IgnoreFilePattern}" />
@@ -306,23 +306,23 @@
                                     <!-- Same thing a double-click on the row does; here so
                                          it's discoverable, and so a keyboard-only
                                          selection can reach it. -->
-                                    <MenuItem Header="Open in your default app"
+                                    <MenuItem Header="{Loc 'Open in your default app'}"
                                               IsVisible="{Binding CanOpenSelectedChange}"
                                               Command="{Binding OpenChangeCommand}"
                                               CommandParameter="{Binding SelectedChange}" />
                                     <Separator IsVisible="{Binding CanOpenSelectedChange}" />
 
-                                    <MenuItem Header="Copy file path"
+                                    <MenuItem Header="{Loc 'Copy file path'}"
                                               IsVisible="{Binding IsOneChangeSelected}"
                                               Command="{Binding CopyFilePathCommand}"
                                               CommandParameter="{Binding SelectedChange}" />
-                                    <MenuItem Header="Copy relative file path"
+                                    <MenuItem Header="{Loc 'Copy relative file path'}"
                                               IsVisible="{Binding IsOneChangeSelected}"
                                               Command="{Binding CopyRelativeFilePathCommand}"
                                               CommandParameter="{Binding SelectedChange}" />
                                     <Separator IsVisible="{Binding IsOneChangeSelected}" />
 
-                                    <MenuItem Header="Show in your file manager"
+                                    <MenuItem Header="{Loc 'Show in your file manager'}"
                                               IsVisible="{Binding IsOneChangeSelected}"
                                               Command="{Binding ShowInFileManagerCommand}"
                                               CommandParameter="{Binding SelectedChange}" />
@@ -381,29 +381,29 @@
                              time. Each command decides for itself whether it applies. -->
                         <ListBox.ContextFlyout>
                             <MenuFlyout Placement="Pointer">
-                                <MenuItem Header="Amend this commit…"
+                                <MenuItem Header="{Loc 'Amend this commit…'}"
                                           Command="{Binding AmendSelectedCommitCommand}" />
-                                <MenuItem Header="Reset the branch to here…"
+                                <MenuItem Header="{Loc 'Reset the branch to here…'}"
                                           Command="{Binding ResetToSelectedCommitCommand}" />
-                                <MenuItem Header="Open this commit"
+                                <MenuItem Header="{Loc 'Open this commit'}"
                                           Command="{Binding CheckoutSelectedCommitCommand}" />
-                                <MenuItem Header="Undo this commit"
+                                <MenuItem Header="{Loc 'Undo this commit'}"
                                           Command="{Binding RevertSelectedCommitCommand}" />
                                 <Separator />
 
-                                <MenuItem Header="Create a branch from here…"
+                                <MenuItem Header="{Loc 'Create a branch from here…'}"
                                           Command="{Binding BranchFromSelectedCommitCommand}" />
-                                <MenuItem Header="Create a tag…"
+                                <MenuItem Header="{Loc 'Create a tag…'}"
                                           Command="{Binding TagSelectedCommitCommand}" />
-                                <MenuItem Header="Copy onto another branch…"
+                                <MenuItem Header="{Loc 'Copy onto another branch…'}"
                                           Command="{Binding CherryPickSelectedCommitCommand}" />
                                 <Separator />
 
-                                <MenuItem Header="Copy SHA"
+                                <MenuItem Header="{Loc 'Copy SHA'}"
                                           Command="{Binding CopyCommitShaCommand}" />
-                                <MenuItem Header="Copy summary"
+                                <MenuItem Header="{Loc 'Copy summary'}"
                                           Command="{Binding CopyCommitSummaryCommand}" />
-                                <MenuItem Header="Copy tag"
+                                <MenuItem Header="{Loc 'Copy tag'}"
                                           Command="{Binding CopyCommitTagCommand}" />
                                 <Separator />
 
@@ -481,10 +481,10 @@
                                        Text="{Binding StashLabel}" />
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <Button Classes="secondary" Padding="9,4" FontSize="12"
-                                        Content="Restore"
+                                        Content="{Loc 'Restore'}"
                                         Command="{Binding RestoreStashCommand}" />
                                 <Button Classes="secondary" Padding="9,4" FontSize="12"
-                                        Content="Discard"
+                                        Content="{Loc 'Discard'}"
                                         Command="{Binding DiscardStashCommand}" />
                             </StackPanel>
                         </StackPanel>
@@ -494,7 +494,7 @@
                              PlaceholderText="{Binding CommitSummaryPlaceholder}"
                              Text="{Binding CommitSummary, Mode=TwoWay}" />
                     <TextBox Classes="commitBox"
-                             PlaceholderText="Description"
+                             PlaceholderText="{Loc 'Description'}"
                              Text="{Binding CommitDescription, Mode=TwoWay}"
                              AcceptsReturn="True" TextWrapping="Wrap" Height="76" />
                     <!-- Amending is started from the history's context menu. While it is
@@ -507,9 +507,9 @@
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
                             <TextBlock Grid.Column="0" Classes="caption" TextWrapping="Wrap"
                                        VerticalAlignment="Center"
-                                       Text="Fixing the last commit instead of adding a new one." />
+                                       Text="{Loc 'Fixing the last commit instead of adding a new one.'}" />
                             <Button Grid.Column="1" Classes="secondary" Padding="9,4" FontSize="12"
-                                    Content="Cancel"
+                                    Content="{Loc 'Cancel'}"
                                     Command="{Binding CancelAmendCommand}" />
                         </Grid>
                     </Border>
@@ -541,7 +541,7 @@
             <TextBlock IsVisible="{Binding IsChangesTab}"
                        Classes="caption"
                        HorizontalAlignment="Center" VerticalAlignment="Center"
-                       Text="No local changes."
+                       Text="{Loc 'No local changes.'}"
                        ZIndex="-1" />
 
             <!-- Selected commit: header across the top, then files | splitter | diff. -->
@@ -592,7 +592,7 @@
                                             </ItemsControl>
                                             <StackPanel Orientation="Horizontal" Spacing="7">
                                                 <TextBlock Classes="caption" Text="{Binding AuthorName}" />
-                                                <TextBlock Classes="muted" Text="committed" />
+                                                <TextBlock Classes="muted" Text="{Loc 'committed'}" />
                                                 <TextBlock Classes="muted" Text="{Binding RelativeTime}" />
                                                 <TextBlock Classes="muted" Text="·" />
                                                 <!-- Lives on the view model, not the commit, so it

@@ -31,7 +31,7 @@
         <DataTemplate x:Key="PublishTarget" x:DataType="vm:PublishTargetViewModel">
             <StackPanel Spacing="14">
                 <StackPanel Spacing="6" IsVisible="{Binding CanChooseSite}">
-                    <TextBlock Classes="sectionLabel" Text="PUBLISH TO" />
+                    <TextBlock Classes="sectionLabel" Text="{Loc 'PUBLISH TO'}" />
                     <ComboBox HorizontalAlignment="Stretch"
                               ItemsSource="{Binding Targets}"
                               SelectedItem="{Binding Target, Mode=TwoWay}">
@@ -52,7 +52,7 @@
                             <Binding Path="HasChoiceOfOwner" />
                         </MultiBinding>
                     </StackPanel.IsVisible>
-                    <TextBlock Classes="sectionLabel" Text="OWNER" />
+                    <TextBlock Classes="sectionLabel" Text="{Loc 'OWNER'}" />
                     <ComboBox HorizontalAlignment="Stretch"
                               ItemsSource="{Binding Owners}"
                               SelectedItem="{Binding Owner, Mode=TwoWay}">
@@ -66,7 +66,7 @@
 
                 <TextBlock Classes="muted"
                            IsVisible="{Binding IsLoadingOwners}"
-                           Text="Asking which organisations you belong to…" />
+                           Text="{Loc 'Asking which organisations you belong to…'}" />
 
                 <!-- The site did not answer. Publishing is still offered, because a
                      token that cannot list organisations can usually still create - but
@@ -77,7 +77,7 @@
                            IsVisible="{Binding HasSiteProblem}"
                            Text="{Binding SiteProblem}" />
 
-                <CheckBox Content="Keep this code private"
+                <CheckBox Content="{Loc 'Keep this code private'}"
                           IsVisible="{Binding HasSite}"
                           IsChecked="{Binding IsPrivate, Mode=TwoWay}" />
             </StackPanel>
@@ -149,7 +149,7 @@
                                                Text="{Binding SelectedRepository.Name}" />
                                     <Border Classes="chip" Padding="6,1"
                                             IsVisible="{Binding SelectedRepository.IsWorktree}">
-                                        <TextBlock Classes="muted" Text="Worktree" />
+                                        <TextBlock Classes="muted" Text="{Loc 'Worktree'}" />
                                     </Border>
                                 </StackPanel>
 
@@ -192,7 +192,7 @@
                                             Command="{Binding ShowNewRepositoryCommand}">
                                         <StackPanel Orientation="Horizontal" Spacing="9">
                                             <Path Classes="icon" Data="{DynamicResource IconPlus}" />
-                                            <TextBlock Classes="body" Text="New repository…" />
+                                            <TextBlock Classes="body" Text="{Loc 'New repository…'}" />
                                         </StackPanel>
                                     </Button>
 
@@ -209,7 +209,7 @@
                                             Command="{Binding AddRepositoryCommand}">
                                         <StackPanel Orientation="Horizontal" Spacing="9">
                                             <Path Classes="icon" Data="{DynamicResource IconRepo}" />
-                                            <TextBlock Classes="body" Text="Add local repository…" />
+                                            <TextBlock Classes="body" Text="{Loc 'Add local repository…'}" />
                                         </StackPanel>
                                     </Button>
 
@@ -219,7 +219,7 @@
                                             Command="{Binding ShowCloneCommand}">
                                         <StackPanel Orientation="Horizontal" Spacing="9">
                                             <Path Classes="icon" Data="{DynamicResource IconSync}" />
-                                            <TextBlock Classes="body" Text="Clone repository…" />
+                                            <TextBlock Classes="body" Text="{Loc 'Clone repository…'}" />
                                         </StackPanel>
                                     </Button>
 
@@ -231,7 +231,7 @@
                                             Command="{Binding AddAccountCommand}">
                                         <StackPanel Orientation="Horizontal" Spacing="9">
                                             <Path Classes="icon" Data="{DynamicResource IconGlobe}" />
-                                            <TextBlock Classes="body" Text="Add a hosting site…" />
+                                            <TextBlock Classes="body" Text="{Loc 'Add a hosting site…'}" />
                                         </StackPanel>
                                     </Button>
                                 </StackPanel>
@@ -268,14 +268,14 @@
                                     <Button Grid.Column="0" Classes="tab"
                                             Classes.active="{Binding IsBranchesTab}"
                                             Command="{Binding ShowBranchesTabCommand}"
-                                            Content="Branches" />
+                                            Content="{Loc 'Branches'}" />
                                     <Button Grid.Column="1" Classes="tab"
                                             Classes.active="{Binding IsPullRequestsTab}"
                                             IsVisible="{Binding CanListPullRequests}"
                                             Command="{Binding ShowPullRequestsTabCommand}">
                                         <StackPanel Orientation="Horizontal" Spacing="7"
                                                     HorizontalAlignment="Center">
-                                            <TextBlock Text="Pull requests" />
+                                            <TextBlock Text="{Loc 'Pull requests'}" />
                                             <Border Classes="chip" Padding="6,1"
                                                     IsVisible="{Binding HasPullRequests}">
                                                 <TextBlock Classes="muted"
@@ -333,7 +333,7 @@
                                              Classes="commitBox" Margin="10,2,10,8"
                                              KeyDown="OnBranchFilterKeyDown"
                                              Text="{Binding BranchFilter, Mode=TwoWay}"
-                                             PlaceholderText="Filter branches, here or on the remote" />
+                                             PlaceholderText="{Loc 'Filter branches, here or on the remote'}" />
 
                                     <TextBlock Grid.Row="1" Classes="muted" Margin="10,4,10,10"
                                                TextWrapping="Wrap"
@@ -380,11 +380,11 @@
                                                                                                Text="{Binding Name}" />
                                                                                     <Border Classes="chip" Padding="6,1"
                                                                                             IsVisible="{Binding IsCurrent}">
-                                                                                        <TextBlock Classes="muted" Text="Current" />
+                                                                                        <TextBlock Classes="muted" Text="{Loc 'Current'}" />
                                                                                     </Border>
                                                                                     <Border Classes="chip" Padding="6,1"
                                                                                             IsVisible="{Binding IsCheckedOutElsewhere}">
-                                                                                        <TextBlock Classes="muted" Text="Worktree" />
+                                                                                        <TextBlock Classes="muted" Text="{Loc 'Worktree'}" />
                                                                                     </Border>
                                                                                 </StackPanel>
                                                                                 <TextBlock Classes="muted"
@@ -416,8 +416,8 @@
                                       IsVisible="{Binding IsBranchesTab}">
                                     <TextBox Grid.Column="0" Classes="commitBox"
                                              Text="{Binding NewBranchName, Mode=TwoWay}"
-                                             PlaceholderText="New branch name" />
-                                    <Button Grid.Column="1" Classes="primary" Content="Create"
+                                             PlaceholderText="{Loc 'New branch name'}" />
+                                    <Button Grid.Column="1" Classes="primary" Content="{Loc 'Create'}"
                                             Click="OnBranchRowClick"
                                             Command="{Binding CreateBranchCommand}" />
                                 </Grid>
@@ -432,10 +432,10 @@
                                     <TextBlock Classes="muted" TextWrapping="Wrap"
                                                Text="{Binding CreatePullRequestLabel}" />
                                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                                        <Button Grid.Column="0" Classes="secondary" Content="Refresh"
+                                        <Button Grid.Column="0" Classes="secondary" Content="{Loc 'Refresh'}"
                                                 Command="{Binding RefreshPullRequestsCommand}" />
                                         <Button Grid.Column="1" Classes="primary"
-                                                Content="Create pull request"
+                                                Content="{Loc 'Create pull request'}"
                                                 Click="OnBranchRowClick"
                                                 Command="{Binding CreatePullRequestCommand}" />
                                     </Grid>
@@ -454,7 +454,7 @@
                      and behind at once. -->
                 <Button Grid.Column="2" Classes="toolbarItem"
                         Command="{Binding SyncCommand}"
-                        ToolTip.Tip="Ctrl+P to push · Ctrl+Shift+P to pull · Ctrl+Shift+F to fetch">
+                        ToolTip.Tip="{Loc 'Ctrl+P to push · Ctrl+Shift+P to pull · Ctrl+Shift+F to fetch'}">
                     <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="9">
                         <Path Grid.Column="0" Classes="icon" Data="{DynamicResource IconSync}" />
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -540,7 +540,7 @@
                                     HorizontalAlignment="Right">
                             <Button Classes="secondary" Content="{Loc 'Cancel'}"
                                     Command="{Binding CancelDiscardCommand}" />
-                            <Button Classes="primary" Content="Discard changes"
+                            <Button Classes="primary" Content="{Loc 'Discard changes'}"
                                     Command="{Binding ConfirmDiscardCommand}" />
                         </StackPanel>
                     </StackPanel>
@@ -611,17 +611,17 @@
                                         <RadioButton GroupName="BranchSwitch"
                                                      IsChecked="{Binding IsBringing, Mode=OneWay}"
                                                      Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).BringChangesCommand}"
-                                                     Content="Bring my changes with me" />
+                                                     Content="{Loc 'Bring my changes with me'}" />
                                         <RadioButton GroupName="BranchSwitch"
                                                      IsChecked="{Binding LeaveEverything, Mode=OneWay}"
                                                      Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).LeaveChangesCommand}"
-                                                     Content="Leave everything here (stash it)" />
+                                                     Content="{Loc 'Leave everything here (stash it)'}" />
                                     </StackPanel>
 
-                                    <Expander Header="Choose which files come with you"
+                                    <Expander Header="{Loc 'Choose which files come with you'}"
                                               IsVisible="{Binding IsBringing}">
                                         <StackPanel Spacing="6" Margin="0,8,0,0">
-                                            <CheckBox Content="All files"
+                                            <CheckBox Content="{Loc 'All files'}"
                                                       IsChecked="{Binding AllSelected, Mode=TwoWay}" />
                                             <Border Classes="divider" />
                                             <ScrollViewer MaxHeight="220">
@@ -682,47 +682,47 @@
                         <DataTemplate x:DataType="vm:NewRepositoryViewModel">
                             <Border Classes="dialog" Width="480">
                                 <StackPanel Spacing="14">
-                                    <TextBlock Classes="h2" Text="Create a new repository" />
+                                    <TextBlock Classes="h2" Text="{Loc 'Create a new repository'}" />
 
                                     <StackPanel Spacing="6">
-                                        <TextBlock Classes="sectionLabel" Text="NAME" />
+                                        <TextBlock Classes="sectionLabel" Text="{Loc 'NAME'}" />
                                         <TextBox Classes="commitBox"
                                                  Text="{Binding Name, Mode=TwoWay}"
                                                  PlaceholderText="my-project" />
                                     </StackPanel>
 
                                     <StackPanel Spacing="6">
-                                        <TextBlock Classes="sectionLabel" Text="DESCRIPTION" />
+                                        <TextBlock Classes="sectionLabel" Text="{Loc 'DESCRIPTION'}" />
                                         <TextBox Classes="commitBox"
                                                  Text="{Binding Description, Mode=TwoWay}"
-                                                 PlaceholderText="What it is (optional)" />
+                                                 PlaceholderText="{Loc 'What it is (optional)'}" />
                                     </StackPanel>
 
                                     <StackPanel Spacing="6">
-                                        <TextBlock Classes="sectionLabel" Text="LOCAL PATH" />
+                                        <TextBlock Classes="sectionLabel" Text="{Loc 'LOCAL PATH'}" />
                                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
                                             <TextBox Grid.Column="0" Classes="commitBox"
                                                      Text="{Binding ParentPath, Mode=TwoWay}"
-                                                     PlaceholderText="The folder to create it inside" />
-                                            <Button Grid.Column="1" Classes="secondary" Content="Choose…"
+                                                     PlaceholderText="{Loc 'The folder to create it inside'}" />
+                                            <Button Grid.Column="1" Classes="secondary" Content="{Loc 'Choose…'}"
                                                     Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).PickNewRepositoryFolderCommand}" />
                                         </Grid>
                                         <TextBlock Classes="muted" TextWrapping="Wrap"
                                                    Text="{Binding PathLabel}" />
                                     </StackPanel>
 
-                                    <CheckBox Content="Start it with a README"
+                                    <CheckBox Content="{Loc 'Start it with a README'}"
                                               IsChecked="{Binding WriteReadme, Mode=TwoWay}" />
 
                                     <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                                         <StackPanel Grid.Column="0" Spacing="6">
-                                            <TextBlock Classes="sectionLabel" Text="GIT IGNORE" />
+                                            <TextBlock Classes="sectionLabel" Text="{Loc 'GIT IGNORE'}" />
                                             <ComboBox HorizontalAlignment="Stretch"
                                                       ItemsSource="{Binding GitignoreNames}"
                                                       SelectedItem="{Binding GitignoreName, Mode=TwoWay}" />
                                         </StackPanel>
                                         <StackPanel Grid.Column="1" Spacing="6">
-                                            <TextBlock Classes="sectionLabel" Text="LICENCE" />
+                                            <TextBlock Classes="sectionLabel" Text="{Loc 'LICENCE'}" />
                                             <ComboBox HorizontalAlignment="Stretch"
                                                       ItemsSource="{Binding Licences}"
                                                       SelectedItem="{Binding Licence, Mode=TwoWay}" />
@@ -773,19 +773,19 @@
                         <DataTemplate x:DataType="vm:PublishRepositoryViewModel">
                             <Border Classes="dialog" Width="460">
                                 <StackPanel Spacing="14">
-                                    <TextBlock Classes="h2" Text="Publish repository" />
+                                    <TextBlock Classes="h2" Text="{Loc 'Publish repository'}" />
 
                                     <StackPanel Spacing="6">
-                                        <TextBlock Classes="sectionLabel" Text="NAME" />
+                                        <TextBlock Classes="sectionLabel" Text="{Loc 'NAME'}" />
                                         <TextBox Classes="commitBox"
                                                  Text="{Binding Name, Mode=TwoWay}" />
                                     </StackPanel>
 
                                     <StackPanel Spacing="6">
-                                        <TextBlock Classes="sectionLabel" Text="DESCRIPTION" />
+                                        <TextBlock Classes="sectionLabel" Text="{Loc 'DESCRIPTION'}" />
                                         <TextBox Classes="commitBox"
                                                  Text="{Binding Description, Mode=TwoWay}"
-                                                 PlaceholderText="What it is (optional)" />
+                                                 PlaceholderText="{Loc 'What it is (optional)'}" />
                                     </StackPanel>
 
                                     <ContentControl Content="{Binding Target}"
@@ -798,7 +798,7 @@
                                                 HorizontalAlignment="Right">
                                         <Button Classes="secondary" Content="{Loc 'Cancel'}"
                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).CancelPublishCommand}" />
-                                        <Button Classes="primary" Content="Publish repository"
+                                        <Button Classes="primary" Content="{Loc 'Publish repository'}"
                                                 IsEnabled="{Binding CanPublish}"
                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).ConfirmPublishCommand}" />
                                     </StackPanel>
@@ -818,19 +818,19 @@
                         <DataTemplate x:DataType="vm:BranchFromCommitViewModel">
                             <Border Classes="dialog">
                                 <StackPanel Spacing="14">
-                                    <TextBlock Classes="h2" Text="New branch from this commit" />
+                                    <TextBlock Classes="h2" Text="{Loc 'New branch from this commit'}" />
                                     <TextBlock Classes="muted" TextWrapping="Wrap"
                                                Text="{Binding CommitLabel}" />
                                     <TextBox Classes="commitBox"
                                              Text="{Binding Name, Mode=TwoWay}"
-                                             PlaceholderText="Branch name" />
+                                             PlaceholderText="{Loc 'Branch name'}" />
                                     <TextBlock Classes="caption" TextWrapping="Wrap"
-                                               Text="The new branch starts here and is checked out. Nothing already committed changes." />
+                                               Text="{Loc 'The new branch starts here and is checked out. Nothing already committed changes.'}" />
                                     <StackPanel Orientation="Horizontal" Spacing="10"
                                                 HorizontalAlignment="Right">
                                         <Button Classes="secondary" Content="{Loc 'Cancel'}"
                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).CancelBranchFromCommitCommand}" />
-                                        <Button Classes="primary" Content="Create branch"
+                                        <Button Classes="primary" Content="{Loc 'Create branch'}"
                                                 IsEnabled="{Binding CanCreate}"
                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).ConfirmBranchFromCommitCommand}" />
                                     </StackPanel>
@@ -850,23 +850,23 @@
                         <DataTemplate x:DataType="vm:TagDraftViewModel">
                             <Border Classes="dialog">
                                 <StackPanel Spacing="14">
-                                    <TextBlock Classes="h2" Text="Tag this commit" />
+                                    <TextBlock Classes="h2" Text="{Loc 'Tag this commit'}" />
                                     <TextBlock Classes="muted" TextWrapping="Wrap"
                                                Text="{Binding CommitLabel}" />
                                     <TextBox Classes="commitBox"
                                              Text="{Binding Name, Mode=TwoWay}"
-                                             PlaceholderText="Tag name, e.g. v1.2.0" />
+                                             PlaceholderText="{Loc 'Tag name, e.g. v1.2.0'}" />
                                     <TextBox Classes="commitBox"
                                              Text="{Binding Message, Mode=TwoWay}"
-                                             PlaceholderText="What it marks (optional)"
+                                             PlaceholderText="{Loc 'What it marks (optional)'}"
                                              AcceptsReturn="True" TextWrapping="Wrap" Height="64" />
                                     <TextBlock Classes="caption" TextWrapping="Wrap"
-                                               Text="A message makes it an annotated tag, recording who made it and when. The tag stays local until you push." />
+                                               Text="{Loc 'A message makes it an annotated tag, recording who made it and when. The tag stays local until you push.'}" />
                                     <StackPanel Orientation="Horizontal" Spacing="10"
                                                 HorizontalAlignment="Right">
                                         <Button Classes="secondary" Content="{Loc 'Cancel'}"
                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).CancelTagCommand}" />
-                                        <Button Classes="primary" Content="Create tag"
+                                        <Button Classes="primary" Content="{Loc 'Create tag'}"
                                                 IsEnabled="{Binding CanCreate}"
                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).ConfirmTagCommand}" />
                                     </StackPanel>
@@ -886,7 +886,7 @@
                         <DataTemplate x:DataType="vm:CherryPickDraftViewModel">
                             <Border Classes="dialog">
                                 <StackPanel Spacing="14">
-                                    <TextBlock Classes="h2" Text="Copy this commit to another branch" />
+                                    <TextBlock Classes="h2" Text="{Loc 'Copy this commit to another branch'}" />
                                     <TextBlock Classes="muted" TextWrapping="Wrap"
                                                Text="{Binding CommitLabel}" />
 
@@ -901,13 +901,13 @@
 
                                     <TextBlock Classes="caption" TextWrapping="Wrap"
                                                IsVisible="{Binding HasBranches}"
-                                               Text="Omnigit switches to that branch and applies the same change there as a new commit. If it clashes with what is already there, you finish it on the Changes tab." />
+                                               Text="{Loc 'Omnigit switches to that branch and applies the same change there as a new commit. If it clashes with what is already there, you finish it on the Changes tab.'}" />
 
                                     <StackPanel Orientation="Horizontal" Spacing="10"
                                                 HorizontalAlignment="Right">
                                         <Button Classes="secondary" Content="{Loc 'Cancel'}"
                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).CancelCherryPickCommand}" />
-                                        <Button Classes="primary" Content="Copy it across"
+                                        <Button Classes="primary" Content="{Loc 'Copy it across'}"
                                                 IsEnabled="{Binding CanApply}"
                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).ConfirmCherryPickCommand}" />
                                     </StackPanel>
@@ -928,7 +928,7 @@
                         <DataTemplate x:DataType="vm:ResetDraftViewModel">
                             <Border Classes="dialog">
                                 <StackPanel Spacing="14">
-                                    <TextBlock Classes="h2" Text="Move the branch back to this commit" />
+                                    <TextBlock Classes="h2" Text="{Loc 'Move the branch back to this commit'}" />
                                     <TextBlock Classes="muted" TextWrapping="Wrap"
                                                Text="{Binding CommitLabel}" />
 
@@ -936,15 +936,15 @@
                                         <RadioButton GroupName="ResetKind"
                                                      IsChecked="{Binding IsSoft, Mode=OneWay}"
                                                      Command="{Binding ChooseSoftCommand}"
-                                                     Content="Keep the changes, ready to commit" />
+                                                     Content="{Loc 'Keep the changes, ready to commit'}" />
                                         <RadioButton GroupName="ResetKind"
                                                      IsChecked="{Binding IsMixed, Mode=OneWay}"
                                                      Command="{Binding ChooseMixedCommand}"
-                                                     Content="Keep the changes in my working tree" />
+                                                     Content="{Loc 'Keep the changes in my working tree'}" />
                                         <RadioButton GroupName="ResetKind"
                                                      IsChecked="{Binding IsHard, Mode=OneWay}"
                                                      Command="{Binding ChooseHardCommand}"
-                                                     Content="Throw the changes away" />
+                                                     Content="{Loc 'Throw the changes away'}" />
                                     </StackPanel>
 
                                     <Border Background="{DynamicResource BannerWarningBackground}"
@@ -974,14 +974,14 @@
                     IsVisible="{Binding IsConfirmingAbort}">
                 <Border Classes="dialog" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <StackPanel Spacing="14">
-                        <TextBlock Classes="h2" Text="Abandon this?" />
+                        <TextBlock Classes="h2" Text="{Loc 'Abandon this?'}" />
                         <TextBlock Classes="caption" TextWrapping="Wrap"
                                    Text="{Binding AbortSummary}" />
                         <StackPanel Orientation="Horizontal" Spacing="9"
                                     HorizontalAlignment="Right">
-                            <Button Classes="secondary" Content="Keep going"
+                            <Button Classes="secondary" Content="{Loc 'Keep going'}"
                                     Command="{Binding CancelAbortCommand}" />
-                            <Button Classes="primary" Content="Abandon it"
+                            <Button Classes="primary" Content="{Loc 'Abandon it'}"
                                     Command="{Binding ConfirmAbortCommand}" />
                         </StackPanel>
                     </StackPanel>
@@ -1059,8 +1059,8 @@
                                              Foreground="{DynamicResource TextPrimary}">
                             <SelectableTextBlock.ContextFlyout>
                                 <MenuFlyout Placement="Pointer">
-                                    <MenuItem Header="Copy" Click="OnCopyLogSelection" />
-                                    <MenuItem Header="Select all" Click="OnSelectAllLog" />
+                                    <MenuItem Header="{Loc 'Copy'}" Click="OnCopyLogSelection" />
+                                    <MenuItem Header="{Loc 'Select all'}" Click="OnSelectAllLog" />
                                 </MenuFlyout>
                             </SelectableTextBlock.ContextFlyout>
                         </SelectableTextBlock>

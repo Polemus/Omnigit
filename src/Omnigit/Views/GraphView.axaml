@@ -28,7 +28,7 @@
               Margin="18,16,18,12">
             <Button Grid.Column="0" Classes="secondary"
                     Command="{Binding CloseGraphCommand}"
-                    Content="← Back to repository" />
+                    Content="{Loc '← Back to repository'}" />
 
             <StackPanel Grid.Column="1" VerticalAlignment="Center">
                 <TextBlock Classes="h2" Text="{Binding GraphTitle}" />
@@ -37,7 +37,7 @@
 
             <TextBlock Grid.Column="2" Classes="muted" VerticalAlignment="Center"
                        IsVisible="{Binding IsGraphLoading}"
-                       Text="Reading the history…" />
+                       Text="{Loc 'Reading the history…'}" />
         </Grid>
 
         <Border Grid.Row="1" Classes="divider" />
@@ -48,8 +48,8 @@
                  SelectedItem="{Binding SelectedGraphCommit, Mode=TwoWay}">
             <ListBox.ContextFlyout>
                 <MenuFlyout Placement="Pointer">
-                    <MenuItem Header="Copy SHA" Command="{Binding CopyGraphCommitShaCommand}" />
-                    <MenuItem Header="Copy summary" Command="{Binding CopyGraphCommitSummaryCommand}" />
+                    <MenuItem Header="{Loc 'Copy SHA'}" Command="{Binding CopyGraphCommitShaCommand}" />
+                    <MenuItem Header="{Loc 'Copy summary'}" Command="{Binding CopyGraphCommitSummaryCommand}" />
                 </MenuFlyout>
             </ListBox.ContextFlyout>
 

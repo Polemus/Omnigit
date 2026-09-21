@@ -18,19 +18,25 @@
         <StackPanel Grid.Row="0" Spacing="12" Margin="32,28,32,16">
             <Button Classes="secondary" HorizontalAlignment="Left"
                     Command="{Binding CloseCloneCommand}"
-                    Content="← Back to repository" />
+                    Content="{Loc '← Back to repository'}" />
 
-            <TextBlock Classes="h1" Text="Clone a repository" />
-            <TextBlock Classes="caption" TextWrapping="Wrap"
-                       Text="Everything your signed-in accounts can see, from every hosting site at once. Cloning uses that site's own token, so private repositories work without touching a terminal." />
+            <TextBlock Classes="h1" Text="{Loc 'Clone a repository'}" />
+            <!-- The element form because the sentence contains an apostrophe, which
+                 would close {Loc '...'}'s own string. Key is an ordinary XML attribute
+                 here, so nothing in the sentence is special. -->
+            <TextBlock Classes="caption" TextWrapping="Wrap">
+                <TextBlock.Text>
+                    <Loc Key="Everything your signed-in accounts can see, from every hosting site at once. Cloning uses that site's own token, so private repositories work without touching a terminal." />
+                </TextBlock.Text>
+            </TextBlock>
         </StackPanel>
 
         <!-- Filter and refresh -->
         <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="10" Margin="32,0,32,14">
             <TextBox Grid.Column="0" Classes="commitBox"
                      Text="{Binding RemoteFilter, Mode=TwoWay}"
-                     PlaceholderText="Filter by name or description" />
-            <Button Grid.Column="1" Classes="secondary" Content="Refresh"
+                     PlaceholderText="{Loc 'Filter by name or description'}" />
+            <Button Grid.Column="1" Classes="secondary" Content="{Loc 'Refresh'}"
                     IsEnabled="{Binding !IsLoadingRemotes}"
                     Command="{Binding LoadRemoteRepositoriesCommand}" />
         </Grid>
@@ -40,7 +46,7 @@
             <TextBlock Classes="caption"
                        HorizontalAlignment="Center" VerticalAlignment="Center"
                        IsVisible="{Binding IsLoadingRemotes}"
-                       Text="Asking every signed-in site…" />
+                       Text="{Loc 'Asking every signed-in site…'}" />
 
             <TextBlock Classes="caption" TextWrapping="Wrap" MaxWidth="420"
                        HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -79,7 +85,7 @@
                                                    Text="{Binding CloneUrl}" />
                                     </StackPanel>
 
-                                    <Button Grid.Column="1" Classes="primary" Content="Clone"
+                                    <Button Grid.Column="1" Classes="primary" Content="{Loc 'Clone'}"
                                             VerticalAlignment="Center"
                                             IsVisible="{Binding CanClone}"
                                             Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).CloneRepositoryCommand}"
@@ -87,7 +93,7 @@
 
                                     <Border Grid.Column="1" Classes="chip" VerticalAlignment="Center"
                                             IsVisible="{Binding IsCloned}">
-                                        <TextBlock Classes="muted" Text="Already added" />
+                                        <TextBlock Classes="muted" Text="{Loc 'Already added'}" />
                                     </Border>
                                 </Grid>
                             </Border>

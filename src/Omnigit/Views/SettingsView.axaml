@@ -21,9 +21,9 @@
                 <Button Classes="secondary" Margin="14,0,14,16"
                         HorizontalAlignment="Stretch"
                         Command="{Binding ShowRepositoryCommand}"
-                        Content="← Back to repository" />
+                        Content="{Loc '← Back to repository'}" />
 
-                <TextBlock Classes="sectionLabel" Text="SETTINGS" Margin="18,0,18,8" />
+                <TextBlock Classes="sectionLabel" Text="{Loc 'SETTINGS'}" Margin="18,0,18,8" />
 
                 <Button Classes="settingsTab" Content="{Loc 'General'}"
                         Classes.active="{Binding IsGeneralSection}"
@@ -33,7 +33,7 @@
                     </Button.CommandParameter>
                 </Button>
 
-                <Button Classes="settingsTab" Content="Accounts"
+                <Button Classes="settingsTab" Content="{Loc 'Accounts'}"
                         Classes.active="{Binding IsAccountsSection}"
                         Command="{Binding ShowSettingsSectionCommand}">
                     <Button.CommandParameter>
@@ -41,7 +41,7 @@
                     </Button.CommandParameter>
                 </Button>
 
-                <Button Classes="settingsTab" Content="Hosting sites"
+                <Button Classes="settingsTab" Content="{Loc 'Hosting sites'}"
                         Classes.active="{Binding IsHostsSection}"
                         Command="{Binding ShowSettingsSectionCommand}">
                     <Button.CommandParameter>
@@ -59,7 +59,7 @@
                         <x:Int32>2</x:Int32>
                     </Button.CommandParameter>
                     <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="About" VerticalAlignment="Center" />
+                        <TextBlock Text="{Loc 'About'}" VerticalAlignment="Center" />
                         <Ellipse Width="7" Height="7" VerticalAlignment="Center"
                                  Fill="{DynamicResource NotificationDot}"
                                  IsVisible="{Binding Update.IsUpdateAvailable}" />
@@ -125,9 +125,9 @@
                             HorizontalAlignment="Left">
 
                     <StackPanel Spacing="8">
-                        <TextBlock Classes="h1" Text="Accounts" />
+                        <TextBlock Classes="h1" Text="{Loc 'Accounts'}" />
                         <TextBlock Classes="caption" TextWrapping="Wrap"
-                                   Text="Omnigit talks to any number of hosting sites at once. Each keeps its own credentials, so a self-hosted Gitea behind your own domain works exactly like GitHub.com." />
+                                   Text="{Loc 'Omnigit talks to any number of hosting sites at once. Each keeps its own credentials, so a self-hosted Gitea behind your own domain works exactly like GitHub.com.'}" />
                     </StackPanel>
 
                     <!-- Where tokens live -->
@@ -151,15 +151,15 @@
                             BorderThickness="1" CornerRadius="8" Padding="14,11"
                             IsVisible="{Binding CredentialBackendIsWeak}">
                         <TextBlock Classes="caption" TextWrapping="Wrap"
-                                   Text="No system keyring was found, so tokens are written to a file readable by anything running as you. Install libsecret (secret-tool) for encrypted storage." />
+                                   Text="{Loc 'No system keyring was found, so tokens are written to a file readable by anything running as you. Install libsecret (secret-tool) for encrypted storage.'}" />
                     </Border>
 
                     <!-- Signed-in accounts -->
                     <StackPanel Spacing="12">
-                        <TextBlock Classes="sectionLabel" Text="SIGNED IN" />
+                        <TextBlock Classes="sectionLabel" Text="{Loc 'SIGNED IN'}" />
 
                         <TextBlock Classes="caption" IsVisible="{Binding !HasAccounts}"
-                                   Text="No accounts yet. Sign in below to fetch and push." />
+                                   Text="{Loc 'No accounts yet. Sign in below to fetch and push.'}" />
 
                         <ItemsControl ItemsSource="{Binding Accounts}">
                             <ItemsControl.ItemTemplate>
@@ -184,7 +184,7 @@
                                                            Text="{Binding BaseUrl}" />
                                             </StackPanel>
 
-                                            <Button Grid.Column="2" Classes="secondary" Content="Sign out"
+                                            <Button Grid.Column="2" Classes="secondary" Content="{Loc 'Sign out'}"
                                                     VerticalAlignment="Top"
                                                     Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).SignOutCommand}"
                                                     CommandParameter="{Binding}" />
@@ -197,13 +197,13 @@
 
                     <!-- Sign in -->
                     <StackPanel Spacing="12">
-                        <TextBlock Classes="sectionLabel" Text="ADD AN ACCOUNT" />
+                        <TextBlock Classes="sectionLabel" Text="{Loc 'ADD AN ACCOUNT'}" />
                         <Border Classes="card">
                             <StackPanel Spacing="14">
 
                                 <Grid ColumnDefinitions="*,2*" ColumnSpacing="12">
                                     <StackPanel Grid.Column="0" Spacing="6">
-                                        <TextBlock Classes="muted" Text="Site" />
+                                        <TextBlock Classes="muted" Text="{Loc 'Site'}" />
                                         <ComboBox ItemsSource="{Binding Providers}"
                                                   SelectedItem="{Binding SelectedProvider, Mode=TwoWay}"
                                                   HorizontalAlignment="Stretch">
@@ -216,7 +216,7 @@
                                     </StackPanel>
 
                                     <StackPanel Grid.Column="1" Spacing="6">
-                                        <TextBlock Classes="muted" Text="Server URL" />
+                                        <TextBlock Classes="muted" Text="{Loc 'Server URL'}" />
                                         <TextBox Classes="commitBox"
                                                  Text="{Binding SignInServerUrl, Mode=TwoWay}"
                                                  PlaceholderText="https://git.example.com" />
@@ -224,19 +224,19 @@
                                 </Grid>
 
                                 <StackPanel Spacing="6">
-                                    <TextBlock Classes="muted" Text="Personal access token" />
+                                    <TextBlock Classes="muted" Text="{Loc 'Personal access token'}" />
                                     <TextBox Classes="commitBox"
                                              PasswordChar="•"
                                              Text="{Binding SignInToken, Mode=TwoWay}"
-                                             PlaceholderText="Paste your token" />
+                                             PlaceholderText="{Loc 'Paste your token'}" />
                                     <TextBlock Classes="muted" TextWrapping="Wrap"
                                                Text="{Binding TokenHelpText}" />
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Spacing="10">
-                                    <Button Classes="primary" Content="Sign in"
+                                    <Button Classes="primary" Content="{Loc 'Sign in'}"
                                             Command="{Binding SignInWithTokenCommand}" />
-                                    <Button Classes="secondary" Content="Sign in with browser"
+                                    <Button Classes="secondary" Content="{Loc 'Sign in with browser'}"
                                             IsVisible="{Binding CanUseBrowserLogin}"
                                             Command="{Binding StartBrowserLoginCommand}" />
                                 </StackPanel>
@@ -252,7 +252,7 @@
                                                     BorderThickness="1" CornerRadius="8" Padding="14">
                                                 <StackPanel Spacing="8">
                                                     <TextBlock Classes="caption"
-                                                               Text="Your browser should have opened with the code already copied. If not:" />
+                                                               Text="{Loc 'Your browser should have opened with the code already copied. If not:'}" />
                                                     <!-- FontFamily is set here, not by the mono class: Avalonia
                                                          selectors match the exact type, so TextBlock.mono
                                                          reaches neither a Button nor a SelectableTextBlock. -->
@@ -260,7 +260,7 @@
                                                             FontFamily="{DynamicResource MonoFont}"
                                                             Content="{Binding VerificationUri}"
                                                             Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).OpenDeviceUrlCommand}"
-                                                            ToolTip.Tip="Open this page in your browser" />
+                                                            ToolTip.Tip="{Loc 'Open this page in your browser'}" />
                                                     <StackPanel Orientation="Horizontal" Spacing="12"
                                                                 VerticalAlignment="Center">
                                                         <!-- Selectable so the code can be dragged out even if
@@ -270,11 +270,11 @@
                                                                              Foreground="{DynamicResource AccentBrush}"
                                                                              VerticalAlignment="Center"
                                                                              Text="{Binding UserCode}" />
-                                                        <Button Classes="secondary" Content="Copy code"
+                                                        <Button Classes="secondary" Content="{Loc 'Copy code'}"
                                                                 VerticalAlignment="Center"
                                                                 Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).CopyDeviceCodeCommand}" />
                                                     </StackPanel>
-                                                    <TextBlock Classes="muted" Text="Waiting for approval…" />
+                                                    <TextBlock Classes="muted" Text="{Loc 'Waiting for approval…'}" />
                                                 </StackPanel>
                                             </Border>
                                         </DataTemplate>
@@ -292,9 +292,9 @@
                             HorizontalAlignment="Left">
 
                     <StackPanel Spacing="8">
-                        <TextBlock Classes="h1" Text="Hosting sites" />
+                        <TextBlock Classes="h1" Text="{Loc 'Hosting sites'}" />
                         <TextBlock Classes="caption" TextWrapping="Wrap"
-                                   Text="A hosting site is described by data, never by code, so a description you got from someone else can never read the tokens held for your other sites. Adding one here writes exactly the same JSON file you could drop in the hosts folder yourself." />
+                                   Text="{Loc 'A hosting site is described by data, never by code, so a description you got from someone else can never read the tokens held for your other sites. Adding one here writes exactly the same JSON file you could drop in the hosts folder yourself.'}" />
                     </StackPanel>
 
                     <!-- Manifest problems -->
@@ -303,14 +303,14 @@
                             BorderThickness="1" CornerRadius="8" Padding="14,11"
                             IsVisible="{Binding HasHostWarnings}">
                         <StackPanel Spacing="4">
-                            <TextBlock Classes="caption" FontWeight="SemiBold" Text="Host description problems" />
+                            <TextBlock Classes="caption" FontWeight="SemiBold" Text="{Loc 'Host description problems'}" />
                             <TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding HostWarnings}" />
                         </StackPanel>
                     </Border>
 
                     <!-- Known sites -->
                     <StackPanel Spacing="12">
-                        <TextBlock Classes="sectionLabel" Text="KNOWN SITES" />
+                        <TextBlock Classes="sectionLabel" Text="{Loc 'KNOWN SITES'}" />
 
                         <ItemsControl ItemsSource="{Binding HostEntries}">
                             <ItemsControl.ItemTemplate>
@@ -333,13 +333,13 @@
                                                 </StackPanel>
                                             </StackPanel>
 
-                                            <Button Grid.Column="1" Classes="secondary" Content="Edit"
+                                            <Button Grid.Column="1" Classes="secondary" Content="{Loc 'Edit'}"
                                                     VerticalAlignment="Center"
                                                     IsVisible="{Binding IsUserDefined}"
                                                     Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).EditHostCommand}"
                                                     CommandParameter="{Binding}" />
 
-                                            <Button Grid.Column="2" Classes="secondary" Content="Remove"
+                                            <Button Grid.Column="2" Classes="secondary" Content="{Loc 'Remove'}"
                                                     VerticalAlignment="Center"
                                                     IsVisible="{Binding IsUserDefined}"
                                                     Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).DeleteHostCommand}"
@@ -352,9 +352,9 @@
 
                         <StackPanel Orientation="Horizontal" Spacing="10"
                                     IsVisible="{Binding !IsEditingHost}">
-                            <Button Classes="primary" Content="Add a site"
+                            <Button Classes="primary" Content="{Loc 'Add a site'}"
                                     Command="{Binding AddHostCommand}" />
-                            <Button Classes="secondary" Content="Add a GitLab-like site"
+                            <Button Classes="secondary" Content="{Loc 'Add a GitLab-like site'}"
                                     Command="{Binding AddGitLabLikeHostCommand}" />
                         </StackPanel>
                     </StackPanel>
@@ -369,24 +369,24 @@
 
                                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                                             <StackPanel Grid.Column="0" Spacing="6">
-                                                <TextBlock Classes="muted" Text="Id" />
+                                                <TextBlock Classes="muted" Text="{Loc 'Id'}" />
                                                 <TextBox Classes="commitBox" Text="{Binding Id, Mode=TwoWay}"
                                                          IsEnabled="{Binding !IsEditing}"
                                                          PlaceholderText="forgejo" />
                                                 <TextBlock Classes="muted" TextWrapping="Wrap"
-                                                           Text="Lower case, no spaces. Names the file, and replaces a built-in site if it matches one." />
+                                                           Text="{Loc 'Lower case, no spaces. Names the file, and replaces a built-in site if it matches one.'}" />
                                             </StackPanel>
                                             <StackPanel Grid.Column="1" Spacing="6">
-                                                <TextBlock Classes="muted" Text="Display name" />
+                                                <TextBlock Classes="muted" Text="{Loc 'Display name'}" />
                                                 <TextBox Classes="commitBox" Text="{Binding DisplayName, Mode=TwoWay}"
                                                          PlaceholderText="Forgejo" />
                                             </StackPanel>
                                         </Grid>
 
                                         <StackPanel Spacing="6">
-                                            <TextBlock Classes="sectionLabel" Text="RECOGNISING THE SITE" />
+                                            <TextBlock Classes="sectionLabel" Text="{Loc 'RECOGNISING THE SITE'}" />
                                             <TextBlock Classes="muted" TextWrapping="Wrap"
-                                                       Text="Omnigit probes this path and checks the field exists, rather than guessing from the domain name." />
+                                                       Text="{Loc 'Omnigit probes this path and checks the field exists, rather than guessing from the domain name.'}" />
                                             <Grid ColumnDefinitions="2*,*" ColumnSpacing="12">
                                                 <TextBox Grid.Column="0" Classes="commitBox"
                                                          Text="{Binding RecognisePath, Mode=TwoWay}"
@@ -398,7 +398,7 @@
                                         </StackPanel>
 
                                         <StackPanel Spacing="6">
-                                            <TextBlock Classes="sectionLabel" Text="TOKEN HEADER" />
+                                            <TextBlock Classes="sectionLabel" Text="{Loc 'TOKEN HEADER'}" />
                                             <Grid ColumnDefinitions="*,2*" ColumnSpacing="12">
                                                 <TextBox Grid.Column="0" Classes="commitBox"
                                                          Text="{Binding AuthHeaderName, Mode=TwoWay}"
@@ -412,7 +412,7 @@
                                         </StackPanel>
 
                                         <StackPanel Spacing="6">
-                                            <TextBlock Classes="sectionLabel" Text="ENDPOINTS" />
+                                            <TextBlock Classes="sectionLabel" Text="{Loc 'ENDPOINTS'}" />
                                             <TextBox Classes="commitBox"
                                                      Text="{Binding CurrentUserEndpoint, Mode=TwoWay}"
                                                      PlaceholderText="/api/v1/user" />
@@ -424,13 +424,16 @@
                                                      PlaceholderText="{}{owner}/{repo} pull requests — leave empty if the site has none" />
                                             <TextBox Classes="commitBox"
                                                      Text="{Binding OwnersEndpoint, Mode=TwoWay}"
-                                                     PlaceholderText="Organisations — leave empty if the site has none" />
+                                                     PlaceholderText="{Loc 'Organisations — leave empty if the site has none'}" />
                                         </StackPanel>
 
                                         <StackPanel Spacing="6">
-                                            <TextBlock Classes="sectionLabel" Text="CREATING A REPOSITORY" />
-                                            <TextBlock Classes="muted" TextWrapping="Wrap"
-                                                       Text="Where Omnigit POSTs a new repository, and the address for one an organisation owns. Leave the first empty and Omnigit won't offer to publish to this site." />
+                                            <TextBlock Classes="sectionLabel" Text="{Loc 'CREATING A REPOSITORY'}" />
+                                            <TextBlock Classes="muted" TextWrapping="Wrap">
+                                                <TextBlock.Text>
+                                                    <Loc Key="Where Omnigit POSTs a new repository, and the address for one an organisation owns. Leave the first empty and Omnigit won't offer to publish to this site." />
+                                                </TextBlock.Text>
+                                            </TextBlock>
                                             <TextBox Classes="commitBox"
                                                      Text="{Binding CreateRepositoryPath, Mode=TwoWay}"
                                                      PlaceholderText="/api/v1/user/repos" />
@@ -439,10 +442,10 @@
                                                      PlaceholderText="/api/v1/orgs/{}{owner}/repos — empty if the owner goes in the body" />
                                         </StackPanel>
 
-                                        <Expander Header="Where the values sit in the responses">
+                                        <Expander Header="{Loc 'Where the values sit in the responses'}">
                                             <StackPanel Spacing="14" Margin="0,10,0,0">
                                                 <StackPanel Spacing="6">
-                                                    <TextBlock Classes="muted" Text="Account: login, display name, avatar" />
+                                                    <TextBlock Classes="muted" Text="{Loc 'Account: login, display name, avatar'}" />
                                                     <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
                                                         <TextBox Grid.Column="0" Classes="commitBox"
                                                                  Text="{Binding UserLoginField, Mode=TwoWay}" />
@@ -454,7 +457,7 @@
                                                 </StackPanel>
 
                                                 <StackPanel Spacing="6">
-                                                    <TextBlock Classes="muted" Text="Repository: name, owner, clone URL, default branch" />
+                                                    <TextBlock Classes="muted" Text="{Loc 'Repository: name, owner, clone URL, default branch'}" />
                                                     <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="10">
                                                         <TextBox Grid.Column="0" Classes="commitBox"
                                                                  Text="{Binding RepoNameField, Mode=TwoWay}" />
@@ -468,7 +471,7 @@
                                                 </StackPanel>
 
                                                 <StackPanel Spacing="6">
-                                                    <TextBlock Classes="muted" Text="Repository: description, updated at" />
+                                                    <TextBlock Classes="muted" Text="{Loc 'Repository: description, updated at'}" />
                                                     <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                                                         <TextBox Grid.Column="0" Classes="commitBox"
                                                                  Text="{Binding RepoDescriptionField, Mode=TwoWay}" />
@@ -479,31 +482,31 @@
 
                                                 <StackPanel Spacing="6">
                                                     <TextBlock Classes="muted" TextWrapping="Wrap"
-                                                               Text="Private repositories: the field, and — only if the site sends a word rather than true/false — the word that means private." />
+                                                               Text="{Loc 'Private repositories: the field, and — only if the site sends a word rather than true/false — the word that means private.'}" />
                                                     <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                                                         <TextBox Grid.Column="0" Classes="commitBox"
                                                                  Text="{Binding RepoPrivateField, Mode=TwoWay}"
                                                                  PlaceholderText="private" />
                                                         <TextBox Grid.Column="1" Classes="commitBox"
                                                                  Text="{Binding RepoPrivateEquals, Mode=TwoWay}"
-                                                                 PlaceholderText="(leave empty for true/false)" />
+                                                                 PlaceholderText="{Loc '(leave empty for true/false)'}" />
                                                     </Grid>
                                                 </StackPanel>
 
                                                 <StackPanel Spacing="6">
-                                                    <TextBlock Classes="muted" Text="Organisation: name, id — the id only for a site that addresses one by number" />
+                                                    <TextBlock Classes="muted" Text="{Loc 'Organisation: name, id — the id only for a site that addresses one by number'}" />
                                                     <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                                                         <TextBox Grid.Column="0" Classes="commitBox"
                                                                  Text="{Binding OwnerLoginField, Mode=TwoWay}"
                                                                  PlaceholderText="username" />
                                                         <TextBox Grid.Column="1" Classes="commitBox"
                                                                  Text="{Binding OwnerIdField, Mode=TwoWay}"
-                                                                 PlaceholderText="(leave empty for a name)" />
+                                                                 PlaceholderText="{Loc '(leave empty for a name)'}" />
                                                     </Grid>
                                                 </StackPanel>
 
                                                 <StackPanel Spacing="6">
-                                                    <TextBlock Classes="muted" Text="New repository: the body keys for its name and description" />
+                                                    <TextBlock Classes="muted" Text="{Loc 'New repository: the body keys for its name and description'}" />
                                                     <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                                                         <TextBox Grid.Column="0" Classes="commitBox"
                                                                  Text="{Binding CreateNameField, Mode=TwoWay}"
@@ -516,23 +519,23 @@
 
                                                 <StackPanel Spacing="6">
                                                     <TextBlock Classes="muted" TextWrapping="Wrap"
-                                                               Text="New repository: the body key for privacy, and — only if the site wants a word rather than true/false — the words for private and public." />
+                                                               Text="{Loc 'New repository: the body key for privacy, and — only if the site wants a word rather than true/false — the words for private and public.'}" />
                                                     <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
                                                         <TextBox Grid.Column="0" Classes="commitBox"
                                                                  Text="{Binding CreatePrivacyField, Mode=TwoWay}"
                                                                  PlaceholderText="private" />
                                                         <TextBox Grid.Column="1" Classes="commitBox"
                                                                  Text="{Binding CreatePrivacyWhenPrivate, Mode=TwoWay}"
-                                                                 PlaceholderText="(empty for true/false)" />
+                                                                 PlaceholderText="{Loc '(empty for true/false)'}" />
                                                         <TextBox Grid.Column="2" Classes="commitBox"
                                                                  Text="{Binding CreatePrivacyWhenPublic, Mode=TwoWay}"
-                                                                 PlaceholderText="(empty for true/false)" />
+                                                                 PlaceholderText="{Loc '(empty for true/false)'}" />
                                                     </Grid>
                                                 </StackPanel>
 
                                                 <StackPanel Spacing="6">
                                                     <TextBlock Classes="muted" TextWrapping="Wrap"
-                                                               Text="New repository: the body key naming the owner, and whether to send its id or its name. Only for a site that POSTs to one address for everything." />
+                                                               Text="{Loc 'New repository: the body key naming the owner, and whether to send its id or its name. Only for a site that POSTs to one address for everything.'}" />
                                                     <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                                                         <TextBox Grid.Column="0" Classes="commitBox"
                                                                  Text="{Binding CreateOwnerField, Mode=TwoWay}"
@@ -544,7 +547,7 @@
                                                 </StackPanel>
 
                                                 <StackPanel Spacing="6">
-                                                    <TextBlock Classes="muted" Text="Pull request: number, title, author, draft" />
+                                                    <TextBlock Classes="muted" Text="{Loc 'Pull request: number, title, author, draft'}" />
                                                     <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="10">
                                                         <TextBox Grid.Column="0" Classes="commitBox"
                                                                  Text="{Binding PrNumberField, Mode=TwoWay}" />
@@ -558,7 +561,7 @@
                                                 </StackPanel>
 
                                                 <StackPanel Spacing="6">
-                                                    <TextBlock Classes="muted" Text="Pull request: source branch, target branch, updated at, page URL" />
+                                                    <TextBlock Classes="muted" Text="{Loc 'Pull request: source branch, target branch, updated at, page URL'}" />
                                                     <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="10">
                                                         <TextBox Grid.Column="0" Classes="commitBox"
                                                                  Text="{Binding PrSourceBranchField, Mode=TwoWay}" />
@@ -572,15 +575,18 @@
                                                 </StackPanel>
 
                                                 <StackPanel Spacing="6">
-                                                    <TextBlock Classes="muted" TextWrapping="Wrap"
-                                                               Text="Checking a pull request out fetches this ref from the remote, so a contributor's fork needs no remote of its own." />
+                                                    <TextBlock Classes="muted" TextWrapping="Wrap">
+                                                        <TextBlock.Text>
+                                                            <Loc Key="Checking a pull request out fetches this ref from the remote, so a contributor's fork needs no remote of its own." />
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <TextBox Classes="commitBox"
                                                              Text="{Binding PullRequestRef, Mode=TwoWay}"
                                                              PlaceholderText="refs/pull/{}{number}/head" />
                                                 </StackPanel>
 
                                                 <StackPanel Spacing="6">
-                                                    <TextBlock Classes="muted" Text="What git gets for HTTPS: username, password" />
+                                                    <TextBlock Classes="muted" Text="{Loc 'What git gets for HTTPS: username, password'}" />
                                                     <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                                                         <TextBox Grid.Column="0" Classes="commitBox"
                                                                  Text="{Binding GitUsername, Mode=TwoWay}" />
@@ -590,16 +596,22 @@
                                                 </StackPanel>
 
                                                 <StackPanel Spacing="6">
-                                                    <TextBlock Classes="muted" TextWrapping="Wrap"
-                                                               Text="Where &quot;View on this site&quot; sends a browser. Leave it alone unless the site puts its commits somewhere unusual." />
+                                                    <TextBlock Classes="muted" TextWrapping="Wrap">
+                                                        <TextBlock.Text>
+                                                            <Loc Key="Where &quot;View on this site&quot; sends a browser. Leave it alone unless the site puts its commits somewhere unusual." />
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <TextBox Classes="commitBox"
                                                              Text="{Binding CommitUrlTemplate, Mode=TwoWay}"
                                                              PlaceholderText="{}{base}/{owner}/{repo}/commit/{sha}" />
                                                 </StackPanel>
 
                                                 <StackPanel Spacing="6">
-                                                    <TextBlock Classes="muted" TextWrapping="Wrap"
-                                                               Text="Where &quot;Create pull request&quot; sends a browser. Opening one is left to the site's own form, which asks for reviewers and templates this app knows nothing about." />
+                                                    <TextBlock Classes="muted" TextWrapping="Wrap">
+                                                        <TextBlock.Text>
+                                                            <Loc Key="Where &quot;Create pull request&quot; sends a browser. Opening one is left to the site's own form, which asks for reviewers and templates this app knows nothing about." />
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <TextBox Classes="commitBox"
                                                              Text="{Binding NewPullRequestUrlTemplate, Mode=TwoWay}"
                                                              PlaceholderText="{}{base}/{owner}/{repo}/compare/{target}...{source}?expand=1" />
@@ -609,9 +621,9 @@
 
                                         <!-- Testing the draft against a real server, before saving it. -->
                                         <StackPanel Spacing="8">
-                                            <TextBlock Classes="sectionLabel" Text="TEST IT AGAINST A SERVER" />
+                                            <TextBlock Classes="sectionLabel" Text="{Loc 'TEST IT AGAINST A SERVER'}" />
                                             <TextBlock Classes="muted" TextWrapping="Wrap"
-                                                       Text="Neither the address nor the token is saved. Without a token only the recognise check can run." />
+                                                       Text="{Loc 'Neither the address nor the token is saved. Without a token only the recognise check can run.'}" />
                                             <Grid ColumnDefinitions="2*,2*,Auto" ColumnSpacing="12">
                                                 <TextBox Grid.Column="0" Classes="commitBox"
                                                          Text="{Binding TestUrl, Mode=TwoWay}"
@@ -619,13 +631,13 @@
                                                 <TextBox Grid.Column="1" Classes="commitBox"
                                                          PasswordChar="•"
                                                          Text="{Binding TestToken, Mode=TwoWay}"
-                                                         PlaceholderText="token (optional)" />
-                                                <Button Grid.Column="2" Classes="secondary" Content="Test connection"
+                                                         PlaceholderText="{Loc 'token (optional)'}" />
+                                                <Button Grid.Column="2" Classes="secondary" Content="{Loc 'Test connection'}"
                                                         IsEnabled="{Binding CanTest}"
                                                         Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).TestHostCommand}" />
                                             </Grid>
 
-                                            <TextBlock Classes="muted" Text="Testing…" IsVisible="{Binding IsTesting}" />
+                                            <TextBlock Classes="muted" Text="{Loc 'Testing…'}" IsVisible="{Binding IsTesting}" />
 
                                             <StackPanel Spacing="10" IsVisible="{Binding HasTestResult}">
                                                 <TextBlock Classes="logLine"
@@ -655,10 +667,10 @@
                                         </StackPanel>
 
                                         <StackPanel Orientation="Horizontal" Spacing="10">
-                                            <Button Classes="primary" Content="Save site"
+                                            <Button Classes="primary" Content="{Loc 'Save site'}"
                                                     IsEnabled="{Binding CanSave}"
                                                     Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).SaveHostCommand}" />
-                                            <Button Classes="secondary" Content="Cancel"
+                                            <Button Classes="secondary" Content="{Loc 'Cancel'}"
                                                     Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).CancelHostDraftCommand}" />
                                         </StackPanel>
                                     </StackPanel>
@@ -668,7 +680,7 @@
                     </ContentControl>
 
                     <TextBlock Classes="muted" TextWrapping="Wrap"
-                               Text="Sites added here are written to the hosts folder as JSON. You can still edit those files by hand — see docs/host-manifests.md." />
+                               Text="{Loc 'Sites added here are written to the hosts folder as JSON. You can still edit those files by hand — see docs/host-manifests.md.'}" />
                 </StackPanel>
             </ScrollViewer>
 
@@ -678,9 +690,9 @@
                             HorizontalAlignment="Left">
 
                     <StackPanel Spacing="8">
-                        <TextBlock Classes="h1" Text="About Omnigit" />
+                        <TextBlock Classes="h1" Text="{Loc 'About Omnigit'}" />
                         <TextBlock Classes="caption" TextWrapping="Wrap"
-                                   Text="A git client that talks to more than one hosting site. MIT licensed." />
+                                   Text="{Loc 'A git client that talks to more than one hosting site. MIT licensed.'}" />
                     </StackPanel>
 
                     <!-- Through a template rather than by reassigning DataContext on a
@@ -737,15 +749,15 @@
                                                    IsVisible="{Binding IsManagedElsewhere}" />
 
                                         <StackPanel Orientation="Horizontal" Spacing="10">
-                                            <Button Classes="primary" Content="Update now"
+                                            <Button Classes="primary" Content="{Loc 'Update now'}"
                                                     IsVisible="{Binding CanInstall}"
                                                     Command="{Binding InstallCommand}" />
 
-                                            <Button Classes="secondary" Content="Check for updates"
+                                            <Button Classes="secondary" Content="{Loc 'Check for updates'}"
                                                     IsVisible="{Binding !IsWorking}"
                                                     Command="{Binding CheckCommand}" />
 
-                                            <Button Classes="link" Content="Release notes on GitHub"
+                                            <Button Classes="link" Content="{Loc 'Release notes on GitHub'}"
                                                     VerticalAlignment="Center"
                                                     IsVisible="{Binding IsUpdateAvailable}"
                                                     Command="{Binding OpenReleasePageCommand}" />
@@ -757,7 +769,7 @@
                     </ContentControl>
 
                     <TextBlock Classes="muted" TextWrapping="Wrap"
-                               Text="Omnigit checks for a new release once a day. Nothing is downloaded until you press Update now." />
+                               Text="{Loc 'Omnigit checks for a new release once a day. Nothing is downloaded until you press Update now.'}" />
                 </StackPanel>
             </ScrollViewer>
         </Panel>
