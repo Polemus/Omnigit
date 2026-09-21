@@ -177,10 +177,11 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public string TokenHelpText => SelectedProvider is null
         ? string.Empty
-        : $"Create a token on {SelectedProvider.DisplayName} and paste it here. "
-          + "It is stored in " + _credentials.Description + ".";
+        : Strings.Format("Create a token on {0} and paste it here. It is stored in {1}.",
+                         SelectedProvider.DisplayName, _credentials.Description);
 
-    public string CredentialBackendLabel => $"Tokens are stored in {_credentials.Description}.";
+    public string CredentialBackendLabel =>
+        Strings.Format("Tokens are stored in {0}.", _credentials.Description);
 
     public bool CredentialBackendIsWeak => !_credentials.IsSecure;
 
@@ -267,7 +268,8 @@ public partial class MainWindowViewModel : ViewModelBase
     private const int GraphLimit = 400;
 
     /// <summary>What the header button would do if pressed now.</summary>
-    public string GraphButtonLabel => IsGraphPageVisible ? "Hide the commit graph" : "Commit graph";
+    public string GraphButtonLabel =>
+        IsGraphPageVisible ? Strings.Get("Hide the commit graph") : Strings.Get("Commit graph");
 
     /// <summary>
     /// Every branch, not just the one checked out. A graph of one branch is a straight
@@ -288,14 +290,19 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     public partial bool IsGraphLoading { get; set; }
 
-    public string GraphTitle => SelectedRepository?.Name ?? "Graph";
+    public string GraphTitle => SelectedRepository?.Name ?? Strings.Get("Graph");
 
     public string GraphSubtitle => GraphCommits.Count switch
     {
-        0 => "Nothing to draw",
-        1 => "1 commit across every branch",
-        var many when many >= GraphLimit => $"The most recent {many} commits across every branch",
-        var many => $"{many} commits across every branch",
+        0 => Strings.Get("Nothing to draw"),
+
+        // The cap is its own sentence rather than the general one with a bigger number:
+        // "the most recent" is the whole point of it, and it is never reached with one.
+        var many when many >= GraphLimit =>
+            Strings.Format("The most recent {0} commits across every branch", many),
+
+        var many => Strings.Plural(
+            "{0} commit across every branch", "{0} commits across every branch", many),
     };
 
     /// <summary>
@@ -338,7 +345,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            Log(ActivityLevel.Error, $"Could not read the history: {ex.Message}");
+            Log(ActivityLevel.Error, Strings.Format("Could not read the history: {0}", ex.Message));
         }
         finally
         {
@@ -354,14 +361,14 @@ public partial class MainWindowViewModel : ViewModelBase
     private async Task CopyGraphCommitShaAsync()
     {
         if (SelectedGraphCommit is { } commit)
-            await CopyAsync(commit.Sha, "commit SHA");
+            await CopyAsync(commit.Sha, Strings.Get("Copied the commit SHA to the clipboard"));
     }
 
     [RelayCommand]
     private async Task CopyGraphCommitSummaryAsync()
     {
         if (SelectedGraphCommit is { } commit)
-            await CopyAsync(commit.Summary, "commit summary");
+            await CopyAsync(commit.Summary, Strings.Get("Copied the commit summary to the clipboard"));
     }
 
     // ---- Selection ---------------------------------------------------------
@@ -458,7 +465,8 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool IsGraphPageVisible => ActivePage == Page.Graph;
 
     /// <summary>What the header's gear would do if pressed now.</summary>
-    public string SettingsButtonLabel => IsSettingsPageVisible ? "Close settings" : "Settings";
+    public string SettingsButtonLabel =>
+        IsSettingsPageVisible ? Strings.Get("Close settings") : Strings.Get("Settings");
 
     // ---- Making a repository, and putting it on a site ---------------------
 
@@ -524,7 +532,7 @@ public partial class MainWindowViewModel : ViewModelBase
         if (NewRepositoryDraft is not { } draft)
             return;
 
-        if (await _picker.PickAsync("Where should the repository go?") is { Length: > 0 } path)
+        if (await _picker.PickAsync(Strings.Get("Where should the repository go?")) is { Length: > 0 } path)
             draft.ParentPath = path;
     }
 
@@ -569,14 +577,14 @@ public partial class MainWindowViewModel : ViewModelBase
                     _git.Commit(
                         workdir,
                         files.Select(f => f.Path),
-                        "Initial commit",
+                        "Initial commit", // Not translated: this is written into the repository.
                         string.Empty);
                 }
 
                 return workdir;
             });
 
-            Log(ActivityLevel.Success, $"Created {name} at {created}");
+            Log(ActivityLevel.Success, Strings.Format("Created {0} at {1}", name, created));
 
             // Last, and only once everything above worked. A repository that exists on
             // a site but not on disk would be the one failure with nothing here to
@@ -596,9 +604,10 @@ public partial class MainWindowViewModel : ViewModelBase
                     // what to press to finish it.
                     Log(
                         ActivityLevel.Error,
-                        $"{name} was created here, but not on {account.BaseUrl.Host} — {ex.Message}",
-                        "Everything is committed locally. Press Publish repository on the "
-                        + $"toolbar to try again.\n\n{ex}");
+                        Strings.Format("{0} was created here, but not on {1} — {2}",
+                                       name, account.BaseUrl.Host, ex.Message),
+                        Strings.Format("Everything is committed locally. Press Publish repository "
+                                       + "on the toolbar to try again.\n\n{0}", ex));
                 }
             }
         });
@@ -637,8 +646,8 @@ public partial class MainWindowViewModel : ViewModelBase
             Log(
                 ActivityLevel.Warning,
                 Accounts.Count == 0
-                    ? "Sign in to a hosting site first — there is nowhere to publish this yet."
-                    : "None of the sites you are signed in to can be asked to create a repository.");
+                    ? Strings.Get("Sign in to a hosting site first — there is nowhere to publish this yet.")
+                    : Strings.Get("None of the sites you are signed in to can be asked to create a repository."));
             return;
         }
 
@@ -682,7 +691,8 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            Log(ActivityLevel.Warning, $"Could not list organisations for {account.Handle}: {ex.Message}");
+            Log(ActivityLevel.Warning,
+                Strings.Format("Could not list organisations for {0}: {1}", account.Handle, ex.Message));
 
             if (ReferenceEquals(target.Account, account))
             {
@@ -693,8 +703,9 @@ public partial class MainWindowViewModel : ViewModelBase
                 target.SetOwners([new RepositoryOwner(account.Login, IsSelf: true)]);
 
                 target.SiteProblem =
-                    $"Couldn't ask {account.BaseUrl.Host} which organisations you belong to — "
-                    + $"{ex.Message} Publishing there will probably fail too.";
+                    Strings.Format("Couldn't ask {0} which organisations you belong to — "
+                                   + "{1} Publishing there will probably fail too.",
+                                   account.BaseUrl.Host, ex.Message);
             }
         }
         finally
@@ -722,7 +733,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
         var created = await provider.CreateRepositoryAsync(account, request, default);
 
-        Log(ActivityLevel.Success, $"Created {created.FullName} on {account.BaseUrl.Host}");
+        Log(ActivityLevel.Success,
+            Strings.Format("Created {0} on {1}", created.FullName, account.BaseUrl.Host));
 
         await Task.Run(() => _git.AddRemote(path, "origin", created.CloneUrl));
 
@@ -785,8 +797,8 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool HasRemoteResults => RemoteRepositories.Count > 0;
 
     public string RemoteEmptyLabel => _allRemotes.Count == 0
-        ? "Sign in to a hosting site to browse what you can clone."
-        : "Nothing matches that filter.";
+        ? Strings.Get("Sign in to a hosting site to browse what you can clone.")
+        : Strings.Get("Nothing matches that filter.");
 
     // ---- Settings ----------------------------------------------------------
 
@@ -897,7 +909,8 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>What the toolbar shows where the branch name goes.</summary>
     public string HeadLabel => IsDetachedHead ? HeadShortSha : SelectedBranch?.Name ?? "—";
 
-    public string HeadDetailLabel => IsDetachedHead ? "Not on a branch" : "Current branch";
+    public string HeadDetailLabel =>
+        IsDetachedHead ? Strings.Get("Not on a branch") : Strings.Get("Current branch");
 
     // ---- An operation git could not finish on its own ----------------------
 
@@ -916,23 +929,25 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public string PendingOperationName => PendingOperation switch
     {
-        RepositoryOperation.Merge => "merge",
-        RepositoryOperation.Revert => "revert",
-        RepositoryOperation.CherryPick => "cherry-pick",
-        RepositoryOperation.Rebase => "rebase",
-        _ => "operation",
+        RepositoryOperation.Merge => Strings.Get("merge"),
+        RepositoryOperation.Revert => Strings.Get("revert"),
+        RepositoryOperation.CherryPick => Strings.Get("cherry-pick"),
+        RepositoryOperation.Rebase => Strings.Get("rebase"),
+        _ => Strings.Get("operation"),
     };
 
     public string PendingOperationLabel => ConflictedPaths.Count switch
     {
-        0 => $"The {PendingOperationName} went through — commit it to finish.",
-        1 => $"This {PendingOperationName} stopped on 1 file git could not merge on its own.",
-        var n => $"This {PendingOperationName} stopped on {n} files git could not merge on its own.",
+        0 => Strings.Format("The {0} went through — commit it to finish.", PendingOperationName),
+        var n => Strings.Plural(
+            "This {1} stopped on {0} file git could not merge on its own.",
+            "This {1} stopped on {0} files git could not merge on its own.",
+            n, PendingOperationName),
     };
 
     public string ConflictHelpLabel =>
-        "Keep one side whole, or edit the file yourself and mark it resolved. "
-        + "Committing finishes the operation; abandoning puts everything back.";
+        Strings.Get("Keep one side whole, or edit the file yourself and mark it resolved. "
+                    + "Committing finishes the operation; abandoning puts everything back.");
 
     /// <remarks>
     /// Four verbs became five. A repository with no remote at all is not a failed fetch
@@ -945,16 +960,16 @@ public partial class MainWindowViewModel : ViewModelBase
     /// branch the remote has never seen has nothing to be ahead or behind of, and
     /// "Fetch origin" was the wrong offer there.
     /// </remarks>
-    public string SyncActionLabel => !HasRemote ? "Publish repository"
-                                   : CanPublish ? "Publish branch"
-                                   : Behind > 0 ? "Pull origin"
-                                   : Ahead > 0 ? "Push origin"
-                                   : "Fetch origin";
+    public string SyncActionLabel => !HasRemote ? Strings.Get("Publish repository")
+                                   : CanPublish ? Strings.Get("Publish branch")
+                                   : Behind > 0 ? Strings.Get("Pull origin")
+                                   : Ahead > 0 ? Strings.Get("Push origin")
+                                   : Strings.Get("Fetch origin");
 
     public string SyncDetailLabel => SelectedRepository is null ? string.Empty
-        : !HasRemote ? "This repository is only on this machine"
-        : LastFetched is { } when ? $"Last fetched {TimeFormat.Relative(when)}"
-        : "Never fetched";
+        : !HasRemote ? Strings.Get("This repository is only on this machine")
+        : LastFetched is { } when ? Strings.Format("Last fetched {0}", TimeFormat.Relative(when))
+        : Strings.Get("Never fetched");
 
     /// <summary>What a press would send, and what it would bring down.</summary>
     public string SyncCountLabel => SyncCounts.Label(Ahead, Behind);
@@ -986,12 +1001,9 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public int StagedCount => Changes.Count(c => c.IsStaged);
 
-    public string StagedCountLabel => Changes.Count switch
-    {
-        0 => "No local changes",
-        1 => "1 changed file",
-        _ => $"{Changes.Count} changed files",
-    };
+    public string StagedCountLabel => Changes.Count == 0
+        ? Strings.Get("No local changes")
+        : Strings.Plural("{0} changed file", "{0} changed files", Changes.Count);
 
     // Amending only needs a message; re-wording the last commit without touching any
     // file is a perfectly ordinary thing to want. Conflicts are the one hard block:
@@ -1055,8 +1067,8 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool HasBranchMatches => BranchSections.Count > 0;
 
     public string BranchesEmptyLabel => string.IsNullOrWhiteSpace(BranchFilter)
-        ? "No branches yet - the first commit makes one."
-        : $"No branch here or on the remote matches \u201c{BranchFilter.Trim()}\u201d.";
+        ? Strings.Get("No branches yet - the first commit makes one.")
+        : Strings.Format("No branch here or on the remote matches \u201c{0}\u201d.", BranchFilter.Trim());
 
     private void RebuildBranchSections()
     {
@@ -1086,9 +1098,9 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public bool HasBranchStashes => BranchStashes.Count > 0;
 
-    public string StashLabel => BranchStashes.Count == 1
-        ? "You have stashed changes on this branch"
-        : $"You have {BranchStashes.Count} sets of stashed changes on this branch";
+    public string StashLabel => Strings.Plural(
+        "You have stashed changes on this branch",
+        "You have {0} sets of stashed changes on this branch", BranchStashes.Count);
 
     /// <summary>The prompt shown when switching branches would abandon uncommitted work.</summary>
     [ObservableProperty]
@@ -1134,9 +1146,9 @@ public partial class MainWindowViewModel : ViewModelBase
     [NotifyPropertyChangedFor(nameof(AbortSummary))]
     public partial bool IsConfirmingAbort { get; set; }
 
-    public string AbortSummary =>
-        $"Everything this {PendingOperationName} changed, including any conflicts you have already "
-        + "sorted out, goes back to the last commit. This cannot be undone.";
+    public string AbortSummary => Strings.Format(
+        "Everything this {0} changed, including any conflicts you have already "
+        + "sorted out, goes back to the last commit. This cannot be undone.", PendingOperationName);
 
     // ---- Changed-file context menu -----------------------------------------
 
@@ -1155,22 +1167,26 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool HasPendingDiscard => PendingDiscard is { Count: > 0 };
 
     public string PendingDiscardTitle => PendingDiscard is not { Count: > 1 } pending
-        ? "Discard changes?"
-        : $"Discard changes to {pending.Count} files?";
+        ? Strings.Get("Discard changes?")
+        : Strings.Plural("Discard changes to {0} file?",
+                         "Discard changes to {0} files?", pending.Count);
 
     public string PendingDiscardSummary => PendingDiscard switch
     {
         null or { Count: 0 } => string.Empty,
-        [var only] => $"{only} goes back to its last committed state. This cannot be undone.",
+        [var only] => Strings.Format(
+            "{0} goes back to its last committed state. This cannot be undone.", only),
 
         // Named while the list is short enough to read, counted once it isn't: a discard
         // of thirty files would otherwise push the buttons off the bottom of the dialog.
-        { Count: <= 8 } some =>
-            $"{string.Join(", ", some)} go back to their last committed state. "
-            + "This cannot be undone.",
-        var many =>
-            $"{many.Count} files go back to their last committed state. "
-            + "This cannot be undone.",
+        { Count: <= 8 } some => Strings.Format(
+            "{0} go back to their last committed state. This cannot be undone.",
+            string.Join(Strings.Particular("between items of a list", ", "), some)),
+
+        var many => Strings.Plural(
+            "{0} file goes back to its last committed state. This cannot be undone.",
+            "{0} files go back to their last committed state. This cannot be undone.",
+            many.Count),
     };
 
     /// <summary>
@@ -1197,8 +1213,8 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool CanOpenSelectedChange => IsOneChangeSelected && SelectedChange is { IsDeleted: false };
 
     public string DiscardChangesLabel => SelectedChangeSet is { Count: > 1 } many
-        ? $"Discard changes to {many.Count} files"
-        : "Discard changes";
+        ? Strings.Plural("Discard changes to {0} file", "Discard changes to {0} files", many.Count)
+        : Strings.Get("Discard changes");
 
     [RelayCommand]
     private void AskDiscardChanges()
@@ -1223,8 +1239,9 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             await Task.Run(() => _git.DiscardChanges(path, targets));
             Log(ActivityLevel.Success, targets is [var only]
-                ? $"Discarded changes to {only}"
-                : $"Discarded changes to {targets.Count} files");
+                ? Strings.Format("Discarded changes to {0}", only)
+                : Strings.Plural("Discarded changes to {0} file",
+                                 "Discarded changes to {0} files", targets.Count));
         });
 
         await OpenRepositoryAsync(repo);
@@ -1241,7 +1258,7 @@ public partial class MainWindowViewModel : ViewModelBase
         await RunAsync(async () =>
         {
             await Task.Run(() => _git.AddToGitignore(path, pattern));
-            Log(ActivityLevel.Success, $"Added {pattern} to .gitignore");
+            Log(ActivityLevel.Success, Strings.Format("Added {0} to .gitignore", pattern));
         });
 
         await OpenRepositoryAsync(repo);
@@ -1257,14 +1274,14 @@ public partial class MainWindowViewModel : ViewModelBase
             await Task.Run(() => _git.GetWorkingDirectory(repo.LocalPath)),
             change.Path);
 
-        await CopyAsync(full, "file path");
+        await CopyAsync(full, Strings.Get("Copied the file path to the clipboard"));
     }
 
     [RelayCommand]
     private async Task CopyRelativeFilePathAsync(FileChangeViewModel? change)
     {
         if (change is not null)
-            await CopyAsync(change.Path, "relative file path");
+            await CopyAsync(change.Path, Strings.Get("Copied the relative file path to the clipboard"));
     }
 
     [RelayCommand]
@@ -1278,7 +1295,7 @@ public partial class MainWindowViewModel : ViewModelBase
             change.Path);
 
         if (!await _shell.ShowInFileManagerAsync(full))
-            Log(ActivityLevel.Warning, "Could not open a file manager");
+            Log(ActivityLevel.Warning, Strings.Get("Could not open a file manager"));
     }
 
     /// <summary>
@@ -1299,37 +1316,47 @@ public partial class MainWindowViewModel : ViewModelBase
 
         if (!System.IO.File.Exists(full))
         {
-            Log(ActivityLevel.Warning, $"{change.FileName} is not on disk to open");
+            Log(ActivityLevel.Warning,
+                Strings.Format("{0} is not on disk to open", change.FileName));
             return;
         }
 
         if (!await _shell.OpenFileAsync(full))
-            Log(ActivityLevel.Warning, $"Nothing is set up to open {change.FileName}");
+            Log(ActivityLevel.Warning,
+                Strings.Format("Nothing is set up to open {0}", change.FileName));
     }
 
-    private async Task CopyAsync(string text, string what)
+    /// <param name="copied">
+    /// The whole sentence to log, not the noun to build one around. It was
+    /// CopyAsync(text, "file path") producing "Copied the {what} to the clipboard", which
+    /// needs the noun to take a form the call site cannot know - and one of the five call
+    /// sites was already passing "tag" or "tags" to get English's plural right.
+    /// </param>
+    private async Task CopyAsync(string text, string copied)
     {
         if (await _shell.CopyTextAsync(text))
-            Log(ActivityLevel.Info, $"Copied the {what} to the clipboard");
+            Log(ActivityLevel.Info, copied);
         else
-            Log(ActivityLevel.Warning, "Could not reach the clipboard");
+            Log(ActivityLevel.Warning, Strings.Get("Could not reach the clipboard"));
     }
 
     public bool CanCreateBranch => !string.IsNullOrWhiteSpace(NewBranchName)
                                    && SelectedRepository is not null
                                    && !IsBusy;
 
-    public string CommitButtonLabel => IsAmending ? "Amend last commit"
-        : HasPendingOperation ? $"Finish the {PendingOperationName}"
-        : IsDetachedHead ? $"Commit onto {HeadShortSha}"
-        : $"Commit to {SelectedBranch?.Name ?? "branch"}";
+    public string CommitButtonLabel => IsAmending ? Strings.Get("Amend last commit")
+        : HasPendingOperation ? Strings.Format("Finish the {0}", PendingOperationName)
+        : IsDetachedHead ? Strings.Format("Commit onto {0}", HeadShortSha)
+        : Strings.Format("Commit to {0}", SelectedBranch?.Name ?? Strings.Get("branch"));
 
     public string CommitSummaryPlaceholder
     {
         get
         {
             var staged = Changes.Where(c => c.IsStaged).ToList();
-            return staged.Count == 1 ? $"Update {staged[0].FileName}" : "Summary (required)";
+            return staged.Count == 1
+                ? Strings.Format("Update {0}", staged[0].FileName)
+                : Strings.Get("Summary (required)");
         }
     }
 
@@ -1343,9 +1370,8 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public string SelectedCommitFilesLabel => SelectedCommitFiles.Count == 1
-        ? "1 file changed"
-        : $"{SelectedCommitFiles.Count} files changed";
+    public string SelectedCommitFilesLabel =>
+        Strings.Plural("{0} file changed", "{0} files changed", SelectedCommitFiles.Count);
 
     /// <summary>Which of the commit's files the diff pane is showing.</summary>
     [ObservableProperty]
@@ -1370,10 +1396,14 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
 
         Log(ActivityLevel.Info,
-            $"Omnigit ready — {Providers.Count} hosting site{(Providers.Count == 1 ? "" : "s")}: "
-            + string.Join(", ", Providers.Select(p => p.DisplayName)));
+            Strings.Plural("Omnigit ready — {0} hosting site: {1}",
+                           "Omnigit ready — {0} hosting sites: {1}",
+                           Providers.Count,
+                           string.Join(Strings.Particular("between items of a list", ", "),
+                                       Providers.Select(p => p.DisplayName))));
 
-        Log(ActivityLevel.Trace, _credentials.Description is { } d ? $"Tokens stored in {d}" : "");
+        Log(ActivityLevel.Trace,
+            _credentials.Description is { } d ? Strings.Format("Tokens stored in {0}", d) : "");
 
         foreach (var warning in _hosts.Warnings)
             Log(ActivityLevel.Warning, warning);
@@ -1384,7 +1414,8 @@ public partial class MainWindowViewModel : ViewModelBase
         OnPropertyChanged(nameof(HasAccounts));
 
         foreach (var account in Accounts)
-            Log(ActivityLevel.Trace, $"Signed in to {account.BaseUrl.Host} as {account.Login}");
+            Log(ActivityLevel.Trace,
+                Strings.Format("Signed in to {0} as {1}", account.BaseUrl.Host, account.Login));
 
         var stored = await Task.Run(() => _store.Load());
 
@@ -1458,7 +1489,7 @@ public partial class MainWindowViewModel : ViewModelBase
             var credentials = await Task.Run(() => CredentialsFor(_git.GetRemoteUrl(path)));
             var result = await Task.Run(() => _git.Fetch(path, credentials, null));
 
-            Log(ActivityLevel.Trace, $"Background fetch — {result.Message}");
+            Log(ActivityLevel.Trace, Strings.Format("Background fetch — {0}", result.Message));
 
             // The user may have switched repositories, or started something of their
             // own, while the fetch was in flight.
@@ -1467,7 +1498,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            Log(ActivityLevel.Trace, $"Background fetch failed — {ex.Message}");
+            Log(ActivityLevel.Trace, Strings.Format("Background fetch failed — {0}", ex.Message));
         }
         finally
         {
@@ -1480,13 +1511,13 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private async Task AddRepositoryAsync()
     {
-        var path = await _picker.PickAsync("Select a git repository");
+        var path = await _picker.PickAsync(Strings.Get("Select a git repository"));
         if (string.IsNullOrEmpty(path))
             return;
 
         if (!await Task.Run(() => _git.IsRepository(path)))
         {
-            Log(ActivityLevel.Error, $"'{path}' is not a git repository.");
+            Log(ActivityLevel.Error, Strings.Format("'{0}' is not a git repository.", path));
             return;
         }
 
@@ -1585,14 +1616,15 @@ public partial class MainWindowViewModel : ViewModelBase
     private async Task ShowRepositoryInFileManagerAsync(RepositoryInfo repository)
     {
         if (!await _shell.ShowInFileManagerAsync(repository.LocalPath))
-            Log(ActivityLevel.Warning, $"Nothing here opens folders. It is at {repository.LocalPath}");
+            Log(ActivityLevel.Warning,
+                Strings.Format("Nothing here opens folders. It is at {0}", repository.LocalPath));
     }
 
     [RelayCommand]
     private async Task CopyRepositoryPathAsync(RepositoryInfo repository)
     {
         if (await _shell.CopyTextAsync(repository.LocalPath))
-            Log(ActivityLevel.Trace, $"Copied {repository.LocalPath}");
+            Log(ActivityLevel.Trace, Strings.Format("Copied {0}", repository.LocalPath));
     }
 
     /// <summary>
@@ -1625,16 +1657,19 @@ public partial class MainWindowViewModel : ViewModelBase
         switch (result.Outcome)
         {
             case TrashOutcome.Trashed:
-                Log(ActivityLevel.Success, $"Moved {prompt.Repository.Name} to the trash.");
+                Log(ActivityLevel.Success,
+                    Strings.Format("Moved {0} to the trash.", prompt.Repository.Name));
                 break;
 
             case TrashOutcome.NotFound:
-                Log(ActivityLevel.Info, $"Removed {prompt.Repository.Name}; its folder was already gone.");
+                Log(ActivityLevel.Info,
+                    Strings.Format("Removed {0}; its folder was already gone.", prompt.Repository.Name));
                 break;
 
             default:
                 Log(ActivityLevel.Warning,
-                    $"Removed {prompt.Repository.Name} from Omnigit, but its folder is still on disk.",
+                    Strings.Format("Removed {0} from Omnigit, but its folder is still on disk.",
+                                   prompt.Repository.Name),
                     result.Detail);
                 break;
         }
@@ -1697,7 +1732,7 @@ public partial class MainWindowViewModel : ViewModelBase
         // What the changes are being carried away from, which is the commit rather than
         // the branch when the branch is being started somewhere further back.
         var from = startPoint is null
-            ? SelectedBranch?.Name ?? "this branch"
+            ? SelectedBranch?.Name ?? Strings.Get("this branch")
             : startPoint.Length > 7 ? startPoint[..7] : startPoint;
 
         PendingBranchSwitch = new BranchSwitchViewModel(from, targetBranch, create, Changes, startPoint);
@@ -1756,11 +1791,12 @@ public partial class MainWindowViewModel : ViewModelBase
             }
 
             Log(ActivityLevel.Success, create
-                ? $"Created and switched to branch {targetBranch}"
-                : $"Switched to branch {targetBranch}");
+                ? Strings.Format("Created and switched to branch {0}", targetBranch)
+                : Strings.Format("Switched to branch {0}", targetBranch));
 
             if (stashedSomething)
-                Log(ActivityLevel.Info, "Changes left behind were stashed on the previous branch");
+                Log(ActivityLevel.Info,
+                    Strings.Get("Changes left behind were stashed on the previous branch"));
         });
 
         await OpenRepositoryAsync(repo);
@@ -1780,7 +1816,7 @@ public partial class MainWindowViewModel : ViewModelBase
         await RunAsync(async () =>
         {
             await Task.Run(() => _git.PopStash(path, index));
-            Log(ActivityLevel.Success, "Restored your stashed changes");
+            Log(ActivityLevel.Success, Strings.Get("Restored your stashed changes"));
         });
 
         await OpenRepositoryAsync(repo);
@@ -1798,7 +1834,7 @@ public partial class MainWindowViewModel : ViewModelBase
         await RunAsync(async () =>
         {
             await Task.Run(() => _git.DropStash(path, index));
-            Log(ActivityLevel.Warning, "Discarded the stashed changes");
+            Log(ActivityLevel.Warning, Strings.Get("Discarded the stashed changes"));
         });
 
         await OpenRepositoryAsync(repo);
@@ -1862,14 +1898,15 @@ public partial class MainWindowViewModel : ViewModelBase
         if (known is null)
         {
             Log(ActivityLevel.Error,
-                $"{branch.Name} is checked out in {path}, which could not be opened.");
+                Strings.Format("{0} is checked out in {1}, which could not be opened.",
+                               branch.Name, path));
             return;
         }
 
         IsRepositoryPickerOpen = false;
         await OpenRepositoryAsync(known);
 
-        Log(ActivityLevel.Info, $"Opened the worktree holding {branch.Name}");
+        Log(ActivityLevel.Info, Strings.Format("Opened the worktree holding {0}", branch.Name));
     }
 
     [RelayCommand]
@@ -1898,13 +1935,15 @@ public partial class MainWindowViewModel : ViewModelBase
             if (amending)
             {
                 var amended = await Task.Run(() => _git.AmendCommit(path, paths, summary, description));
-                Log(ActivityLevel.Success, $"Amended the last commit — now {amended[..7]}");
+                Log(ActivityLevel.Success,
+                    Strings.Format("Amended the last commit — now {0}", amended[..7]));
             }
             else
             {
                 var sha = await Task.Run(() => _git.Commit(path, paths, summary, description));
                 Log(ActivityLevel.Success,
-                    $"Committed {sha[..7]} — {paths.Count} file{(paths.Count == 1 ? "" : "s")}");
+                    Strings.Plural("Committed {1} — {0} file", "Committed {1} — {0} files",
+                                   paths.Count, sha[..7]));
             }
 
             committed = true;
@@ -2024,7 +2063,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         if (!Uri.TryCreate(SignInServerUrl, UriKind.Absolute, out var baseUrl))
         {
-            Log(ActivityLevel.Error, "Enter a full server URL, including https://");
+            Log(ActivityLevel.Error, Strings.Get("Enter a full server URL, including https://"));
             return;
         }
 
@@ -2034,7 +2073,7 @@ public partial class MainWindowViewModel : ViewModelBase
             await AddAccountAsync(account);
 
             SignInToken = string.Empty;
-            Log(ActivityLevel.Success, $"Signed in to {provider.DisplayName} as {account.Login}");
+            Log(ActivityLevel.Success, Strings.Format("Signed in to {0} as {1}", provider.DisplayName, account.Login));
         });
     }
 
@@ -2046,7 +2085,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         if (!Uri.TryCreate(SignInServerUrl, UriKind.Absolute, out var baseUrl))
         {
-            Log(ActivityLevel.Error, "Enter a full server URL, including https://");
+            Log(ActivityLevel.Error, Strings.Get("Enter a full server URL, including https://"));
             return;
         }
 
@@ -2060,16 +2099,17 @@ public partial class MainWindowViewModel : ViewModelBase
             // clipboard and open the page, so the common path is paste-and-approve. Both
             // can fail on a bare desktop, hence the panel keeps its own buttons.
             if (await _shell.CopyTextAsync(login.UserCode))
-                Log(ActivityLevel.Info, $"Copied the code {login.UserCode} to the clipboard");
+                Log(ActivityLevel.Info,
+                Strings.Format("Copied the code {0} to the clipboard", login.UserCode));
 
             if (!await _shell.OpenUrlAsync(login.VerificationUri))
-                Log(ActivityLevel.Warning, $"Couldn't open a browser. Go to {login.VerificationUri} yourself.");
+                Log(ActivityLevel.Warning, Strings.Format("Couldn't open a browser. Go to {0} yourself.", login.VerificationUri));
 
             try
             {
                 var account = await provider.CompleteBrowserLoginAsync(baseUrl, login, default);
                 await AddAccountAsync(account);
-                Log(ActivityLevel.Success, $"Signed in to {provider.DisplayName} as {account.Login}");
+                Log(ActivityLevel.Success, Strings.Format("Signed in to {0} as {1}", provider.DisplayName, account.Login));
             }
             finally
             {
@@ -2086,7 +2126,7 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
 
         if (!await _shell.OpenUrlAsync(login.VerificationUri))
-            Log(ActivityLevel.Warning, $"Couldn't open a browser. Go to {login.VerificationUri} yourself.");
+            Log(ActivityLevel.Warning, Strings.Format("Couldn't open a browser. Go to {0} yourself.", login.VerificationUri));
     }
 
     [RelayCommand]
@@ -2096,9 +2136,9 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
 
         if (await _shell.CopyTextAsync(login.UserCode))
-            Log(ActivityLevel.Info, $"Copied {login.UserCode} to the clipboard");
+            Log(ActivityLevel.Info, Strings.Format("Copied {0} to the clipboard", login.UserCode));
         else
-            Log(ActivityLevel.Warning, "Couldn't reach the clipboard.");
+            Log(ActivityLevel.Warning, Strings.Get("Couldn't reach the clipboard."));
     }
 
     [RelayCommand]
@@ -2114,7 +2154,7 @@ public partial class MainWindowViewModel : ViewModelBase
             // one out takes that name away with it.
             RebuildGroups();
 
-            Log(ActivityLevel.Info, $"Signed out {account.Login}");
+            Log(ActivityLevel.Info, Strings.Format("Signed out {0}", account.Login));
         });
     }
 
@@ -2183,9 +2223,9 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
 
         if (await _shell.CopyTextAsync(commit.Sha))
-            Log(ActivityLevel.Info, $"Copied {commit.ShortSha} to the clipboard");
+            Log(ActivityLevel.Info, Strings.Format("Copied {0} to the clipboard", commit.ShortSha));
         else
-            Log(ActivityLevel.Warning, "Could not reach the clipboard");
+            Log(ActivityLevel.Warning, Strings.Get("Could not reach the clipboard"));
     }
 
     [RelayCommand(CanExecute = nameof(HasSelectedCommit))]
@@ -2195,9 +2235,9 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
 
         if (await _shell.CopyTextAsync(commit.Summary))
-            Log(ActivityLevel.Info, "Copied the commit summary to the clipboard");
+            Log(ActivityLevel.Info, Strings.Get("Copied the commit summary to the clipboard"));
         else
-            Log(ActivityLevel.Warning, "Could not reach the clipboard");
+            Log(ActivityLevel.Warning, Strings.Get("Could not reach the clipboard"));
     }
 
     /// <summary>Every tag on the commit, since a commit can carry more than one.</summary>
@@ -2207,7 +2247,9 @@ public partial class MainWindowViewModel : ViewModelBase
         if (SelectedCommit is not { Tags.Count: > 0 } commit)
             return;
 
-        await CopyAsync(string.Join(" ", commit.Tags), commit.Tags.Count == 1 ? "tag" : "tags");
+        await CopyAsync(string.Join(" ", commit.Tags),
+            Strings.Plural("Copied the tag to the clipboard",
+                           "Copied the tags to the clipboard", commit.Tags.Count));
     }
 
     // ---- Opening the commit on the site it came from ------------------------
@@ -2216,7 +2258,10 @@ public partial class MainWindowViewModel : ViewModelBase
 
     /// <summary>Names the site, the way GitHub Desktop's "View on GitHub" does.</summary>
     public string ViewOnHostLabel =>
-        $"View on {(SelectedRepository?.Host is { BaseUrl.Length: > 0 } host ? host.Name : "the hosting site")}";
+        Strings.Format("View on {0}",
+            SelectedRepository?.Host is { BaseUrl.Length: > 0 } host
+                ? host.Name
+                : Strings.Get("the hosting site"));
 
     /// <summary>
     /// Where this commit lives on the web. A site we are signed in to describes its own
@@ -2248,7 +2293,8 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
 
         if (!await _shell.OpenUrlAsync(url))
-            Log(ActivityLevel.Warning, $"Couldn't open a browser. The commit is at {url}");
+            Log(ActivityLevel.Warning,
+                Strings.Format("Couldn't open a browser. The commit is at {0}", url));
     }
 
     // ---- Pull requests -----------------------------------------------------
@@ -2282,11 +2328,11 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool HasPullRequests => PullRequests.Count > 0;
 
     public string PullRequestsEmptyLabel => IsLoadingPullRequests
-        ? "Loading…"
-        : SelectedRepository is null ? "No repository open."
+        ? Strings.Get("Loading…")
+        : SelectedRepository is null ? Strings.Get("No repository open.")
         : HostFor(SelectedRepository) is null
-            ? "Sign in to this site to see its pull requests."
-            : "No open pull requests.";
+            ? Strings.Get("Sign in to this site to see its pull requests.")
+            : Strings.Get("No open pull requests.");
 
     /// <summary>
     /// The signed-in account for a clone's host, with the provider that speaks to it.
@@ -2357,16 +2403,16 @@ public partial class MainWindowViewModel : ViewModelBase
 
             if (announce)
             {
-                Log(ActivityLevel.Info, loaded.Count == 1
-                    ? "1 open pull request"
-                    : $"{loaded.Count} open pull requests");
+                Log(ActivityLevel.Info, Strings.Plural(
+                    "{0} open pull request", "{0} open pull requests", loaded.Count));
             }
         }
         catch (HostProviderException ex)
         {
             // The site refusing to list them is worth saying once, in the console, and
             // is not a reason to tear the picker down.
-            Log(ActivityLevel.Warning, $"Couldn't list pull requests: {ex.Message}");
+            Log(ActivityLevel.Warning,
+                Strings.Format("Couldn't list pull requests: {0}", ex.Message));
             PullRequests.Clear();
         }
         finally
@@ -2416,8 +2462,9 @@ public partial class MainWindowViewModel : ViewModelBase
         if (fetch.IsStale)
         {
             Log(ActivityLevel.Warning,
-                $"{fetch.BranchName} is already here and differs from the pull request — "
-                + "it was left as it is. Delete it, or move it yourself, to take the new version.");
+                Strings.Format("{0} is already here and differs from the pull request — "
+                               + "it was left as it is. Delete it, or move it yourself, "
+                               + "to take the new version.", fetch.BranchName));
         }
 
         await BeginBranchSwitchAsync(
@@ -2431,12 +2478,14 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (!Uri.TryCreate(pullRequest.WebUrl, UriKind.Absolute, out var url))
         {
-            Log(ActivityLevel.Warning, $"{pullRequest.Reference} came with no link to open.");
+            Log(ActivityLevel.Warning,
+                Strings.Format("{0} came with no link to open.", pullRequest.Reference));
             return;
         }
 
         if (!await _shell.OpenUrlAsync(url))
-            Log(ActivityLevel.Warning, $"Couldn't open a browser. The pull request is at {url}");
+            Log(ActivityLevel.Warning,
+                Strings.Format("Couldn't open a browser. The pull request is at {0}", url));
     }
 
     /// <summary>
@@ -2457,22 +2506,24 @@ public partial class MainWindowViewModel : ViewModelBase
         get
         {
             if (SelectedRepository is not { } repository)
-                return "Open a repository first.";
+                return Strings.Get("Open a repository first.");
 
             if (!repository.HasRemote)
-                return "This clone has no remote, so there is nowhere to open a pull request.";
+                return Strings.Get("This clone has no remote, so there is nowhere to open a pull request.");
 
             if (repository.IsDetached || SelectedBranch is not { } branch)
-                return "You are not on a branch. Check one out to propose it.";
+                return Strings.Get("You are not on a branch. Check one out to propose it.");
 
             if (string.Equals(branch.Name, repository.DefaultBranch, StringComparison.Ordinal))
             {
-                return $"You are on {repository.DefaultBranch}, which is what pull requests "
-                       + "merge into. Switch to another branch to propose changes.";
+                return Strings.Format("You are on {0}, which is what pull requests "
+                                      + "merge into. Switch to another branch to propose changes.",
+                                      repository.DefaultBranch);
             }
 
             return NewPullRequestUrl() is null
-                ? $"{repository.Host.Name} didn't give a usable address for its pull request form."
+                ? Strings.Format("{0} didn't give a usable address for its pull request form.",
+                                 repository.Host.Name)
                 : $"{branch.Name} → {repository.DefaultBranch}";
         }
     }
@@ -2501,7 +2552,8 @@ public partial class MainWindowViewModel : ViewModelBase
         if (!standing.IsPublished || standing.Ahead > 0)
         {
             Log(ActivityLevel.Info,
-                $"Pushing {SelectedBranch?.Name ?? "the branch"} before opening the pull request form");
+                Strings.Format("Pushing {0} before opening the pull request form",
+                               SelectedBranch?.Name ?? Strings.Get("the branch")));
 
             await RunAsync(async () =>
             {
@@ -2531,13 +2583,16 @@ public partial class MainWindowViewModel : ViewModelBase
             // The form would open on "There isn't anything to compare", which reads as a
             // broken app rather than as a branch that never left this machine.
             Log(ActivityLevel.Error,
-                $"{SelectedBranch?.Name ?? "The branch"} isn't on {repository.Host.Name} yet, so there is "
-                + "nothing to open a pull request from. The push above says why it didn't get there.");
+                Strings.Format("{0} isn't on {1} yet, so there is nothing to open a pull request "
+                               + "from. The push above says why it didn't get there.",
+                               SelectedBranch?.Name ?? Strings.Get("The branch"),
+                               repository.Host.Name));
             return;
         }
 
         if (!await _shell.OpenUrlAsync(url))
-            Log(ActivityLevel.Warning, $"Couldn't open a browser. Open a pull request at {url}");
+            Log(ActivityLevel.Warning,
+                Strings.Format("Couldn't open a browser. Open a pull request at {0}", url));
     }
 
     /// <summary>
@@ -2623,8 +2678,12 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             var created = await Task.Run(() => _git.CreateTag(path, name, sha, message));
 
-            Log(ActivityLevel.Success, $"Tagged {sha[..7]} as {created}"
-                                       + (string.IsNullOrWhiteSpace(message) ? string.Empty : " (annotated)"));
+            // Two whole sentences rather than one with " (annotated)" bolted on: the
+            // parenthetical is a word, and a word appended to a sentence is a sentence
+            // the translation cannot rearrange.
+            Log(ActivityLevel.Success, string.IsNullOrWhiteSpace(message)
+                ? Strings.Format("Tagged {0} as {1}", sha[..7], created)
+                : Strings.Format("Tagged {0} as {1} (annotated)", sha[..7], created));
         });
 
         await OpenRepositoryAsync(repo);
@@ -2652,8 +2711,8 @@ public partial class MainWindowViewModel : ViewModelBase
             }
 
             Log(ActivityLevel.Info,
-                $"Opened {commit.ShortSha}. You are not on a branch — make one here, or pick a "
-                + "branch to go back.");
+                Strings.Format("Opened {0}. You are not on a branch — make one here, or pick a "
+                               + "branch to go back.", commit.ShortSha));
         });
 
         await OpenRepositoryAsync(repo);
@@ -2738,9 +2797,12 @@ public partial class MainWindowViewModel : ViewModelBase
             Log(kind == ResetKind.Hard ? ActivityLevel.Warning : ActivityLevel.Success,
                 kind switch
                 {
-                    ResetKind.Soft => $"Moved the branch back to {sha[..7]} — the changes are staged",
-                    ResetKind.Hard => $"Reset to {sha[..7]} — everything after it was discarded",
-                    _ => $"Moved the branch back to {sha[..7]} — the changes are in your working tree",
+                    ResetKind.Soft => Strings.Format(
+                        "Moved the branch back to {0} — the changes are staged", sha[..7]),
+                    ResetKind.Hard => Strings.Format(
+                        "Reset to {0} — everything after it was discarded", sha[..7]),
+                    _ => Strings.Format(
+                        "Moved the branch back to {0} — the changes are in your working tree", sha[..7]),
                 });
         });
 
@@ -2785,8 +2847,8 @@ public partial class MainWindowViewModel : ViewModelBase
             await Task.Run(() => _git.ResolveConflict(local, file, side));
 
             Log(ActivityLevel.Info, side == ConflictSide.Mine
-                ? $"Kept your version of {file}"
-                : $"Took the incoming version of {file}");
+                ? Strings.Format("Kept your version of {0}", file)
+                : Strings.Format("Took the incoming version of {0}", file));
         });
 
         await OpenRepositoryAsync(repo);
@@ -2803,7 +2865,7 @@ public partial class MainWindowViewModel : ViewModelBase
         await RunAsync(async () =>
         {
             await Task.Run(() => _git.MarkConflictResolved(local, [file]));
-            Log(ActivityLevel.Info, $"Marked {file} as resolved");
+            Log(ActivityLevel.Info, Strings.Format("Marked {0} as resolved", file));
         });
 
         await OpenRepositoryAsync(repo);
@@ -2828,7 +2890,8 @@ public partial class MainWindowViewModel : ViewModelBase
         await RunAsync(async () =>
         {
             await Task.Run(() => _git.AbortOperation(path));
-            Log(ActivityLevel.Warning, $"Abandoned the {what} — everything is back as it was");
+            Log(ActivityLevel.Warning,
+                Strings.Format("Abandoned the {0} — everything is back as it was", what));
         });
 
         // The message git prepared belongs to the operation that no longer exists.
@@ -2896,7 +2959,8 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 if (error is not null)
                 {
-                    Log(ActivityLevel.Warning, $"Could not list repositories for {account.Handle}: {error}");
+                    Log(ActivityLevel.Warning,
+                        Strings.Format("Could not list repositories for {0}: {1}", account.Handle, error));
                     continue;
                 }
 
@@ -2915,7 +2979,9 @@ public partial class MainWindowViewModel : ViewModelBase
             ApplyRemoteFilter();
 
             if (_allRemotes.Count > 0)
-                Log(ActivityLevel.Info, $"Found {_allRemotes.Count} repositories you can clone");
+                Log(ActivityLevel.Info, Strings.Plural(
+                    "Found {0} repository you can clone",
+                    "Found {0} repositories you can clone", _allRemotes.Count));
         }
         finally
         {
@@ -2955,7 +3021,8 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private async Task CloneRepositoryAsync(RemoteRepositoryViewModel repository)
     {
-        var parent = await _picker.PickAsync($"Where should {repository.Name} go?");
+        var parent = await _picker.PickAsync(
+            Strings.Format("Where should {0} go?", repository.Name));
         if (string.IsNullOrEmpty(parent))
             return;
 
@@ -3079,7 +3146,8 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (_hosts.LoadUserManifest(entry.Id) is not { } manifest)
         {
-            Log(ActivityLevel.Error, $"Could not read the description for '{entry.Id}'.");
+            Log(ActivityLevel.Error,
+                Strings.Format("Could not read the description for '{0}'.", entry.Id));
             return;
         }
 
@@ -3102,7 +3170,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         if (!HostConnectionTester.TryParseBaseUrl(draft.TestUrl, out var baseUrl))
         {
-            Log(ActivityLevel.Error, "Enter the address of a server to test against.");
+            Log(ActivityLevel.Error, Strings.Get("Enter the address of a server to test against."));
             return;
         }
 
@@ -3121,12 +3189,13 @@ public partial class MainWindowViewModel : ViewModelBase
                         ProbeOutcome.Failed => ActivityLevel.Warning,
                         _ => ActivityLevel.Trace,
                     },
-                    $"{baseUrl.Host} — {step.Name}: {step.Detail}");
+                    Strings.Format("{0} — {1}: {2}", baseUrl.Host, step.Name, step.Detail));
             }
         }
         catch (Exception ex)
         {
-            Log(ActivityLevel.Error, $"Could not test the site: {ex.Message}", ex.ToString());
+            Log(ActivityLevel.Error,
+                Strings.Format("Could not test the site: {0}", ex.Message), ex.ToString());
         }
         finally
         {
@@ -3143,12 +3212,13 @@ public partial class MainWindowViewModel : ViewModelBase
         try
         {
             _hosts.SaveUserManifest(draft.ToManifest());
-            AfterHostsChanged($"Saved the '{draft.DisplayName}' hosting site");
+            AfterHostsChanged(Strings.Format("Saved the '{0}' hosting site", draft.DisplayName));
             HostDraft = null;
         }
         catch (Exception ex)
         {
-            Log(ActivityLevel.Error, $"Could not save the host: {ex.Message}", ex.ToString());
+            Log(ActivityLevel.Error,
+                Strings.Format("Could not save the host: {0}", ex.Message), ex.ToString());
         }
     }
 
@@ -3158,11 +3228,12 @@ public partial class MainWindowViewModel : ViewModelBase
         try
         {
             _hosts.DeleteUserManifest(entry.Id);
-            AfterHostsChanged($"Removed the '{entry.DisplayName}' hosting site");
+            AfterHostsChanged(Strings.Format("Removed the '{0}' hosting site", entry.DisplayName));
         }
         catch (Exception ex)
         {
-            Log(ActivityLevel.Error, $"Could not remove the host: {ex.Message}", ex.ToString());
+            Log(ActivityLevel.Error,
+                Strings.Format("Could not remove the host: {0}", ex.Message), ex.ToString());
         }
     }
 
@@ -3210,7 +3281,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            Log(ActivityLevel.Error, $"Could not open '{path}'", ex.Message);
+            Log(ActivityLevel.Error, Strings.Format("Could not open '{0}'", path), ex.Message);
             return null;
         }
 
@@ -3297,7 +3368,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             // An automatic refresh is not worth interrupting anyone over; the next
             // deliberate action will surface the problem properly.
-            Log(ActivityLevel.Trace, $"Automatic refresh failed: {ex.Message}");
+            Log(ActivityLevel.Trace, Strings.Format("Automatic refresh failed: {0}", ex.Message));
         }
     }
 
@@ -3411,12 +3482,26 @@ public partial class MainWindowViewModel : ViewModelBase
         if (!announce)
             return;
 
-        Log(ActivityLevel.Trace,
-            $"Opened {repository.Name} on {SelectedBranch?.Name ?? "?"} — "
-            + $"{Changes.Count} change{(Changes.Count == 1 ? "" : "s")}, "
-            + $"{Branches.Count} branch{(Branches.Count == 1 ? "" : "es")}"
-            + (info.Ahead > 0 ? $", {info.Ahead} ahead" : string.Empty)
-            + (info.Behind > 0 ? $", {info.Behind} behind" : string.Empty));
+        // Five fragments with two inline plurals and two optional tails. Each piece is
+        // its own translatable sentence or clause now; the line is still assembled here
+        // because which clauses appear depends on the numbers, but no piece of it is
+        // built by splicing a suffix onto a word.
+        var summary = Strings.Format("Opened {0} on {1}",
+            repository.Name, SelectedBranch?.Name ?? "?");
+
+        summary += Strings.Format(" — {0}",
+            Strings.Plural("{0} change", "{0} changes", Changes.Count));
+
+        summary += Strings.Format(", {0}",
+            Strings.Plural("{0} branch", "{0} branches", Branches.Count));
+
+        if (info.Ahead > 0)
+            summary += Strings.Format(", {0}", Strings.Plural("{0} ahead", "{0} ahead", info.Ahead));
+
+        if (info.Behind > 0)
+            summary += Strings.Format(", {0}", Strings.Plural("{0} behind", "{0} behind", info.Behind));
+
+        Log(ActivityLevel.Trace, summary);
     }
 
     /// <summary>Commit diffs are loaded only when a commit is actually selected.</summary>
