@@ -1014,7 +1014,7 @@
                                 Classes.error="{Binding LatestEntry.IsError, FallbackValue=False}" />
 
                         <TextBlock Grid.Column="1" Classes="caption" VerticalAlignment="Center"
-                                   Text="{Binding LatestEntry.Message, FallbackValue='Ready'}" />
+                                   Text="{Binding LatestMessage}" />
 
                         <!-- Chevron only. Points up to expand, down to collapse. -->
                         <Path Grid.Column="2" Classes="icon" VerticalAlignment="Center"

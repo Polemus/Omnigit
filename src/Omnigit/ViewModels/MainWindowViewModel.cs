@@ -232,6 +232,17 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>Most recent line, shown on the collapsed bar.</summary>
     public ActivityEntry? LatestEntry => _log.Entries.Count > 0 ? _log.Entries[^1] : null;
 
+    /// <summary>
+    /// What the collapsed console bar reads before anything has been logged.
+    /// </summary>
+    /// <remarks>
+    /// A property rather than the binding's FallbackValue, which was where this lived.
+    /// FallbackValue takes an object, and the Loc markup extension hands back a binding
+    /// rather than a string - so it would have compiled and then shown the binding's type
+    /// name in the bar the first time anything failed to resolve.
+    /// </remarks>
+    public string LatestMessage => LatestEntry?.Message ?? Strings.Get("Ready");
+
     public bool HasLogEntries => _log.Entries.Count > 0;
 
     [RelayCommand]
@@ -241,6 +252,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         _log.Write(level, message, detail);
         OnPropertyChanged(nameof(LatestEntry));
+        OnPropertyChanged(nameof(LatestMessage));
         OnPropertyChanged(nameof(HasLogEntries));
     }
 
