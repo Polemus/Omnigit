@@ -1,0 +1,197 @@
+{
+  "id": "gitea",
+  "displayName": "Gitea",
+  "auth": ["token"],
+
+  "//mobile": "Every key the desktop reads is held here byte-for-byte; `npm run check:manifests` fails the build if it drifts. The rest is what a phone needs and a clone does not.",
+
+  "tokenHelp": "Settings -> Applications -> Generate New Token, with read access to repository, issue and notification.",
+
+  "recognise": {
+    "path": "/api/v1/version",
+    "expectField": "version"
+  },
+
+  "authHeader": {
+    "name": "Authorization",
+    "value": "token {token}"
+  },
+
+  "endpoints": {
+    "currentUser": "/api/v1/user",
+    "repositories": "/api/v1/user/repos?limit=100",
+    "owners": "/api/v1/user/orgs?limit=100",
+    "pullRequests": "/api/v1/repos/{owner}/{repo}/pulls?state=open&sort=recentupdate&limit=50",
+
+    "//issues": "type=issues is Gitea's own way of keeping pull requests out of the issue list, which is why this manifest needs no pullRequestMarker the way GitHub's does.",
+    "repository": "/api/v1/repos/{owner}/{repo}",
+    "issues": "/api/v1/repos/{owner}/{repo}/issues?state={state}&type=issues&sort=recentupdate&limit=30",
+    "issue": "/api/v1/repos/{owner}/{repo}/issues/{number}",
+    "pullRequest": "/api/v1/repos/{owner}/{repo}/pulls/{number}",
+    "pullRequestFiles": "/api/v1/repos/{owner}/{repo}/pulls/{number}/files?limit=100",
+    "pullRequestDiff": "/api/v1/repos/{owner}/{repo}/pulls/{number}.diff",
+    "pullRequestCommits": "/api/v1/repos/{owner}/{repo}/pulls/{number}/commits?limit=100",
+    "comments": "/api/v1/repos/{owner}/{repo}/issues/{number}/comments",
+    "commits": "/api/v1/repos/{owner}/{repo}/commits?sha={ref}&limit=30",
+    "//commit": "Under git/, unlike the list. verification=false skips a signature check nothing here shows. The files it lists carry a name and a status but no patch and no line counts, so the provider completes them from commitDiff - one request for the whole commit.",
+    "commit": "/api/v1/repos/{owner}/{repo}/git/commits/{sha}?stat=true&verification=false&files=true",
+    "commitDiff": "/api/v1/repos/{owner}/{repo}/git/commits/{sha}.diff",
+    "branches": "/api/v1/repos/{owner}/{repo}/branches?limit=100",
+    "//readme": "Gitea has no readme endpoint of its own, so the file is asked for by name through the ordinary contents call.",
+    "readme": "/api/v1/repos/{owner}/{repo}/contents/README.md",
+    "contents": "/api/v1/repos/{owner}/{repo}/contents/{path}?ref={ref}",
+    "tree": "/api/v1/repos/{owner}/{repo}/contents/{path}?ref={ref}",
+    "notifications": "/api/v1/notifications?all=true&limit=50",
+    "markNotificationRead": "/api/v1/notifications/threads/{id}?to-status=read",
+    "searchRepositories": "/api/v1/repos/search?q={query}&limit=30"
+  },
+
+  "pullRequestDiffAccept": "text/plain",
+  "commitDiffAccept": "text/plain",
+  "markNotificationReadMethod": "PATCH",
+
+  "//ownerFields": "Gitea addresses an organisation by name in the URL, so no id is needed and none is mapped.",
+  "ownerFields": {
+    "login": "username"
+  },
+
+  "//createRepository": "Gitea copied GitHub here too: a different address for an organisation, and a boolean for privacy. Note there is no auto_init - the repository being published already has its first commit, and a README written on the server would be a second root the first push could not fast-forward past.",
+  "createRepository": {
+    "path": "/api/v1/user/repos",
+    "ownerPath": "/api/v1/orgs/{owner}/repos",
+    "nameField": "name",
+    "descriptionField": "description",
+    "privacy": { "field": "private" }
+  },
+
+  "userFields": {
+    "login": "login",
+    "displayName": "full_name",
+    "avatarUrl": "avatar_url"
+  },
+
+  "repositoryFields": {
+    "name": "name",
+    "owner": "owner.login",
+    "cloneUrl": "clone_url",
+    "defaultBranch": "default_branch",
+    "isPrivate": "private",
+    "description": "description",
+    "updatedAt": "updated_at",
+    "stars": "stars_count",
+    "forks": "forks_count",
+    "openIssues": "open_issues_count",
+    "language": "language",
+    "isFork": "fork",
+    "isArchived": "archived",
+    "webUrl": "html_url",
+    "avatarUrl": "owner.avatar_url"
+  },
+
+  "//pullRequestFields": "Gitea copied GitHub's shape here, so these are the defaults. Written out anyway, since a manifest is also the worked example.",
+  "pullRequestFields": {
+    "number": "number",
+    "title": "title",
+    "author": "user.login",
+    "sourceBranch": "head.ref",
+    "targetBranch": "base.ref",
+    "isDraft": "draft",
+    "updatedAt": "updated_at",
+    "webUrl": "html_url",
+    "authorAvatarUrl": "user.avatar_url",
+    "isMerged": "merged",
+    "state": "state",
+    "body": "body",
+    "commentCount": "comments",
+    "additions": "additions",
+    "deletions": "deletions",
+    "changedFiles": "changed_files",
+    "createdAt": "created_at",
+    "labels": "labels"
+  },
+
+  "issueFields": {
+    "number": "number",
+    "title": "title",
+    "author": "user.login",
+    "authorAvatarUrl": "user.avatar_url",
+    "state": "state",
+    "body": "body",
+    "commentCount": "comments",
+    "createdAt": "created_at",
+    "updatedAt": "updated_at",
+    "webUrl": "html_url",
+    "labels": "labels"
+  },
+
+  "labelFields": {
+    "name": "name",
+    "color": "color"
+  },
+
+  "commentFields": {
+    "author": "user.login",
+    "authorAvatarUrl": "user.avatar_url",
+    "body": "body",
+    "createdAt": "created_at"
+  },
+
+  "commitFields": {
+    "sha": "sha",
+    "message": "commit.message",
+    "author": "commit.author.name",
+    "authorAvatarUrl": "author.avatar_url",
+    "committedAt": "commit.author.date",
+    "additions": "stats.additions",
+    "deletions": "stats.deletions",
+    "files": "files"
+  },
+
+  "branchFields": {
+    "name": "name",
+    "sha": "commit.id"
+  },
+
+  "//treeFields": "Gitea copied GitHub's shape here too, so these are the defaults.",
+  "treeFields": {
+    "name": "name",
+    "path": "path",
+    "type": "type",
+    "size": "size"
+  },
+
+  "changedFileFields": {
+    "path": "filename",
+    "status": "status",
+    "additions": "additions",
+    "deletions": "deletions",
+    "patch": "patch"
+  },
+
+  "notificationFields": {
+    "id": "id",
+    "title": "subject.title",
+    "type": "subject.type",
+    "repository": "repository.full_name",
+    "updatedAt": "updated_at",
+    "isUnread": "unread",
+    "webUrl": "subject.html_url"
+  },
+
+  "pullRequestRef": "refs/pull/{number}/head",
+
+  "gitCredentials": {
+    "username": "{login}",
+    "password": "{token}"
+  },
+
+  "webUrls": {
+    "commit": "{base}/{owner}/{repo}/commit/{sha}",
+    "newPullRequest": "{base}/{owner}/{repo}/compare/{target}...{source}?expand=1",
+    "repository": "{base}/{owner}/{repo}",
+    "pullRequest": "{base}/{owner}/{repo}/pulls/{number}",
+    "issue": "{base}/{owner}/{repo}/issues/{number}",
+    "blob": "{base}/{owner}/{repo}/src/branch/{ref}/{path}",
+    "tokenSettings": "{base}/user/settings/applications"
+  }
+}

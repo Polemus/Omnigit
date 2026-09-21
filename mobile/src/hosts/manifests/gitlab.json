@@ -1,0 +1,214 @@
+{
+  "id": "gitlab",
+  "displayName": "GitLab",
+  "auth": ["token"],
+
+  "//mobile": "Every key the desktop reads is held here byte-for-byte; `npm run check:manifests` fails the build if it drifts. GitLab is the site worth reading if you want to know why this format is shaped the way it is - it disagrees with everyone else on nearly every axis at once.",
+
+  "defaultBaseUrl": "https://gitlab.com",
+  "tokenHelp": "Preferences -> Access tokens, with read_api. read_repository alone is not enough to list merge requests.",
+
+  "recognise": {
+    "path": "/api/v4/version",
+    "expectField": "version"
+  },
+
+  "//": "GitLab uses its own header rather than Authorization.",
+  "authHeader": {
+    "name": "PRIVATE-TOKEN",
+    "value": "{token}"
+  },
+
+  "//endpoints": "GitLab addresses a project by a URL-encoded owner/name pair rather than a path, so {owner} and {repo} are separated by %2F here rather than a slash.",
+  "endpoints": {
+    "currentUser": "/api/v4/user",
+    "repositories": "/api/v4/projects?membership=true&per_page=100",
+    "owners": "/api/v4/groups?min_access_level=30&per_page=100",
+    "pullRequests": "/api/v4/projects/{owner}%2F{repo}/merge_requests?state=opened&order_by=updated_at&per_page=50",
+
+    "repository": "/api/v4/projects/{owner}%2F{repo}",
+    "issues": "/api/v4/projects/{owner}%2F{repo}/issues?state={state}&order_by=updated_at&per_page=30",
+    "issue": "/api/v4/projects/{owner}%2F{repo}/issues/{number}",
+    "pullRequest": "/api/v4/projects/{owner}%2F{repo}/merge_requests/{number}",
+    "pullRequestFiles": "/api/v4/projects/{owner}%2F{repo}/merge_requests/{number}/diffs?per_page=100",
+    "pullRequestDiff": "/api/v4/projects/{owner}%2F{repo}/merge_requests/{number}/raw_diffs",
+    "pullRequestCommits": "/api/v4/projects/{owner}%2F{repo}/merge_requests/{number}/commits?per_page=100",
+
+    "//comments": "The one place a merge request is not an issue with another name: GitLab files their conversations under separate addresses, so both are named. Everywhere else pullRequestComments is absent and comments serves both.",
+    "comments": "/api/v4/projects/{owner}%2F{repo}/issues/{number}/notes?per_page=50&sort=asc",
+    "pullRequestComments": "/api/v4/projects/{owner}%2F{repo}/merge_requests/{number}/notes?per_page=50&sort=asc",
+
+    "//commits": "ref_name, not sha or ref - GitLab's own spelling for the branch to list history from.",
+    "commits": "/api/v4/projects/{owner}%2F{repo}/repository/commits?ref_name={ref}&per_page=30",
+    "//commit": "The commit carries its line totals but not its files. Those are a list of their own at commitFiles, each with its patch in the same diff field a merge request's files use - so there is no raw-diff fallback to name, and none is needed.",
+    "commit": "/api/v4/projects/{owner}%2F{repo}/repository/commits/{sha}",
+    "commitFiles": "/api/v4/projects/{owner}%2F{repo}/repository/commits/{sha}/diff?per_page=100",
+    "branches": "/api/v4/projects/{owner}%2F{repo}/repository/branches?per_page=100",
+
+    "//readme": "GitLab will not serve a file without being told which ref, even for the default branch, so HEAD is named explicitly. The dot in README.md is encoded because the path itself is a single URL segment here.",
+    "readme": "/api/v4/projects/{owner}%2F{repo}/repository/files/README%2Emd?ref=HEAD",
+    "//contents": "Two addresses, not one: GitLab lists a directory from repository/tree and reads a file from repository/files, which is why the format has a separate tree endpoint at all. Note {encodedPath} rather than {path} - a file is named by its whole path inside a single URL segment, so src/app/index.tsx has to arrive as src%2Fapp%2Findex.tsx.",
+    "contents": "/api/v4/projects/{owner}%2F{repo}/repository/files/{encodedPath}?ref={ref}",
+    "tree": "/api/v4/projects/{owner}%2F{repo}/repository/tree?path={path}&ref={ref}&per_page=100",
+
+    "//notifications": "GitLab has no notification inbox; todos are the nearest thing and carry the same three facts a row needs.",
+    "notifications": "/api/v4/todos?state=pending&per_page=50",
+    "readNotifications": "/api/v4/todos?state=done&per_page=50",
+    "markNotificationRead": "/api/v4/todos/{id}/mark_as_done",
+    "searchRepositories": "/api/v4/projects?search={query}&membership=true&per_page=30"
+  },
+
+  "pullRequestDiffAccept": "text/plain",
+  "markNotificationReadMethod": "POST",
+
+  "//issueStates": "GitLab says opened where everyone else says open. Asking it for state=open returns everything rather than failing, so without this the closed filter would quietly do nothing.",
+  "issueStates": {
+    "open": "opened",
+    "closed": "closed"
+  },
+
+  "//ownerFields": "A GitLab group is addressed by a numeric id rather than by name, so both are mapped: full_path is what the user recognises, id is what the create call needs. min_access_level=30 above asks only for groups the user is a developer of or better - the rest are ones they could not create in anyway.",
+  "ownerFields": {
+    "login": "full_path",
+    "id": "id"
+  },
+
+  "//createRepository": "The three ways GitLab differs from everyone else, in one block: one address for both personal and group projects, the group named by a numeric namespace_id in the body rather than in the URL, and privacy spelled as a word instead of a boolean. This is the write-side mirror of the visibility mapping in repositoryFields.",
+  "createRepository": {
+    "path": "/api/v4/projects",
+    "nameField": "name",
+    "descriptionField": "description",
+    "privacy": {
+      "field": "visibility",
+      "whenPrivate": "private",
+      "whenPublic": "public"
+    },
+    "ownerField": {
+      "field": "namespace_id",
+      "source": "id"
+    }
+  },
+
+  "userFields": {
+    "login": "username",
+    "displayName": "name",
+    "avatarUrl": "avatar_url"
+  },
+
+  "//repositoryFields": "Note how little of this matches Gitea: different field names, a nested owner path, and a visibility string instead of a boolean.",
+  "repositoryFields": {
+    "name": "path",
+    "owner": "namespace.full_path",
+    "cloneUrl": "http_url_to_repo",
+    "defaultBranch": "default_branch",
+    "isPrivate": { "path": "visibility", "equals": "private" },
+    "description": "description",
+    "updatedAt": "last_activity_at",
+    "stars": "star_count",
+    "forks": "forks_count",
+    "openIssues": "open_issues_count",
+    "isArchived": "archived",
+    "webUrl": "web_url",
+    "avatarUrl": "avatar_url"
+  },
+
+  "//gitCredentials": "GitLab wants a fixed username with the token as the password.",
+  "gitCredentials": {
+    "username": "oauth2",
+    "password": "{token}"
+  },
+
+  "//pullRequestFields": "A merge request is a pull request under another name. Note iid, not id: the per-project number is what appears in the URL and in the ref, while id is global and would name someone else's merge request entirely.",
+  "pullRequestFields": {
+    "number": "iid",
+    "title": "title",
+    "author": "author.username",
+    "sourceBranch": "source_branch",
+    "targetBranch": "target_branch",
+    "isDraft": "draft",
+    "updatedAt": "updated_at",
+    "webUrl": "web_url",
+    "authorAvatarUrl": "author.avatar_url",
+    "isMerged": { "path": "state", "equals": "merged" },
+    "state": "state",
+    "body": "description",
+    "commentCount": "user_notes_count",
+    "createdAt": "created_at",
+    "labels": "labels"
+  },
+
+  "//issueFields": "Same story as merge requests: iid rather than id, description rather than body, and labels that arrive as bare strings with no colour attached.",
+  "issueFields": {
+    "number": "iid",
+    "title": "title",
+    "author": "author.username",
+    "authorAvatarUrl": "author.avatar_url",
+    "state": "state",
+    "body": "description",
+    "commentCount": "user_notes_count",
+    "createdAt": "created_at",
+    "updatedAt": "updated_at",
+    "webUrl": "web_url",
+    "labels": "labels"
+  },
+
+  "commentFields": {
+    "author": "author.username",
+    "authorAvatarUrl": "author.avatar_url",
+    "body": "body",
+    "createdAt": "created_at"
+  },
+
+  "//commitFields": "id, not sha, and the message sits at the top level rather than under a commit object.",
+  "commitFields": {
+    "sha": "id",
+    "message": "message",
+    "author": "author_name",
+    "committedAt": "committed_date",
+    "additions": "stats.additions",
+    "deletions": "stats.deletions"
+  },
+
+  "branchFields": {
+    "name": "name",
+    "sha": "commit.id"
+  },
+
+  "//treeFields": "GitLab says tree and blob where everyone else says dir and file. The provider normalises the pair, so the manifest only has to name the field.",
+  "treeFields": {
+    "name": "name",
+    "path": "path",
+    "type": "type"
+  },
+
+  "//changedFileFields": "GitLab describes a change with three booleans - new_file, deleted_file, renamed_file - rather than one status word, and counts no lines per file. So status and the counts are deliberately left unmapped: a row says Changed rather than guessing a word, and the provider counts the lines from the patch itself.",
+  "changedFileFields": {
+    "path": "new_path",
+    "patch": "diff"
+  },
+
+  "//notificationFields": "A todo, described as a notification. state is pending until it is acted on, which is the nearest thing GitLab has to unread.",
+  "notificationFields": {
+    "id": "id",
+    "title": "target.title",
+    "type": "target_type",
+    "repository": "project.path_with_namespace",
+    "updatedAt": "updated_at",
+    "isUnread": { "path": "state", "equals": "pending" },
+    "webUrl": "target_url"
+  },
+
+  "//pullRequestRef": "GitLab files merge request heads somewhere else entirely, which is why this is a manifest field and not a constant.",
+  "pullRequestRef": "refs/merge-requests/{number}/head",
+
+  "//webUrls": "The one place GitLab's website differs in shape from everyone else's: a /-/ between the project and the page. Opening a merge request is a form with its own query parameters rather than a compare page.",
+  "webUrls": {
+    "commit": "{base}/{owner}/{repo}/-/commit/{sha}",
+    "newPullRequest": "{base}/{owner}/{repo}/-/merge_requests/new?merge_request%5Bsource_branch%5D={source}&merge_request%5Btarget_branch%5D={target}",
+    "repository": "{base}/{owner}/{repo}",
+    "pullRequest": "{base}/{owner}/{repo}/-/merge_requests/{number}",
+    "issue": "{base}/{owner}/{repo}/-/issues/{number}",
+    "blob": "{base}/{owner}/{repo}/-/blob/{ref}/{path}",
+    "tokenSettings": "{base}/-/user_settings/personal_access_tokens"
+  }
+}

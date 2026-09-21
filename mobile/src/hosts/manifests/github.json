@@ -1,0 +1,197 @@
+{
+  "id": "github",
+  "displayName": "GitHub",
+  "auth": ["device", "token"],
+
+  "//defaultBaseUrl": "The website, not the API. It is what a person recognises and types, and it is what every link in webUrls is built from.",
+  "defaultBaseUrl": "https://github.com",
+
+  "//apiBaseUrl": "The one site whose API is on another host entirely. GitHub Enterprise is not like this - it serves /api/v3 from its own origin - so an Enterprise manifest sets this to the relative 'api/v3' instead.",
+  "apiBaseUrl": "https://api.github.com",
+
+  "tokenHelp": "A fine-grained or classic token with repo and read:org. Add notifications to see the inbox.",
+
+  "recognise": {
+    "path": "/",
+    "expectField": "current_user_url"
+  },
+
+  "authHeader": {
+    "name": "Authorization",
+    "value": "Bearer {token}"
+  },
+
+  "//deviceLogin": "The reason the desktop keeps GitHub in C#: signing in is a conversation rather than one call. Describing it as data works here because a phone has exactly one browser and one shape of flow. The client id is a public device-flow id with no secret attached - it identifies the app, it does not authorise anything - and it is the same one the desktop ships.",
+  "deviceLogin": {
+    "clientId": "Ov23liTTmSX5cD9G8Ywg",
+    "codePath": "/login/device/code",
+    "tokenPath": "/login/oauth/access_token",
+    "scope": "repo read:org notifications"
+  },
+
+  "endpoints": {
+    "currentUser": "/user",
+    "repositories": "/user/repos?per_page=50&sort=updated&affiliation=owner,collaborator,organization_member",
+    "owners": "/user/orgs?per_page=100",
+    "pullRequests": "/repos/{owner}/{repo}/pulls?state=open&sort=updated&direction=desc&per_page=30",
+
+    "repository": "/repos/{owner}/{repo}",
+    "issues": "/repos/{owner}/{repo}/issues?state={state}&sort=updated&direction=desc&per_page=30",
+    "issue": "/repos/{owner}/{repo}/issues/{number}",
+    "pullRequest": "/repos/{owner}/{repo}/pulls/{number}",
+    "pullRequestFiles": "/repos/{owner}/{repo}/pulls/{number}/files?per_page=100",
+    "pullRequestDiff": "/repos/{owner}/{repo}/pulls/{number}",
+    "pullRequestCommits": "/repos/{owner}/{repo}/pulls/{number}/commits?per_page=100",
+    "comments": "/repos/{owner}/{repo}/issues/{number}/comments?per_page=50",
+    "//commits": "sha= names the branch to list history from. Empty means the default branch, which is what the repository screen asks for before it knows the branch names.",
+    "commits": "/repos/{owner}/{repo}/commits?sha={ref}&per_page=30",
+    "//commit": "One address, two answers, as with pull requests: JSON by default, and the raw diff when commitDiffAccept asks for it. The JSON already carries every changed file with its patch, so the diff is fetched only for a file too large for GitHub to inline.",
+    "commit": "/repos/{owner}/{repo}/commits/{sha}",
+    "commitDiff": "/repos/{owner}/{repo}/commits/{sha}",
+    "branches": "/repos/{owner}/{repo}/branches?per_page=100",
+    "readme": "/repos/{owner}/{repo}/readme",
+    "//contents": "One address serves both a file and a directory here: ask for a folder and GitHub answers with an array, ask for a file and it answers with one base64 object. So tree names the same endpoint rather than a different one.",
+    "contents": "/repos/{owner}/{repo}/contents/{path}?ref={ref}",
+    "tree": "/repos/{owner}/{repo}/contents/{path}?ref={ref}",
+    "notifications": "/notifications?all=true&per_page=50",
+    "markNotificationRead": "/notifications/threads/{id}",
+    "searchRepositories": "/search/repositories?q={query}&per_page=30",
+    "starred": "/user/starred?per_page=50"
+  },
+
+  "pullRequestDiffAccept": "application/vnd.github.diff",
+  "commitDiffAccept": "application/vnd.github.diff",
+  "markNotificationReadMethod": "PATCH",
+
+  "userFields": {
+    "login": "login",
+    "displayName": "name",
+    "avatarUrl": "avatar_url"
+  },
+
+  "repositoryFields": {
+    "name": "name",
+    "owner": "owner.login",
+    "cloneUrl": "clone_url",
+    "defaultBranch": "default_branch",
+    "isPrivate": "private",
+    "description": "description",
+    "updatedAt": "updated_at",
+    "stars": "stargazers_count",
+    "forks": "forks_count",
+    "openIssues": "open_issues_count",
+    "language": "language",
+    "isFork": "fork",
+    "isArchived": "archived",
+    "webUrl": "html_url",
+    "avatarUrl": "owner.avatar_url"
+  },
+
+  "pullRequestFields": {
+    "number": "number",
+    "title": "title",
+    "author": "user.login",
+    "authorAvatarUrl": "user.avatar_url",
+    "sourceBranch": "head.ref",
+    "targetBranch": "base.ref",
+    "isDraft": "draft",
+    "isMerged": "merged",
+    "state": "state",
+    "body": "body",
+    "commentCount": "comments",
+    "additions": "additions",
+    "deletions": "deletions",
+    "changedFiles": "changed_files",
+    "createdAt": "created_at",
+    "updatedAt": "updated_at",
+    "webUrl": "html_url",
+    "labels": "labels"
+  },
+
+  "issueFields": {
+    "number": "number",
+    "title": "title",
+    "author": "user.login",
+    "authorAvatarUrl": "user.avatar_url",
+    "state": "state",
+    "body": "body",
+    "commentCount": "comments",
+    "createdAt": "created_at",
+    "updatedAt": "updated_at",
+    "webUrl": "html_url",
+    "labels": "labels"
+  },
+
+  "labelFields": {
+    "name": "name",
+    "color": "color"
+  },
+
+  "commentFields": {
+    "author": "user.login",
+    "authorAvatarUrl": "user.avatar_url",
+    "body": "body",
+    "createdAt": "created_at"
+  },
+
+  "commitFields": {
+    "sha": "sha",
+    "message": "commit.message",
+    "author": "commit.author.name",
+    "authorAvatarUrl": "author.avatar_url",
+    "committedAt": "commit.author.date",
+    "additions": "stats.additions",
+    "deletions": "stats.deletions",
+    "files": "files"
+  },
+
+  "branchFields": {
+    "name": "name",
+    "sha": "commit.sha"
+  },
+
+  "treeFields": {
+    "name": "name",
+    "path": "path",
+    "type": "type",
+    "size": "size"
+  },
+
+  "changedFileFields": {
+    "path": "filename",
+    "status": "status",
+    "additions": "additions",
+    "deletions": "deletions",
+    "patch": "patch"
+  },
+
+  "notificationFields": {
+    "id": "id",
+    "title": "subject.title",
+    "type": "subject.type",
+    "repository": "repository.full_name",
+    "updatedAt": "updated_at",
+    "isUnread": "unread",
+    "webUrl": "subject.url"
+  },
+
+  "//pullRequestMarker": "GitHub is the only site that returns pull requests from its issues endpoint. Anything carrying this key is a pull request wearing an issue's clothes, and the issue list drops it.",
+  "pullRequestMarker": "pull_request",
+
+  "pullRequestRef": "refs/pull/{number}/head",
+
+  "gitCredentials": {
+    "username": "{login}",
+    "password": "{token}"
+  },
+
+  "webUrls": {
+    "repository": "{base}/{owner}/{repo}",
+    "commit": "{base}/{owner}/{repo}/commit/{sha}",
+    "pullRequest": "{base}/{owner}/{repo}/pull/{number}",
+    "issue": "{base}/{owner}/{repo}/issues/{number}",
+    "blob": "{base}/{owner}/{repo}/blob/{ref}/{path}",
+    "newPullRequest": "{base}/{owner}/{repo}/compare/{target}...{source}?expand=1",
+    "tokenSettings": "{base}/settings/tokens"
+  }
+}
