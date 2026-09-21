@@ -25,6 +25,14 @@
 
                 <TextBlock Classes="sectionLabel" Text="SETTINGS" Margin="18,0,18,8" />
 
+                <Button Classes="settingsTab" Content="{Loc 'General'}"
+                        Classes.active="{Binding IsGeneralSection}"
+                        Command="{Binding ShowSettingsSectionCommand}">
+                    <Button.CommandParameter>
+                        <x:Int32>3</x:Int32>
+                    </Button.CommandParameter>
+                </Button>
+
                 <Button Classes="settingsTab" Content="Accounts"
                         Classes.active="{Binding IsAccountsSection}"
                         Command="{Binding ShowSettingsSectionCommand}">
@@ -65,6 +73,53 @@
         <Panel Grid.Column="2">
 
             <!-- ===================== Accounts ===================== -->
+            <!-- ===================== General ===================== -->
+            <ScrollViewer IsVisible="{Binding IsGeneralSection}">
+                <StackPanel MaxWidth="880" Margin="32,28,32,48" Spacing="22"
+                            HorizontalAlignment="Left">
+
+                    <StackPanel Spacing="8">
+                        <TextBlock Classes="h1" Text="{Loc 'General'}" />
+                        <TextBlock Classes="caption" TextWrapping="Wrap"
+                                   Text="{Loc 'Settings that apply to Omnigit itself rather than to one repository.'}" />
+                    </StackPanel>
+
+                    <!-- Through a template for the same reason the About pane uses one:
+                         everything inside binds against the language view model, and a
+                         template is where x:DataType can change without the enclosing
+                         scope changing with it. -->
+                    <ContentControl Content="{Binding Language}">
+                        <ContentControl.ContentTemplate>
+                            <DataTemplate x:DataType="vm:LanguageViewModel">
+                                <Border Classes="card">
+                                    <StackPanel Spacing="12">
+
+                                        <StackPanel Spacing="3">
+                                            <TextBlock Classes="h2" Text="{Loc 'Language'}" />
+                                            <TextBlock Classes="muted" TextWrapping="Wrap"
+                                                       Text="{Loc 'Takes effect straight away. Anything not yet translated stays in English.'}" />
+                                        </StackPanel>
+
+                                        <ComboBox HorizontalAlignment="Left" MinWidth="260"
+                                                  ItemsSource="{Binding Options}"
+                                                  SelectedItem="{Binding SelectedOption}">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate x:DataType="vm:LanguageOption">
+                                                    <TextBlock Text="{Binding Label}" />
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+
+                                        <TextBlock Classes="caption" TextWrapping="Wrap"
+                                                   Text="{Loc 'Omnigit is translated by the people who use it. To add or fix a language, see the link in the README.'}" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ContentControl.ContentTemplate>
+                    </ContentControl>
+                </StackPanel>
+            </ScrollViewer>
+
             <ScrollViewer IsVisible="{Binding IsAccountsSection}">
                 <StackPanel MaxWidth="880" Margin="32,28,32,48" Spacing="22"
                             HorizontalAlignment="Left">

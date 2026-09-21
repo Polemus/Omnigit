@@ -43,7 +43,7 @@ public partial class MainWindowViewModel : ViewModelBase
                HostProviderRegistry.Create(new System.Net.Http.HttpClient()),
                new AccountStore(new FileCredentialStore()), new FileCredentialStore(),
                new ActivityLog(), new SystemShell(), new RepositoryWatcher(), new UpdateService(),
-               designTime: true)
+               new SettingsStore(), designTime: true)
     {
         LoadDesignTimeData();
     }
@@ -58,9 +58,10 @@ public partial class MainWindowViewModel : ViewModelBase
         IActivityLog log,
         ISystemShell shell,
         IRepositoryWatcher watcher,
-        IUpdateService update)
+        IUpdateService update,
+        ISettingsStore settings)
         : this(git, store, picker, hosts, accountStore, credentials, log, shell, watcher, update,
-               designTime: false)
+               settings, designTime: false)
     {
     }
 
@@ -75,6 +76,7 @@ public partial class MainWindowViewModel : ViewModelBase
         ISystemShell shell,
         IRepositoryWatcher watcher,
         IUpdateService update,
+        ISettingsStore settings,
         bool designTime)
     {
         _git = git;
@@ -89,6 +91,7 @@ public partial class MainWindowViewModel : ViewModelBase
         _isDesignTime = designTime;
 
         Update = new UpdateViewModel(update, log, shell, designTime);
+        Language = new LanguageViewModel(settings);
 
         // The dot on the settings button is the only part of the update state the rest
         // of the app shows, and it lives in a view model the header does not bind to.
@@ -100,6 +103,12 @@ public partial class MainWindowViewModel : ViewModelBase
 
         if (!designTime)
             watcher.Changed += OnRepositoryChangedOnDisk;
+
+        // Every label this view model computes is English assembled in C#, so changing
+        // language has to make all of them re-read. INPC treats a null name as "every
+        // property changed", which is exactly the claim being made and saves naming the
+        // hundred and fifty properties that would otherwise be listed here and go stale.
+        Strings.Changed += () => OnPropertyChanged((string?)null);
 
         // An error the user can't see is an error they can't act on.
         log.ErrorLogged += (_, _) => IsConsoleExpanded = true;
@@ -789,14 +798,22 @@ public partial class MainWindowViewModel : ViewModelBase
     [NotifyPropertyChangedFor(nameof(IsAccountsSection))]
     [NotifyPropertyChangedFor(nameof(IsHostsSection))]
     [NotifyPropertyChangedFor(nameof(IsAboutSection))]
+    [NotifyPropertyChangedFor(nameof(IsGeneralSection))]
     public partial int SettingsSection { get; set; }
 
     public bool IsAccountsSection => SettingsSection == 0;
     public bool IsHostsSection => SettingsSection == 1;
     public bool IsAboutSection => SettingsSection == 2;
 
+    // Numbered after the three that shipped first, and drawn above them: the numbers are
+    // a rail's CommandParameter, not an order.
+    public bool IsGeneralSection => SettingsSection == 3;
+
     /// <summary>The version, and the one button that changes it.</summary>
     public UpdateViewModel Update { get; }
+
+    /// <summary>The language picker on the settings page.</summary>
+    public LanguageViewModel Language { get; }
 
     /// <summary>
     /// Mirrors <see cref="UpdateViewModel.IsUpdateAvailable"/> so the header's settings

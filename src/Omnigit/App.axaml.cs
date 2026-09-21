@@ -13,8 +13,16 @@ namespace Omnigit;
 
 public partial class App : Application
 {
+    private readonly SettingsStore _settings = new();
+
     public override void Initialize()
     {
+        // Before the first view exists, so the window is drawn in the user's language
+        // rather than drawn in English and corrected a moment later. A language this
+        // build does not carry, or a machine that will not say which it is, leaves the
+        // app in English - Strings.Use decides, and never throws.
+        Strings.Use(_settings.Load().Language ?? SystemLanguage.Detect());
+
         AvaloniaXamlLoader.Load(this);
         ApplyBrandAccent();
     }
@@ -77,7 +85,8 @@ public partial class App : Application
                 log,
                 new SystemShell(),
                 new RepositoryWatcher(),
-                new UpdateService());
+                new UpdateService(),
+                _settings);
 
             desktop.MainWindow = new MainWindow { DataContext = viewModel };
 

@@ -286,6 +286,55 @@ public class LocalizationTests
         => Assert.Equal("en", Strings.Available()[0]);
 
     /// <summary>
+    /// The one test that exercises the whole chain rather than a piece of it: the csproj
+    /// embedding a file whose name is not an identifier, Strings.Use finding it by that
+    /// name, the reader parsing what extract.py wrote, and a lookup coming back changed.
+    /// The fake language is the only catalogue this repo generates, so it is the only one
+    /// that can be asserted on without a translator.
+    /// </summary>
+    [Fact]
+    public void The_generated_fake_language_loads_and_changes_what_the_app_says()
+    {
+        try
+        {
+            Assert.Contains("qps-ploc", Strings.Available());
+
+            Strings.Use("qps-ploc");
+
+            Assert.Equal("qps-ploc", Strings.Current);
+
+            var cancel = Strings.Get("Cancel");
+            Assert.NotEqual("Cancel", cancel);
+            Assert.StartsWith("[!!", cancel);
+
+            // The padding is the point: a control sized to "Cancel" has to cope with this.
+            Assert.True(cancel.Length > "Cancel".Length);
+        }
+        finally
+        {
+            Strings.Use(null);
+        }
+    }
+
+    /// <summary>
+    /// A string that was never put through Strings shows as plain English under the fake
+    /// language - which is exactly how a missed one is spotted by looking at the app.
+    /// </summary>
+    [Fact]
+    public void A_string_the_extractor_never_saw_stays_English_under_the_fake_language()
+    {
+        try
+        {
+            Strings.Use("qps-ploc");
+            Assert.Equal("nobody ran the extractor over this", Strings.Get("nobody ran the extractor over this"));
+        }
+        finally
+        {
+            Strings.Use(null);
+        }
+    }
+
+    /// <summary>
     /// Without a catalogue the count still decides, so every call site can be written as
     /// a plural from the start rather than being revisited when a translation arrives.
     /// </summary>

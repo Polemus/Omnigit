@@ -58,6 +58,13 @@ jobs:
       - name: Test
         run: dotnet test Omnigit.slnx --configuration Release --no-build --verbosity normal
 
+      # The English in this app lives in the source, and the template is what
+      # translators are handed. A string added without regenerating it is a string
+      # nobody can translate, and nothing else would ever say so - the app builds,
+      # the tests pass, and the sentence is simply missing from every language.
+      - name: Translation template is current
+        run: python3 build/i18n/extract.py --check
+
   # The Linux packages carry a desktop entry and an AppStream file that nothing
   # in the build compiles, so a mistake in either is invisible until a software
   # centre quietly ignores the app - or, for the Flatpak, until a release is
