@@ -8,11 +8,12 @@
  * closes it. Items are text only, as Android's overflow menus conventionally are.
  */
 
-import { DropdownMenu, DropdownMenuItem, Host, IconButton, Text } from '@expo/ui/jetpack-compose';
+import { DropdownMenu, DropdownMenuItem, IconButton, Text } from '@expo/ui/jetpack-compose';
 import { useState } from 'react';
 
 import { usePalette } from '../theme/use-palette';
 import type { HeaderAction } from './header-menu';
+import { Host } from './host';
 import { Icon } from './icon';
 import { Icons } from './icons';
 

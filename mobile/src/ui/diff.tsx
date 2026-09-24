@@ -6,13 +6,15 @@
  * horizontally scrollable code layout that works on a phone.
  */
 
-import { useMemo } from 'react';
-import { ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { useMemo, useState } from 'react';
+import { ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { ChangedFile } from '../hosts/types';
 import { Fonts, Spacing, type Palette } from '../theme/tokens';
 import { usePalette } from '../theme/use-palette';
+import { Text } from './scaled-text';
+import { useBottomClearance } from './screen';
 import {
   CATEGORY_TOKEN,
   grammarFor,
@@ -38,6 +40,15 @@ export function DiffView({ file }: { file: ChangedFile }) {
   const palette = usePalette();
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const clearance = useBottomClearance();
+  // The width the diff actually has, measured as `CodeView` measures it.
+  const [viewport, setViewport] = useState(0);
+
+  // And the bottom, the same way: `contentInsetAdjustmentBehavior` keeps the last line
+  // clear of the home indicator on iOS and is iOS-only, so Android adds the inset itself.
+  // Without it the end of a diff is drawn under the gesture bar, or under the three
+  // navigation buttons, where nothing can be read.
+  const bottomPadding = Spacing.four + (process.env.EXPO_OS === 'android' ? clearance : 0);
 
   const { lines, total, truncated } = useMemo(() => {
     const parsed = parsePatch(file.patch ?? '', file.path);
@@ -57,16 +68,20 @@ export function DiffView({ file }: { file: ChangedFile }) {
   return (
     <ScrollView
       style={styles.fill}
+      onLayout={(event) => setViewport(event.nativeEvent.layout.width)}
       contentInsetAdjustmentBehavior="automatic"
-      contentContainerStyle={styles.vertical}>
+      contentContainerStyle={{ paddingBottom: bottomPadding }}>
       <ScrollView
         horizontal
         nestedScrollEnabled
         showsHorizontalScrollIndicator
         contentContainerStyle={styles.horizontal}>
-        {/* The visible width, as in `CodeView`: sideways the screen is inset from the
-            notch, and rows the width of the whole window would scroll by that much. */}
-        <View style={{ minWidth: width - insets.left - insets.right }}>
+        {/* The visible width, as in `CodeView`: sideways the diff is inset from the notch
+            and may have the tree of changed files beside it, and rows the width of the
+            whole window would scroll sideways by whatever those take. Until the first
+            layout, the window less the side insets - the answer whenever the diff has the
+            screen to itself. */}
+        <View style={{ minWidth: viewport || width - insets.left - insets.right }}>
           {lines.map((line, index) => (
             <DiffRow
               key={index}
@@ -239,9 +254,6 @@ function nextLine(line: number | undefined): number | undefined {
 const styles = StyleSheet.create({
   fill: {
     flex: 1,
-  },
-  vertical: {
-    paddingBottom: Spacing.four,
   },
   horizontal: {
     paddingRight: Spacing.five,

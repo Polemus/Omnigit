@@ -12,9 +12,10 @@
  * to get out of.
  */
 
-import { Host, List } from '@expo/ui';
+import { List } from '@expo/ui';
 import { StyleSheet, View } from 'react-native';
 
+import { Host } from './host';
 import { ListItem } from './list-item';
 import { useTabBarClearance } from './screen';
 

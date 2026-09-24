@@ -3,7 +3,6 @@
  * that opens each patch in the dedicated code-style diff viewer.
  */
 
-import { FieldGroup, Host } from '@expo/ui';
 import * as Haptics from 'expo-haptics';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
@@ -15,13 +14,16 @@ import { useProvider } from '@/state/accounts';
 import { usePalette } from '@/theme/use-palette';
 import { pullRequestState, type ReviewState } from '@/ui/badges';
 import { ChangedFileSummary, ChangeTotals } from '@/ui/changed-files';
+import { FieldGroup } from '@/ui/field-group';
 import { iconForFile } from '@/ui/file-icons';
 import { Conversation } from '@/ui/conversation';
 import { GroupedContent } from '@/ui/grouped-content';
 import { headerMenu } from '@/ui/header-menu';
+import { Host } from '@/ui/host';
 import { Icon } from '@/ui/icon';
 import { Icons } from '@/ui/icons';
 import { ListItem } from '@/ui/list-item';
+import { NavigationBarStrip } from '@/ui/screen';
 import { Empty, Failed, Loading } from '@/ui/states';
 
 const SECTIONS = ['Conversation', 'Changed files'] as const;
@@ -259,6 +261,7 @@ export default function PullRequestScreen() {
           )}
         </FieldGroup>
       </Host>
+      <NavigationBarStrip />
     </>
   );
 }

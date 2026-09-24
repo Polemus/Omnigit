@@ -9,7 +9,7 @@
  * manifest and optional edit-time server first, then keys this form with both values.
  */
 
-import { FieldGroup, Host, TextInput } from '@expo/ui';
+import { TextInput } from '@expo/ui';
 import * as Clipboard from 'expo-clipboard';
 import * as Haptics from 'expo-haptics';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
@@ -29,10 +29,14 @@ import {
 } from '@/hosts/sign-in';
 import { accountKey, type Account } from '@/hosts/types';
 import { useAccounts } from '@/state/accounts';
+import { useLock } from '@/state/lock';
 import { usePalette } from '@/theme/use-palette';
+import { FieldGroup, SectionRow } from '@/ui/field-group';
+import { Host } from '@/ui/host';
 import { Icon } from '@/ui/icon';
 import { Icons } from '@/ui/icons';
 import { ListItem } from '@/ui/list-item';
+import { NavigationBarStrip } from '@/ui/screen';
 import { Empty, Loading } from '@/ui/states';
 import { Text } from '@/ui/text';
 
@@ -82,6 +86,7 @@ function SignInForm({
   const router = useRouter();
   const palette = usePalette();
   const { accounts, signIn, signOut } = useAccounts();
+  const lock = useLock();
 
   const [baseUrl, setBaseUrl] = useState(initialBaseUrl ?? manifest.defaultBaseUrl ?? '');
   const [token, setToken] = useState('');
@@ -114,7 +119,17 @@ function SignInForm({
       router.back();
       return;
     }
+
     router.dismissTo('/');
+
+    // A token that can read and write every repository this account can see has just landed
+    // on the phone, and nothing is guarding it. Asked here rather than left to be found in
+    // Settings, because this is the one moment the reason for it is obvious. It is an
+    // ordinary modal with a Cancel on it - declining costs a tap and the warning stays in
+    // Settings. Not offered when replacing a token on an account that already exists.
+    if (!lock.isLoading && !lock.isEnabled && !replaceAccountKey) {
+      router.push('/app-lock');
+    }
   }
 
   async function withToken() {
@@ -210,11 +225,7 @@ function SignInForm({
                       ? 'Requesting a secure browser code…'
                       : `Approve a short code on ${hostOf(baseUrl) || manifest.displayName}.`
                   }
-                  trailing={
-                    busy ? undefined : (
-                      <Icon name={Icons.chevron} size={16} />
-                    )
-                  }>
+                  trailing={busy ? undefined : <Icon name={Icons.chevron} size={16} />}>
                   {busy ? 'Starting sign-in…' : 'Continue in browser'}
                 </ListItem>
                 <FieldGroup.SectionFooter>
@@ -224,20 +235,22 @@ function SignInForm({
             ) : null}
 
             <FieldGroup.Section title={needsAddress ? 'Server address' : 'Server'}>
-              <TextInput
-                defaultValue={baseUrl}
-                onChangeText={setBaseUrl}
-                placeholder={placeholderFor(manifest)}
-                autoCapitalize="none"
-                autoCorrect={false}
-                keyboardType="url"
-                cursorColor={palette.accent}
-                placeholderTextColor={palette.textTertiary}
-                selectionColor={palette.accent}
-                autoFocus={needsAddress}
-                editable={!busy}
-                style={styles.input}
-              />
+              <SectionRow>
+                <TextInput
+                  defaultValue={baseUrl}
+                  onChangeText={setBaseUrl}
+                  placeholder={placeholderFor(manifest)}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  keyboardType="url"
+                  cursorColor={palette.accent}
+                  placeholderTextColor={palette.textTertiary}
+                  selectionColor={palette.accent}
+                  autoFocus={needsAddress}
+                  editable={!busy}
+                  style={styles.input}
+                />
+              </SectionRow>
               <FieldGroup.SectionFooter>
                 <Text>
                   {needsAddress
@@ -248,29 +261,29 @@ function SignInForm({
             </FieldGroup.Section>
 
             <FieldGroup.Section title="Access token">
-              <TextInput
-                defaultValue=""
-                onChangeText={setToken}
-                placeholder="Paste your token"
-                autoCapitalize="none"
-                autoCorrect={false}
-                secureTextEntry
-                cursorColor={palette.accent}
-                placeholderTextColor={palette.textTertiary}
-                selectionColor={palette.accent}
-                editable={!busy}
-                onSubmitEditing={() => void withToken()}
-                returnKeyType="go"
-                style={styles.input}
-              />
+              <SectionRow>
+                <TextInput
+                  defaultValue=""
+                  onChangeText={setToken}
+                  placeholder="Paste your token"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  secureTextEntry
+                  cursorColor={palette.accent}
+                  placeholderTextColor={palette.textTertiary}
+                  selectionColor={palette.accent}
+                  editable={!busy}
+                  onSubmitEditing={() => void withToken()}
+                  returnKeyType="go"
+                  style={styles.input}
+                />
+              </SectionRow>
               {tokenPage ? (
                 <ListItem
                   onPress={openTokenSettings}
                   leading={<Icon name={Icons.openInBrowser} size={20} />}
                   supportingText={hostOf(baseUrl) || manifest.displayName}
-                  trailing={
-                    <Icon name={Icons.chevron} size={16} />
-                  }>
+                  trailing={<Icon name={Icons.chevron} size={16} />}>
                   Create an access token
                 </ListItem>
               ) : null}
@@ -286,11 +299,7 @@ function SignInForm({
                 onPress={busy ? undefined : () => void withToken()}
                 leading={<Icon name={Icons.token} size={20} />}
                 supportingText="Your account is checked with the hosting site before it is saved."
-                trailing={
-                  busy ? undefined : (
-                    <Icon name={Icons.chevron} size={16} />
-                  )
-                }>
+                trailing={busy ? undefined : <Icon name={Icons.chevron} size={16} />}>
                 {busy ? 'Signing in…' : returnToAccount ? 'Save account' : 'Add account'}
               </ListItem>
             </FieldGroup.Section>
@@ -307,6 +316,7 @@ function SignInForm({
           </FieldGroup>
         )}
       </Host>
+      <NavigationBarStrip />
     </>
   );
 }

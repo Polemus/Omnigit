@@ -1,0 +1,55 @@
+diff --git a/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/CustomToolbar.kt b/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/CustomToolbar.kt
+index e0762e8..88632f5 100644
+--- a/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/CustomToolbar.kt
++++ b/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/CustomToolbar.kt
+@@ -3,6 +3,7 @@ package com.swmansion.rnscreens
+ import android.annotation.SuppressLint
+ import android.content.Context
+ import android.os.Build
++import android.util.Log
+ import android.view.Choreographer
+ import android.view.WindowInsets
+ import android.view.WindowManager
+@@ -176,7 +177,22 @@ open class CustomToolbar(
+         // independently so that disabling one does not silently drop the other.
+         val topInset =
+             if (shouldHandleTopInset) {
+-                max(cutoutInsets.top, if (shouldApplyTopInset) systemBarInsets.top else 0)
++                val dispatchedTopInset =
++                    max(cutoutInsets.top, if (shouldApplyTopInset) systemBarInsets.top else 0)
++                // Omnigit patch (patches/react-native-screens+4.26.2.patch): never less than the
++                // window's own top inset. An insets pass can reach this toolbar with the top
++                // already used up by a view on the way down, and taking that at its word drew the
++                // header under the status bar until the toolbar was next re-attached - the only
++                // other place this padding is set.
++                val windowTopInset = windowTopInsetFloor()
++                if (windowTopInset > dispatchedTopInset) {
++                    Log.i(
++                        "RNScreens",
++                        "Header top inset arrived as $dispatchedTopInset px; the window's is " +
++                            "$windowTopInset px, which is used instead.",
++                    )
++                }
++                max(dispatchedTopInset, windowTopInset)
+             } else {
+                 0
+             }
+@@ -219,6 +235,18 @@ open class CustomToolbar(
+         setContentInsetsRelative(config.preferredContentInsetStart, config.preferredContentInsetEnd)
+     }
+ 
++    /**
++     * The status bar's (or cutout's) real height, read off the window rather than from a dispatch.
++     * Zero where a header must not take it: the legacy behaviour, which has its own rules, and a
++     * form sheet, which does not reach the top of the screen.
++     */
++    private fun windowTopInsetFloor(): Int {
++        if (config.legacyTopInsetBehavior) return 0
++        if ((config.parent as? Screen)?.stackPresentation == Screen.StackPresentation.FORM_SHEET) return 0
++        val activity = (context as? ThemedReactContext)?.currentActivity ?: return 0
++        return getDecorViewTopInset(activity.window.decorView)
++    }
++
+     private fun applyExactPadding(
+         left: Int,
+         top: Int,

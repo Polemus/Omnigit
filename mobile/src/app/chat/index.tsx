@@ -11,7 +11,6 @@
  * button that does (`assistant-button.tsx`), so arriving here any other way is quiet.
  */
 
-import { Host } from '@expo/ui';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
@@ -21,7 +20,6 @@ import {
   KeyboardAvoidingView,
   Pressable,
   StyleSheet,
-  Text,
   TextInput,
   View,
 } from 'react-native';
@@ -33,8 +31,10 @@ import { usePalette } from '@/theme/use-palette';
 import { AssistantOrb } from '@/ui/assistant-orb';
 import { ChatBubble, TypingBubble } from '@/ui/chat-bubble';
 import { GlassSurface } from '@/ui/glass';
+import { Host } from '@/ui/host';
 import { Icon } from '@/ui/icon';
 import { Icons } from '@/ui/icons';
+import { Text } from '@/ui/scaled-text';
 
 interface Message {
   id: string;

@@ -10,9 +10,10 @@
  */
 
 import { useEffect, useState } from 'react';
-import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
+import { Animated, Easing, StyleSheet, View } from 'react-native';
 
 import type { Palette } from '../theme/tokens';
+import { Text } from './scaled-text';
 
 export function ChatBubble({
   text,

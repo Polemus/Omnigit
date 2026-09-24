@@ -1,7 +1,7 @@
 /**
  * One repository, in the same native grouped structure as the pull request and issue
  * screens - a summary, the details, and the chosen content as a section of its own -
- * with the glass pill switcher pinned above it choosing what that content is.
+ * with the compact view switcher pinned above it choosing what that content is.
  *
  * The pills stay outside the list on purpose. On iOS the segmented control is its own
  * SwiftUI island (a `Host` around a segmented `Picker`), so inside the list it would be
@@ -16,8 +16,7 @@
  * Each view owning its queries means the views you are not looking at never fetch.
  */
 
-import { FieldGroup, Host, List } from '@expo/ui';
-import { SegmentedControl } from '@expo/ui/community/segmented-control';
+import { List } from '@expo/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import * as Clipboard from 'expo-clipboard';
 import * as Haptics from 'expo-haptics';
@@ -41,11 +40,14 @@ import { useProvider } from '@/state/accounts';
 import { Spacing } from '@/theme/tokens';
 import { usePalette } from '@/theme/use-palette';
 import { AssistantButton } from '@/ui/assistant-button';
+import { FieldGroup } from '@/ui/field-group';
 import { FileBrowserSection } from '@/ui/file-browser';
 import { iconForLanguage } from '@/ui/file-icons';
-import { ControlBar, MenuPickerRow } from '@/ui/control-bar';
+import { ControlBar, ControlBarSegments, MenuPickerRow } from '@/ui/control-bar';
 import { GroupedContent } from '@/ui/grouped-content';
 import { headerMenu } from '@/ui/header-menu';
+import { ScopeHeaderTitle } from '@/ui/header-scope';
+import { Host, useHostScheme } from '@/ui/host';
 import { Icon } from '@/ui/icon';
 import { hostLabel } from '@/ui/identity';
 import { Icons } from '@/ui/icons';
@@ -53,15 +55,17 @@ import { ListItem } from '@/ui/list-item';
 import { Markdown } from '@/ui/markdown';
 import { relativeTime } from '@/ui/relative-time';
 import { CommitRow, IssueRow, PullRequestRow } from '@/ui/rows';
+import { NavigationBarStrip } from '@/ui/screen';
 import { Empty } from '@/ui/states';
 import { Text } from '@/ui/text';
 
-// TEMPORARY (Android freeze diagnosis): deliberately passing no style to this screen's
-// `FieldGroup.Section`s. The 'modifiers' prop error either comes from our style being
-// converted into Compose modifiers (`transformToModifiers`), or from the ones FieldSection
-// builds for itself - and only one of those is ours to fix. If the error stops on this
-// screen, it is the former. Restore the padding below once that is known.
-const androidSectionStyle = undefined;
+// The same padding every other screen gives its sections on Android. It was taken off
+// here for a while to find out whether section styles caused the 'modifiers' prop error;
+// they did not - a list row whose tap handler goes away does (`ui/list-item.android.tsx`).
+const androidSectionStyle =
+  process.env.EXPO_OS === 'android'
+    ? ({ paddingHorizontal: 16, paddingTop: 16 } as const)
+    : undefined;
 
 type RepoView = 'about' | 'code' | 'pulls' | 'issues' | 'commits';
 
@@ -101,6 +105,7 @@ export default function RepositoryScreen() {
   }>();
   const router = useRouter();
   const palette = usePalette();
+  const hostScheme = useHostScheme();
   const provider = useProvider(account);
   const queryClient = useQueryClient();
 
@@ -223,22 +228,30 @@ export default function RepositoryScreen() {
       <Stack.Screen
         options={{
           title: name ?? 'Repository',
+          // Two lines in the bar rather than one: the repository, and underneath it the
+          // account it was opened from. `title` stays as well - it is what the *next*
+          // screen puts on its back button, which has no room for two lines.
+          headerTitle: () => (
+            <ScopeHeaderTitle account={provider.account}>{fullName}</ScopeHeaderTitle>
+          ),
           headerBackTitle: 'Back',
           ...menu,
         }}
       />
 
       <View style={styles.fill}>
-        {/* One glass bar for every choice that shapes the content: which view, and then
+        {/* One control area for every choice that shapes the content: which view, and then
             whatever refines it - open or closed on Issues, the branch on Code and Commits.
-            They join this bar rather than getting their own because they refine the view
-            choice above them, and stacked glass capsules read as unrelated toolbars. A
-            site with one view shows no view pills but still gets the refinements. */}
+            iOS keeps the native segmented controls in one glass island. Android leaves
+            the area open so its individual pills can use almost the full width and wrap
+            onto another row. A site with one view still gets any refinements it needs. */}
         {showViewPills || showIssuePills || showBranchPicker ? (
           <ControlBar>
             {showViewPills ? (
-              <SegmentedControl
+              <ControlBarSegments
                 values={available.map((view) => view.label)}
+                // Android keeps every label inside its own pill and moves only the pills
+                // that no longer fit onto the next row. iOS keeps its native segment row.
                 selectedIndex={Math.max(
                   0,
                   available.findIndex((view) => view.id === active)
@@ -248,19 +261,23 @@ export default function RepositoryScreen() {
                   if (next) choose(next.id);
                 }}
                 tintColor={palette.accent}
+                appearance={hostScheme}
               />
             ) : null}
             {showIssuePills ? (
-              <SegmentedControl
+              <ControlBarSegments
+                fillWidth
                 values={['Open', 'Closed']}
                 selectedIndex={issueState === 'open' ? 0 : 1}
                 onValueChange={(value) => chooseIssues(value === 'Open' ? 'open' : 'closed')}
                 tintColor={palette.accent}
+                appearance={hostScheme}
               />
             ) : null}
             {showBranchPicker ? (
               <MenuPickerRow
-                icon={Icons.branch}
+                symbol={{ ios: 'arrow.triangle.branch', android: 'alt_route' }}
+                tint={palette.hues.teal}
                 label="Branch"
                 options={branchNames.map((name) => ({ label: name, value: name }))}
                 selected={ref ?? branchNames[0]}
@@ -415,6 +432,7 @@ export default function RepositoryScreen() {
             ) : null}
           </List>
         </Host>
+        <NavigationBarStrip />
 
         {/* Floating over the list's lower corner, where every view ends in a footer or
             padding rather than something to tap. */}
@@ -647,7 +665,6 @@ function CommitsSection({ target, branch }: { target: Target; branch: string | u
           key={commit.sha}
           commit={commit}
           showChevron={opensHere}
-          grouped
           onPress={() => {
             if (opensHere) {
               if (process.env.EXPO_OS === 'ios') void Haptics.selectionAsync();

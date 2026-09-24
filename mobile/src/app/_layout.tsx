@@ -11,9 +11,14 @@ import { AppState, type AppStateStatus } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AccountsProvider } from '@/state/accounts';
+import { DisplayPreferencesProvider } from '@/state/display-preferences';
+import { LockProvider } from '@/state/lock';
 import { Palettes } from '@/theme/tokens';
 import { useScheme } from '@/theme/use-palette';
 import { AssistantGlowHost } from '@/ui/assistant-glow';
+import { AppLockGate } from '@/ui/lock-screen';
+import { useNavigationBarButtons } from '@/ui/navigation-bar';
+import { OnboardingGate } from '@/ui/onboarding';
 import { lockUpright } from '@/ui/rotation';
 
 SplashScreen.preventAutoHideAsync();
@@ -56,9 +61,18 @@ function useRefetchOnForeground() {
 }
 
 export default function RootLayout() {
+  return (
+    <DisplayPreferencesProvider>
+      <AppLayout />
+    </DisplayPreferencesProvider>
+  );
+}
+
+function AppLayout() {
   const scheme = useScheme();
   const palette = Palettes[scheme];
   useRefetchOnForeground();
+  useNavigationBarButtons(scheme);
 
   // Upright until a code screen says otherwise. A layout effect so that it lands before
   // any screen's focus effect: opened straight onto a file from a link, the file's unlock
@@ -88,41 +102,80 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
-        <AccountsProvider>
-          <ThemeProvider value={navigationTheme}>
-            <StatusBar style="auto" />
-            <Stack screenOptions={{ headerLargeTitleEnabled: false }}>
-              {/* No header over the tabs: the tab bar already says which screen you are
-                  on, and a nav bar above it would be a second title taking a fifth of the
-                  screen. The cost is that nothing is holding content below the status bar
-                  any more, so each tab screen applies the inset itself - see `TabScreen`.
-                  Anything a tab needs to offer goes in its content, not a header. */}
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="sign-in/index"
-                options={{ title: 'Add an account', presentation: 'modal' }}
-              />
-              <Stack.Screen name="sign-in/host" options={{ title: 'Sign in' }} />
-              <Stack.Screen
-                name="account/index"
-                options={{ title: 'Account', presentation: 'modal' }}
-              />
-              <Stack.Screen name="repo/index" options={{ title: '' }} />
-              <Stack.Screen name="pull/index" options={{ title: '' }} />
-              <Stack.Screen name="issue/index" options={{ title: '' }} />
-              <Stack.Screen name="file/index" options={{ title: '' }} />
-              <Stack.Screen name="diff/index" options={{ title: '' }} />
-              <Stack.Screen name="commit/index" options={{ title: '' }} />
-              <Stack.Screen name="commit/file" options={{ title: '' }} />
-              {/* The assistant draws its own header: the orb and its name over the
-                  conversation, as iMessage puts a contact's photo over one. */}
-              <Stack.Screen name="chat/index" options={{ headerShown: false }} />
-            </Stack>
-            {/* Over the whole navigator, so the glow frames the display - header and all -
-                while the conversation slides in beneath it. */}
-            <AssistantGlowHost />
-          </ThemeProvider>
-        </AccountsProvider>
+        <LockProvider>
+            <AccountsProvider>
+              <ThemeProvider value={navigationTheme}>
+                <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
+                <Stack
+                  screenOptions={{
+                    headerLargeTitleEnabled: false,
+                    // The root stack owns every pushed page and modal. Set this once so
+                    // Android centres their titles consistently; iOS keeps its native
+                    // navigation-bar alignment.
+                    headerTitleAlign: process.env.EXPO_OS === 'android' ? 'center' : undefined,
+                    // Native-stack transitions briefly expose the scene behind the card.
+                    // Paint it explicitly so dark mode never falls through to white.
+                    contentStyle: { backgroundColor: palette.background },
+                  }}>
+                  {/* No header *here*, because each tab brings its own: one nav bar above the
+                    whole tab bar could only ever show one title and one set of controls, and
+                    the account and owner a list is drawn from differ per tab. So every tab
+                    wraps its screen in a stack of its own - see `TabStack` - and this screen
+                    stays bare so there are never two bars stacked up. */}
+                  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                  <Stack.Screen
+                    name="sign-in/index"
+                    options={{ title: 'Add an account', presentation: 'modal' }}
+                  />
+                  <Stack.Screen name="sign-in/host" options={{ title: 'Sign in' }} />
+                  <Stack.Screen
+                    name="account/index"
+                    options={{ title: 'Account', presentation: 'modal' }}
+                  />
+                  {/* A modal, like Add an account: a short errand you finish and dismiss,
+                    rather than somewhere in the app you navigate to and come back from. */}
+                  <Stack.Screen
+                    name="updates/index"
+                    options={{ title: 'Updates', presentation: 'modal' }}
+                  />
+                  {/* Pushed from inside the Updates modal, as the sign-in form is from Add an
+                    account. */}
+                  <Stack.Screen name="updates/whats-new" options={{ title: "What's new" }} />
+                  <Stack.Screen
+                    name="app-lock/index"
+                    options={{ title: 'App lock', presentation: 'modal' }}
+                  />
+                  <Stack.Screen
+                    name="display/index"
+                    options={{ title: 'Display', headerBackTitle: 'Settings' }}
+                  />
+                  <Stack.Screen name="text-size/index" options={{ title: 'Text Size' }} />
+                  <Stack.Screen name="repo/index" options={{ title: '' }} />
+                  <Stack.Screen name="pull/index" options={{ title: '' }} />
+                  <Stack.Screen name="issue/index" options={{ title: '' }} />
+                  <Stack.Screen name="file/index" options={{ title: '' }} />
+                  <Stack.Screen name="diff/index" options={{ title: '' }} />
+                  <Stack.Screen name="commit/index" options={{ title: '' }} />
+                  <Stack.Screen name="commit/file" options={{ title: '' }} />
+                  {/* The assistant draws its own header: the orb and its name over the
+                    conversation, as iMessage puts a contact's photo over one. */}
+                  <Stack.Screen name="chat/index" options={{ headerShown: false }} />
+                </Stack>
+                {/* Over the whole navigator, so the glow frames the display - header and all -
+                  while the conversation slides in beneath it. */}
+                <AssistantGlowHost />
+                {/* A one-time gate rather than a route, so a deep link or restored navigator
+                  cannot land past the introduction. The lock below remains last and therefore
+                  wins for anyone who already protected the app. */}
+                <OnboardingGate />
+                {/* Last, and therefore over everything including the glow and any modal. Being
+                  locked is a property of the app rather than a place in it: a lock that is a
+                  route is a route something can navigate past, and it only has to be wrong
+                  once. */}
+                <AppLockGate />
+              </ThemeProvider>
+            </AccountsProvider>
+        </LockProvider>
       </SafeAreaProvider>
     </QueryClientProvider>
   );

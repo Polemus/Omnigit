@@ -12,8 +12,20 @@ import { File, Paths } from 'expo-file-system';
 const PREFERENCES_FILE = 'preferences.json';
 
 export interface Preferences {
-  /** Whether the file tree shows beside the code when the phone is on its side. */
+  /** How the app chooses between its light and dark palettes. */
+  appearance?: 'automatic' | 'dark' | 'light' | 'system';
+  /** The last explicitly chosen palette, restored when Automatic or System is turned off. */
+  manualAppearance?: 'dark' | 'light';
+  /** Whether ordinary-weight text should be promoted to bold throughout the app. */
+  boldText?: boolean;
+  /** Whether a file tree shows beside the code or a diff when the phone is on its side. */
   fileTreeVisible?: boolean;
+  /**
+   * How much bigger than its designed size the app draws its text - 1 to 1.5, and 1 unless
+   * the reader has moved the slider in Settings. The phone's own text size is deliberately
+   * not consulted; see `src/state/text-scale.tsx`.
+   */
+  textScale?: number;
 }
 
 function preferencesFile(): File {

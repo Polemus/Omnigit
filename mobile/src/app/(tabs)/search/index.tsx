@@ -4,36 +4,47 @@
  * This follows the same native grouped structure as Repositories and Inbox: the control
  * that changes the list, account selection, partial failures, and results. The summary of
  * what is being searched is the navigation header's title rather than a card in the list.
- * The search field belongs to the native navigation stack, while the network query is
- * debounced and the content keeps the same grouped structure as the other tabs.
+ * The search field belongs to the native navigation stack on iOS, while the network query
+ * is debounced and the content keeps the same grouped structure as the other tabs.
+ *
+ * Android draws its own field above the list instead. The toolbar's search is a menu item
+ * whose collapsed view still measures the width of the whole bar - react-native-screens
+ * gives it `maxWidth = Integer.MAX_VALUE` so the open field can fill the bar - so its icon
+ * was drawn across the owner and account controls beside it. Ours takes the room it needs,
+ * leaves those controls alone, and puts a measured gap between itself and the first result.
  */
 
-import { FieldGroup, Host, List } from '@expo/ui';
+import { List } from '@expo/ui';
 import * as Haptics from 'expo-haptics';
-import { Stack, useRouter } from 'expo-router';
+import { Stack, useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Keyboard,
+  Pressable,
   StyleSheet,
+  TextInput,
   type NativeSyntheticEvent,
   type TextInputFocusEventData,
   View,
 } from 'react-native';
 import type { SearchBarCommands } from 'react-native-screens';
 
-import { useRepositorySearch } from '@/api/queries';
+import { useRepositories, useRepositorySearch } from '@/api/queries';
 import { accountKey, type Account } from '@/hosts/types';
 import { useAccounts } from '@/state/accounts';
 import { usePalette } from '@/theme/use-palette';
+import { FieldGroup } from '@/ui/field-group';
+import { Host } from '@/ui/host';
 import { Icon } from '@/ui/icon';
-import { hostLabel } from '@/ui/identity';
-import { AccountControlBar } from '@/ui/account-picker';
+import { ownerList, ScopeHeader } from '@/ui/header-scope';
 import { Icons } from '@/ui/icons';
 import { ListItem } from '@/ui/list-item';
 import { RepositoryRow } from '@/ui/rows';
 import { useTabBarClearance } from '@/ui/screen';
 import { Empty, Loading } from '@/ui/states';
 import { Text } from '@/ui/text';
+
+const ANDROID = process.env.EXPO_OS === 'android';
 
 const androidSectionStyle =
   process.env.EXPO_OS === 'android'
@@ -48,6 +59,7 @@ export default function SearchScreen() {
     accounts,
     visibleProviders,
     filter,
+    owner: ownerFilter,
     isLoading: accountsLoading,
   } = useAccounts();
 
@@ -63,13 +75,30 @@ export default function SearchScreen() {
     return () => clearTimeout(timer);
   }, [typed]);
 
+  const { data: repositoryData } = useRepositories();
   const { data, isFetching, error, refetch } = useRepositorySearch(query);
   const able = visibleProviders.filter((provider) => provider.capabilities.canSearchRepositories);
   const trimmed = query.trim();
-  const items = data?.items ?? [];
-  const selectedAccount = filter
-    ? accounts.find((account) => accountKey(account) === filter)
-    : undefined;
+  // iOS learns this from the field opening and closing; Android's field is always there,
+  // so what is typed in it says the same thing.
+  const searching = ANDROID ? typed.trim().length > 0 : isSearchOpen;
+
+  // The left owner menu comes from the same repository list as the Repositories tab, so
+  // it is useful before a search starts and does not change its options with every query.
+  // Search results are included as a fallback for hosts that return something searchable
+  // outside their ordinary repository listing.
+  const loadedResults = data?.items ?? [];
+  const found = filter
+    ? loadedResults.filter(({ account }) => accountKey(account) === filter)
+    : loadedResults;
+  const repositories = filter
+    ? (repositoryData?.items ?? []).filter(({ account }) => accountKey(account) === filter)
+    : (repositoryData?.items ?? []);
+  const owners = ownerList([
+    ...repositories.map(({ item }) => item.owner),
+    ...found.map(({ item }) => item.owner),
+  ]);
+  const items = ownerFilter ? found.filter(({ item }) => item.owner === ownerFilter) : found;
 
   const openRepository = useCallback(
     (account: Account, owner: string, name: string) => {
@@ -81,20 +110,14 @@ export default function SearchScreen() {
     [router]
   );
 
-  const changeSearch = useCallback(
-    (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
-      setTyped(event.nativeEvent.text);
-    },
-    []
-  );
+  const changeSearch = useCallback((event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+    setTyped(event.nativeEvent.text);
+  }, []);
 
-  const submitSearch = useCallback(
-    (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
-      setTyped(event.nativeEvent.text);
-      setQuery(event.nativeEvent.text);
-    },
-    []
-  );
+  const submitSearch = useCallback((event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+    setTyped(event.nativeEvent.text);
+    setQuery(event.nativeEvent.text);
+  }, []);
 
   // A tick as the field opens and as it is cancelled, matching the menus and the tab bar.
   // Each handler is wired to two callbacks, but never both on one platform: `onOpen` and
@@ -120,6 +143,18 @@ export default function SearchScreen() {
     searchBarRef.current?.blur();
   }, []);
 
+  // Leaving Search directly through the tab bar must also finish the search interaction.
+  // Otherwise Android can keep the IME-adjusted navigation bar alive while the next tab
+  // is appearing, leaving Search's destination in a different vertical state.
+  useFocusEffect(
+    useCallback(
+      () => () => {
+        dismissSearchKeyboard();
+      },
+      [dismissSearchKeyboard]
+    )
+  );
+
   const searchBar = (
     <Stack.SearchBar
       ref={searchBarRef}
@@ -129,11 +164,6 @@ export default function SearchScreen() {
       allowToolbarIntegration
       obscureBackground={false}
       hideWhenScrolling={false}
-      tintColor={palette.accent}
-      barTintColor={palette.surfaceRaised}
-      textColor={palette.text}
-      hintTextColor={palette.textTertiary}
-      headerIconColor={palette.textSecondary}
       onFocus={openSearch}
       onOpen={openSearch}
       onChangeText={changeSearch}
@@ -143,27 +173,18 @@ export default function SearchScreen() {
     />
   );
 
-  // The header carries the scope - the chosen account, or how many are being searched -
-  // which is what the "Find a repository" card used to say. The header is there either
-  // way, because the search field belongs to it, so it holds this rather than sitting
-  // empty. Blank while providers are still being built, rather than flashing "0 accounts".
-  const title =
-    accountsLoading || accounts.length === 0 ? '' : scopeTitle(selectedAccount, able.length);
-
+  // The same header the other tabs have, plus the system search field, which belongs to
+  // the bar rather than to the list.
+  //
+  // `headerTransparent: false` because a header holding a search bar is made translucent
+  // on iOS unless told otherwise, and a translucent header lays the screen's content out
+  // from the very top, *underneath* itself. The native list compensates with its own
+  // inset; anything else pinned above it does not. The translucency is only needed for
+  // hide-on-scroll and large titles, and this search bar uses neither.
   const header = (
     <>
-      {/* Both title keys: the layout sets `headerTitle: ''`, and `headerTitle` wins over
-          `title` when both are present.
-
-          `headerTransparent: false` because a header with a search bar is made translucent
-          on iOS unless told otherwise, and a translucent header lays the screen's content
-          out from the very top, *underneath* itself. The native list compensates with its
-          own inset, but the account bar pinned above it does not - it was drawn behind
-          the header, which is why the picker seemed to be missing here and nowhere else.
-          The translucency is only needed for hide-on-scroll and large titles, and this
-          search bar uses neither. */}
-      <Stack.Screen options={{ title, headerTitle: title, headerTransparent: false }} />
-      {searchBar}
+      <ScopeHeader title="Search" owners={owners} options={{ headerTransparent: false }} />
+      {ANDROID ? null : searchBar}
     </>
   );
 
@@ -198,111 +219,169 @@ export default function SearchScreen() {
   return (
     <>
       {header}
-      <View style={styles.fill} onTouchStart={dismissSearchKeyboard}>
-        {/* Always shown, unlike the account section it replaced. That section was hidden
-            while searching to give results room, but this is one row, and `isSearchOpen`
-            only clears on Cancel - so after one search the picker stayed hidden for good. */}
-        <AccountControlBar />
-        <Host style={[styles.fill, { paddingBottom: clearance }]}>
-          <List
-            onRefresh={
-              trimmed.length >= 2
-                ? async () => {
-                    await refetch();
-                  }
-                : undefined
-            }>
-            {!isSearchOpen && (data?.failures.length ?? 0) > 0 ? (
-              <FieldGroup.Section title="Unavailable" style={androidSectionStyle}>
-                {data!.failures.map((failure, index) => (
+      <View style={styles.fill}>
+        {ANDROID ? (
+          <SearchField
+            value={typed}
+            onChange={setTyped}
+            onSubmit={() => setQuery(typed)}
+            onClear={clearSearch}
+          />
+        ) : null}
+        <View style={styles.fill} onTouchStart={dismissSearchKeyboard}>
+          <Host style={[styles.fill, { paddingBottom: clearance }]}>
+            <List
+              onRefresh={
+                trimmed.length >= 2
+                  ? async () => {
+                      await refetch();
+                    }
+                  : undefined
+              }>
+              {!searching && (data?.failures.length ?? 0) > 0 ? (
+                <FieldGroup.Section title="Unavailable" style={androidSectionStyle}>
+                  {data!.failures.map((failure, index) => (
+                    <ListItem
+                      key={`${failure.account}/${index}`}
+                      leading={<Icon name={Icons.warning} size={20} />}
+                      supportingText={failure.message}>
+                      {hostOf(failure.account)}
+                    </ListItem>
+                  ))}
+                  <FieldGroup.SectionFooter>
+                    <Text>Results from the other connected accounts are still shown.</Text>
+                  </FieldGroup.SectionFooter>
+                </FieldGroup.Section>
+              ) : null}
+
+              <FieldGroup.Section
+                title={searching ? undefined : 'Results'}
+                style={searching ? styles.activeResults : androidSectionStyle}>
+                {able.length === 0 ? (
                   <ListItem
-                    key={`${failure.account}/${index}`}
                     leading={<Icon name={Icons.warning} size={20} />}
-                    supportingText={failure.message}>
-                    {hostOf(failure.account)}
+                    supportingText="The selected hosting site describes no repository search endpoint.">
+                    Search unavailable
                   </ListItem>
-                ))}
+                ) : trimmed.length < 2 ? (
+                  <ListItem
+                    leading={<Icon name={Icons.search} size={20} />}
+                    supportingText={
+                      able.length === 1
+                        ? 'Searches the selected hosting site.'
+                        : `Searches all ${able.length} selected hosting sites at once.`
+                    }>
+                    Ready to search
+                  </ListItem>
+                ) : isFetching && !data ? (
+                  <ListItem
+                    leading={<Icon name={Icons.refresh} size={20} />}
+                    supportingText={`Looking for “${trimmed}” across the selected accounts.`}>
+                    Searching…
+                  </ListItem>
+                ) : error && !data ? (
+                  <ListItem
+                    onPress={() => void refetch()}
+                    leading={<Icon name={Icons.warning} size={20} color={palette.danger} />}
+                    supportingText={error instanceof Error ? error.message : 'The search failed.'}
+                    trailing={<Icon name={Icons.refresh} size={17} />}>
+                    Try the search again
+                  </ListItem>
+                ) : items.length === 0 ? (
+                  <ListItem
+                    onPress={() => void refetch()}
+                    leading={<Icon name={Icons.empty} size={20} />}
+                    supportingText={
+                      ownerFilter
+                        ? `Nothing from ${ownerFilter} matched “${trimmed}”.`
+                        : `Nothing matched “${trimmed}”.`
+                    }
+                    trailing={<Icon name={Icons.refresh} size={17} />}>
+                    No repositories found
+                  </ListItem>
+                ) : (
+                  items.map(({ account, item }) => (
+                    <RepositoryRow
+                      key={`${accountKey(account)}/${item.owner}/${item.name}`}
+                      account={account}
+                      repository={item}
+                      showChevron
+                      grouped
+                      onPress={() => openRepository(account, item.owner, item.name)}
+                    />
+                  ))
+                )}
                 <FieldGroup.SectionFooter>
-                  <Text>Results from the other connected accounts are still shown.</Text>
+                  <Text>
+                    {trimmed.length >= 2
+                      ? 'Pull down to run this search again.'
+                      : 'Repository results appear here as you type.'}
+                  </Text>
                 </FieldGroup.SectionFooter>
               </FieldGroup.Section>
-            ) : null}
-
-            <FieldGroup.Section
-              title={isSearchOpen ? undefined : 'Results'}
-              style={isSearchOpen ? styles.activeResults : androidSectionStyle}>
-              {able.length === 0 ? (
-                <ListItem
-                  leading={<Icon name={Icons.warning} size={20} />}
-                  supportingText="The selected hosting site describes no repository search endpoint.">
-                  Search unavailable
-                </ListItem>
-              ) : trimmed.length < 2 ? (
-                <ListItem
-                  leading={<Icon name={Icons.search} size={20} />}
-                  supportingText={
-                    able.length === 1
-                      ? 'Searches the selected hosting site.'
-                      : `Searches all ${able.length} selected hosting sites at once.`
-                  }>
-                  Ready to search
-                </ListItem>
-              ) : isFetching && !data ? (
-                <ListItem
-                  leading={<Icon name={Icons.refresh} size={20} />}
-                  supportingText={`Looking for “${trimmed}” across the selected accounts.`}>
-                  Searching…
-                </ListItem>
-              ) : error && !data ? (
-                <ListItem
-                  onPress={() => void refetch()}
-                  leading={<Icon name={Icons.warning} size={20} color={palette.danger} />}
-                  supportingText={error instanceof Error ? error.message : 'The search failed.'}
-                  trailing={<Icon name={Icons.refresh} size={17} />}>
-                  Try the search again
-                </ListItem>
-              ) : items.length === 0 ? (
-                <ListItem
-                  onPress={() => void refetch()}
-                  leading={<Icon name={Icons.empty} size={20} />}
-                  supportingText={`Nothing matched “${trimmed}”.`}
-                  trailing={<Icon name={Icons.refresh} size={17} />}>
-                  No repositories found
-                </ListItem>
-              ) : (
-                items.map(({ account, item }) => (
-                  <RepositoryRow
-                    key={`${accountKey(account)}/${item.owner}/${item.name}`}
-                    account={account}
-                    repository={item}
-                    showChevron
-                    grouped
-                    onPress={() => openRepository(account, item.owner, item.name)}
-                  />
-                ))
-              )}
-              <FieldGroup.SectionFooter>
-                <Text>
-                  {trimmed.length >= 2
-                    ? 'Pull down to run this search again.'
-                    : 'Repository results appear here as you type.'}
-                </Text>
-              </FieldGroup.SectionFooter>
-            </FieldGroup.Section>
-          </List>
-        </Host>
+            </List>
+          </Host>
+        </View>
       </View>
     </>
   );
 }
 
 /**
- * Which accounts this search covers: the chosen one by name, or how many when it is all
- * of them. Worded exactly as the card it replaced worded its scope.
+ * Android's search field: ours, above the list, rather than the toolbar's.
+ *
+ * A plain `TextInput` rather than a native one, because it sits in React Native's own layer
+ * where the control bars do - and because `@expo/ui`'s field reads its value once, on
+ * mount, which a field that is cleared from outside cannot use.
  */
-function scopeTitle(selectedAccount: Account | undefined, searchableAccounts: number): string {
-  if (selectedAccount) return `${selectedAccount.login} on ${hostLabel(selectedAccount)}`;
-  return `${searchableAccounts} ${searchableAccounts === 1 ? 'account' : 'accounts'}`;
+function SearchField({
+  value,
+  onChange,
+  onSubmit,
+  onClear,
+}: {
+  value: string;
+  onChange: (text: string) => void;
+  onSubmit: () => void;
+  onClear: () => void;
+}) {
+  const palette = usePalette();
+
+  return (
+    <View style={styles.fieldRow}>
+      <View style={[styles.field, { backgroundColor: palette.surface }]}>
+        <Host matchContents>
+          <Icon name={Icons.search} size={20} color={palette.textSecondary} />
+        </Host>
+        <TextInput
+          value={value}
+          onChangeText={onChange}
+          onSubmitEditing={onSubmit}
+          placeholder="Search repositories"
+          placeholderTextColor={palette.textTertiary}
+          autoCapitalize="none"
+          autoCorrect={false}
+          returnKeyType="search"
+          cursorColor={palette.accent}
+          selectionColor={palette.accent}
+          style={[styles.input, { color: palette.text }]}
+        />
+        {value.length > 0 ? (
+          <Pressable
+            onPress={onClear}
+            hitSlop={10}
+            accessibilityRole="button"
+            accessibilityLabel="Clear the search">
+            <View pointerEvents="none">
+              <Host matchContents>
+                <Icon name={Icons.clear} size={20} />
+              </Host>
+            </View>
+          </Pressable>
+        ) : null}
+      </View>
+    </View>
+  );
 }
 
 function hostOf(url: string): string {
@@ -317,8 +396,26 @@ const styles = StyleSheet.create({
   fill: {
     flex: 1,
   },
+  fieldRow: {
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 4,
+  },
+  field: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    height: 48,
+    paddingHorizontal: 14,
+    borderRadius: 24,
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    paddingVertical: 0,
+  },
   activeResults: {
     paddingTop: 0,
-    ...(process.env.EXPO_OS === 'android' ? { paddingHorizontal: 16 } : undefined),
+    ...(ANDROID ? { paddingHorizontal: 16, paddingTop: 8 } : undefined),
   },
 });

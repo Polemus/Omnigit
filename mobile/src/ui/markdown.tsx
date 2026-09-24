@@ -13,10 +13,11 @@
  */
 
 import * as WebBrowser from 'expo-web-browser';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Fonts, Radius, Spacing } from '../theme/tokens';
 import { usePalette } from '../theme/use-palette';
+import { Text } from './scaled-text';
 
 type Block =
   | { kind: 'heading'; level: number; text: string }

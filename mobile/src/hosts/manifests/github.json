@@ -31,7 +31,7 @@
 
   "endpoints": {
     "currentUser": "/user",
-    "repositories": "/user/repos?per_page=50&sort=updated&affiliation=owner,collaborator,organization_member",
+    "repositories": "/user/repos?per_page=100&sort=updated&affiliation=owner,collaborator,organization_member",
     "owners": "/user/orgs?per_page=100",
     "pullRequests": "/repos/{owner}/{repo}/pulls?state=open&sort=updated&direction=desc&per_page=30",
 
@@ -105,7 +105,9 @@
     "createdAt": "created_at",
     "updatedAt": "updated_at",
     "webUrl": "html_url",
-    "labels": "labels"
+    "labels": "labels",
+    "headSha": "head.sha",
+    "baseSha": "base.sha"
   },
 
   "issueFields": {
@@ -142,7 +144,8 @@
     "committedAt": "commit.author.date",
     "additions": "stats.additions",
     "deletions": "stats.deletions",
-    "files": "files"
+    "files": "files",
+    "parentSha": "parents.0.sha"
   },
 
   "branchFields": {
@@ -162,7 +165,8 @@
     "status": "status",
     "additions": "additions",
     "deletions": "deletions",
-    "patch": "patch"
+    "patch": "patch",
+    "previousPath": "previous_filename"
   },
 
   "notificationFields": {

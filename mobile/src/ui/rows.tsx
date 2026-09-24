@@ -14,7 +14,7 @@
  */
 
 import { RNHostView } from '@expo/ui';
-import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { StyleSheet, useWindowDimensions, View } from 'react-native';
 
 import type { Account, Commit, Issue, Notification, PullRequest, Repository } from '../hosts/types';
 import { commitSummary, shortSha } from '../hosts/types';
@@ -27,6 +27,7 @@ import { Avatar, HostBadge, hostLabel } from './identity';
 import { Icons } from './icons';
 import { ListItem } from './list-item';
 import { relativeTime } from './relative-time';
+import { Text } from './scaled-text';
 
 /**
  * Roughly what a `ListItem` spends on everything that is not the middle column: the row's
@@ -58,6 +59,11 @@ function Meta({
 }: {
   children: React.ReactNode;
   hasTrailing?: boolean;
+  /**
+   * Width taken outside the row itself. A grouped row on Android is 32 narrower than one in
+   * a plain list, because its section sits 16 in from either side; the row is the card
+   * there, so that is all (`field-group.android.tsx`).
+   */
   extraChrome?: number;
 }) {
   const { width } = useWindowDimensions();
@@ -138,7 +144,7 @@ export function RepositoryRow({
       <ListItem.Supporting>
         <Meta
           hasTrailing={showChevron}
-          extraChrome={grouped && process.env.EXPO_OS === 'android' ? 64 : 0}>
+          extraChrome={grouped && process.env.EXPO_OS === 'android' ? 32 : 0}>
           <HostBadge account={account} />
           {repository.isPrivate ? (
             <>
@@ -227,7 +233,7 @@ export function PullRequestRow({
       <ListItem.Supporting>
         <Meta
           hasTrailing={showChevron}
-          extraChrome={grouped && process.env.EXPO_OS === 'android' ? 64 : 0}>
+          extraChrome={grouped && process.env.EXPO_OS === 'android' ? 32 : 0}>
           <StateBadge state={pullRequestState(pull)} />
           <MetaText>#{pull.number}</MetaText>
           {pull.author ? (
@@ -285,7 +291,7 @@ export function IssueRow({
       <ListItem.Supporting>
         <Meta
           hasTrailing={showChevron}
-          extraChrome={grouped && process.env.EXPO_OS === 'android' ? 64 : 0}>
+          extraChrome={grouped && process.env.EXPO_OS === 'android' ? 32 : 0}>
           <StateBadge state={issueState(issue)} />
           <MetaText>#{issue.number}</MetaText>
           {issue.updatedAt ? (
@@ -313,14 +319,30 @@ export function CommitRow({
   commit,
   onPress,
   showChevron = false,
-  grouped = false,
 }: {
   commit: Commit;
   onPress?: () => void;
   showChevron?: boolean;
-  grouped?: boolean;
 }) {
   const palette = usePalette();
+
+  // Android draws this line as the row's own supporting text, as `RepositoryRow` and
+  // `NotificationRow` do, and for the reason that matters most here: history is the one
+  // list with no end to it. "Load more commits" adds fifty rows to what is already on
+  // screen, and a React Native island in each one is a Compose host per row that the phone
+  // keeps building as the list grows. The short sha loses its monospace, which is the whole
+  // cost.
+  if (process.env.EXPO_OS === 'android') {
+    return (
+      <ListItem
+        onPress={onPress}
+        leading={<Avatar url={commit.authorAvatarUrl} size={30} fallback={commit.author} />}
+        supportingText={commitMeta(commit)}
+        trailing={showChevron ? <Icon name={Icons.chevron} size={16} /> : undefined}>
+        {commitSummary(commit.message)}
+      </ListItem>
+    );
+  }
 
   return (
     <ListItem onPress={onPress}>
@@ -331,9 +353,7 @@ export function CommitRow({
       {commitSummary(commit.message)}
 
       <ListItem.Supporting>
-        <Meta
-          hasTrailing={showChevron}
-          extraChrome={grouped && process.env.EXPO_OS === 'android' ? 64 : 0}>
+        <Meta hasTrailing={showChevron} extraChrome={0}>
           <Text style={[styles.sha, { color: palette.textSecondary }]}>{shortSha(commit.sha)}</Text>
           {commit.author ? (
             <>
@@ -369,33 +389,49 @@ export function NotificationRow({
   account,
   onPress,
   showChevron = false,
-  grouped = false,
 }: {
   notification: Notification;
   account: Account;
   onPress?: () => void;
   showChevron?: boolean;
-  grouped?: boolean;
 }) {
   const palette = usePalette();
 
+  const mark = (
+    <View
+      style={[
+        styles.unread,
+        { backgroundColor: notification.isUnread ? palette.accent : 'transparent' },
+      ]}
+    />
+  );
+
+  // Android draws this line as the row's own supporting text, for the reason `RepositoryRow`
+  // does: `Meta` is a React Native island, and an island inside a native row costs a Compose
+  // host. The inbox is the longest list in the app - one account's fifty notifications, and
+  // a second account's fifty under them - so it is where that cost lands hardest, and where
+  // the hosts are built and thrown away again every time the list changes shape. The colour
+  // is what is lost: the host badge becomes the host's name in the same grey as the rest.
+  if (process.env.EXPO_OS === 'android') {
+    return (
+      <ListItem
+        onPress={onPress}
+        leading={mark}
+        supportingText={notificationMeta(account, notification)}
+        trailing={showChevron ? <Icon name={Icons.chevron} size={16} /> : undefined}>
+        {notification.title}
+      </ListItem>
+    );
+  }
+
   return (
     <ListItem onPress={onPress}>
-      <ListItem.Leading>
-        <View
-          style={[
-            styles.unread,
-            { backgroundColor: notification.isUnread ? palette.accent : 'transparent' },
-          ]}
-        />
-      </ListItem.Leading>
+      <ListItem.Leading>{mark}</ListItem.Leading>
 
       {notification.title}
 
       <ListItem.Supporting>
-        <Meta
-          hasTrailing={showChevron}
-          extraChrome={grouped && process.env.EXPO_OS === 'android' ? 64 : 0}>
+        <Meta hasTrailing={showChevron} extraChrome={0}>
           <HostBadge account={account} />
           {notification.repository ? (
             <>
@@ -419,6 +455,28 @@ export function NotificationRow({
       ) : null}
     </ListItem>
   );
+}
+
+/** The same line as `Meta` above, as a plain string for the native row to draw. */
+function commitMeta(commit: Commit): string {
+  return [
+    shortSha(commit.sha),
+    commit.author || undefined,
+    commit.committedAt ? relativeTime(commit.committedAt) : undefined,
+  ]
+    .filter((part): part is string => !!part)
+    .join(' · ');
+}
+
+/** The same line as `Meta` above, as a plain string for the native row to draw. */
+function notificationMeta(account: Account, notification: Notification): string {
+  return [
+    hostLabel(account),
+    notification.repository || undefined,
+    notification.updatedAt ? relativeTime(notification.updatedAt) : undefined,
+  ]
+    .filter((part): part is string => !!part)
+    .join(' · ');
 }
 
 const styles = StyleSheet.create({

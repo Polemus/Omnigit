@@ -15,11 +15,13 @@
  */
 
 import { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Fonts, Spacing, type Palette } from '../theme/tokens';
 import { usePalette } from '../theme/use-palette';
+import { Text } from './scaled-text';
+import { useBottomClearance } from './screen';
 import { CATEGORY_TOKEN, grammarFor, highlightSource, type Span } from './syntax';
 
 /** Past this, the file is cut and the reader told. Matches `DiffView`. */
@@ -51,16 +53,18 @@ export function CodeView({ source, path }: CodeViewProps) {
   const palette = usePalette();
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const clearance = useBottomClearance();
   // The width the code actually has - less than the screen's beside the file tree, or
   // clear of the notch when sideways. Until the first layout, the screen's own width
   // less the side insets, which is the answer whenever the code has the screen to itself.
   const [viewport, setViewport] = useState(0);
 
-  // The one place this departs from `DiffView`. `contentInsetAdjustmentBehavior` keeps
-  // the last line clear of the home indicator on iOS, but it is iOS-only - and with
-  // edge-to-edge on, Android draws the end of a long file under the gesture bar. So
-  // Android adds the inset itself; iOS must not, or the automatic one would double it.
-  const bottomPadding = Spacing.four + (process.env.EXPO_OS === 'android' ? insets.bottom : 0);
+  // `contentInsetAdjustmentBehavior` keeps the last line clear of the home indicator on
+  // iOS, but it is iOS-only - and with edge-to-edge on, Android draws the end of a long
+  // file under the gesture bar, or under the three navigation buttons. So Android adds the
+  // inset itself; iOS must not, or the automatic one would double it. `DiffView` does the
+  // same, for the same reason.
+  const bottomPadding = Spacing.four + (process.env.EXPO_OS === 'android' ? clearance : 0);
 
   // Highlighting is pure work over the whole file, so it happens once per file rather
   // than on every scroll frame.

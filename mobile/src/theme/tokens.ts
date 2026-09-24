@@ -64,6 +64,15 @@ export interface Palette {
   addedSurface: string;
   removedSurface: string;
 
+  /**
+   * The other two things that happen to a changed file, beside `added` and `removed`: the
+   * status letters in the changed-file tree. Modified is GitHub's own attention amber, the
+   * colour its tree gives the same files; renamed is quieter, because a rename may change
+   * no line at all.
+   */
+  modified: string;
+  renamed: string;
+
   warning: string;
   danger: string;
 
@@ -122,6 +131,9 @@ const light: Palette = {
   addedSurface: '#E6FFEC',
   removedSurface: '#FFEBE9',
 
+  modified: '#9A6700',
+  renamed: '#0E7C8C',
+
   warning: '#9A6700',
   danger: '#CF222E',
 
@@ -179,6 +191,9 @@ const dark: Palette = {
   removed: '#F85149',
   addedSurface: '#0F2D17',
   removedSurface: '#3A1417',
+
+  modified: '#D29922',
+  renamed: '#39C5CF',
 
   warning: '#D29922',
   danger: '#F85149',

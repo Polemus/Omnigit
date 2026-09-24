@@ -4,10 +4,13 @@
  * Two shapes, and the split between them is deliberate.
  *
  * The **merged** lists - your repositories, your notifications - ask every signed-in site
- * at once and interleave the answers. These do not page. Paging a merged list is not
- * really definable: four sites with four different orderings have no shared page two, and
- * pretending otherwise produces a list that shuffles as you scroll. GitHub Mobile's own
- * "Repositories" is the same first-page-per-source list.
+ * at once and interleave the answers. They do not page *lazily*: four sites with four
+ * different orderings have no shared page two, and pretending otherwise produces a list
+ * that shuffles as you scroll. Repositories instead drains each site up front - every page
+ * it will give, to `MAX_PAGES` - and merges the lot, because "your repositories" that stops
+ * at the first fifty is not the list it says it is. The inbox stays on one page per site:
+ * an inbox is read from the top, and draining a year of notifications to show the newest
+ * twenty helps nobody.
  *
  * The **per-repository** lists - pull requests, issues, commits - come from exactly one
  * site, so they page properly with `useInfiniteQuery` and keep going until the site says
@@ -41,6 +44,7 @@ import type {
   Sourced,
 } from '../hosts/types';
 import { useAccounts } from '../state/accounts';
+import { writePreview, type FilePreview } from '../storage/previews';
 
 /** Identifies the set of signed-in sites, so signing one out refetches the merged lists. */
 function sourcesKey(providers: HostProvider[]): string[] {
@@ -81,6 +85,33 @@ async function fanOut<T>(
   return { items, failures };
 }
 
+/**
+ * How many pages one site is asked for before the list settles for what it has.
+ *
+ * A bound rather than a belief that nobody has more: at a hundred rows a page this is a
+ * thousand repositories, past anything a phone scrolls, and it keeps one enormous account
+ * from turning a pull-to-refresh into a hundred requests.
+ */
+const MAX_PAGES = 10;
+
+/**
+ * Every page a site will give, one after another.
+ *
+ * Sequential by necessity - a page only says whether there is another once it has arrived -
+ * but the sites themselves are still asked in parallel, by `fanOut` above.
+ */
+async function drain<T>(fetchPage: (page: number) => Promise<Page<T>>): Promise<T[]> {
+  const items: T[] = [];
+
+  for (let page = 1; page <= MAX_PAGES; page++) {
+    const { items: batch, hasMore } = await fetchPage(page);
+    items.push(...batch);
+    if (!hasMore) break;
+  }
+
+  return items;
+}
+
 /** Newest first, with anything undated sorted last rather than treated as ancient. */
 function byRecency<T extends { updatedAt?: string }>(a: Sourced<T>, b: Sourced<T>): number {
   const left = a.item.updatedAt ? Date.parse(a.item.updatedAt) : Number.NEGATIVE_INFINITY;
@@ -104,9 +135,10 @@ export function useRepositories(): UseQueryResult<MergedResult<Repository>> {
     queryKey: ['repositories', sourcesKey(visibleProviders)],
     enabled: !isLoading,
     queryFn: async () => {
-      const { items, failures } = await fanOut(visibleProviders, (provider) =>
-        provider.listRepositories()
-      );
+      const { items, failures } = await fanOut(visibleProviders, async (provider) => ({
+        items: await drain((page) => provider.listRepositories(page)),
+        hasMore: false,
+      }));
       return { items: items.sort(byRecency), failures };
     },
   });
@@ -247,8 +279,7 @@ export function useIssues(target: RepoTarget, state: 'open' | 'closed') {
   const query = useInfiniteQuery({
     queryKey: ['issues', ...repoKey(target), state],
     enabled: !!provider?.capabilities.canListIssues,
-    queryFn: ({ pageParam }) =>
-      provider!.listIssues(target.owner, target.repo, state, pageParam),
+    queryFn: ({ pageParam }) => provider!.listIssues(target.owner, target.repo, state, pageParam),
     ...pageOptions,
   });
   return { ...query, items: flatten(query) as Issue[] };
@@ -374,20 +405,48 @@ function treeQuery(target: RepoTarget, path: string) {
   });
 }
 
-export function useFile(target: RepoTarget, path: string): UseQueryResult<string | undefined> {
+/**
+ * A file as text. `null` for one with no text to show - binary, or too large for the site
+ * to inline - because a query that resolves to `undefined` has failed.
+ */
+export function useFile(
+  target: RepoTarget,
+  path: string,
+  enabled = true
+): UseQueryResult<string | null> {
   const { provider } = target;
   return useQuery({
     queryKey: ['file', ...repoKey(target), target.ref ?? '', path],
-    enabled: !!provider && path.length > 0,
+    enabled: enabled && !!provider && path.length > 0,
     staleTime: 5 * 60_000,
-    queryFn: () => provider!.getFile(target.owner, target.repo, path, target.ref),
+    queryFn: async () =>
+      (await provider!.getFile(target.owner, target.repo, path, target.ref)) ?? null,
   });
 }
 
-export function useChangedFiles(
+/**
+ * A picture from the repository, copied where it can be drawn (`storage/previews.ts`) -
+ * or `null` when the site sent no bytes to draw. Its own query rather than `useFile`'s,
+ * because an image read as text is noise.
+ */
+export function useFilePreview(
   target: RepoTarget,
-  number: number
-): UseQueryResult<ChangedFile[]> {
+  path: string,
+  enabled: boolean
+): UseQueryResult<FilePreview | null> {
+  const { provider } = target;
+  return useQuery({
+    queryKey: ['file-preview', ...repoKey(target), target.ref ?? '', path],
+    enabled: enabled && !!provider && path.length > 0,
+    staleTime: 5 * 60_000,
+    queryFn: async () => {
+      const base64 = await provider!.getFileBase64(target.owner, target.repo, path, target.ref);
+      return base64 ? writePreview(base64, path) : null;
+    },
+  });
+}
+
+export function useChangedFiles(target: RepoTarget, number: number): UseQueryResult<ChangedFile[]> {
   const { provider } = target;
   return useQuery({
     queryKey: ['changed-files', ...repoKey(target), number],

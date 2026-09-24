@@ -57,6 +57,31 @@ export const Icons = {
     'indigo',
     Icon.select({ ios: 'gearshape', android: import('@expo/material-symbols/settings.xml') })
   ),
+  appearance: icon(
+    'indigo',
+    Icon.select({
+      ios: 'circle.lefthalf.filled',
+      android: import('@expo/material-symbols/contrast.xml'),
+    })
+  ),
+  automaticAppearance: icon(
+    'orange',
+    Icon.select({
+      ios: 'sun.and.horizon.fill',
+      android: import('@expo/material-symbols/brightness_auto.xml'),
+    })
+  ),
+  textSize: icon(
+    'blue',
+    Icon.select({
+      ios: 'textformat.size',
+      android: import('@expo/material-symbols/format_size.xml'),
+    })
+  ),
+  boldText: icon(
+    'purple',
+    Icon.select({ ios: 'bold', android: import('@expo/material-symbols/format_bold.xml') })
+  ),
 
   // The things a forge holds. Pull requests and issues are drawn in their state's colour
   // wherever the state is known; these hues are for where they stand for the kind.
@@ -189,6 +214,31 @@ export const Icons = {
     'blue',
     Icon.select({ ios: 'link', android: import('@expo/material-symbols/link.xml') })
   ),
+
+  // Over-the-air updates. Three states, three glyphs, because "check", "download" and
+  // "restart" are three different promises and one rotating arrow for all of them tells
+  // someone nothing about what tapping does next.
+  update: icon(
+    'blue',
+    Icon.select({
+      ios: 'arrow.down.circle.fill',
+      android: import('@expo/material-symbols/update.xml'),
+    })
+  ),
+  download: icon(
+    'green',
+    Icon.select({
+      ios: 'arrow.down.circle',
+      android: import('@expo/material-symbols/download.xml'),
+    })
+  ),
+  restart: icon(
+    'purple',
+    Icon.select({
+      ios: 'arrow.clockwise.circle.fill',
+      android: import('@expo/material-symbols/restart_alt.xml'),
+    })
+  ),
   // The one grey icon, on purpose: a disclosure chevron is the platform's own tertiary
   // grey on both systems, and a coloured one would compete with the row it points into.
   chevron: icon(
@@ -253,9 +303,61 @@ export const Icons = {
     'indigo',
     Icon.select({ ios: 'server.rack', android: import('@expo/material-symbols/dns.xml') })
   ),
+  organisation: icon(
+    'indigo',
+    Icon.select({
+      ios: 'building.2.fill',
+      android: import('@expo/material-symbols/corporate_fare.xml'),
+    })
+  ),
   token: icon(
     'yellow',
     Icon.select({ ios: 'key.fill', android: import('@expo/material-symbols/key.xml') })
+  ),
+
+  // The app lock. Shut is green because it is the state to be in; open is orange because
+  // it is a warning rather than an error - nothing has gone wrong, it is simply not on.
+  lock: icon(
+    'green',
+    Icon.select({ ios: 'lock.fill', android: import('@expo/material-symbols/lock.xml') })
+  ),
+  unlocked: icon(
+    'orange',
+    Icon.select({ ios: 'lock.open.fill', android: import('@expo/material-symbols/lock_open.xml') })
+  ),
+  // One glyph for every kind of biometric, because the row's *label* is what says whether
+  // this phone means a face or a finger - `biometricSupport()` asks the phone rather than
+  // guessing, and an icon cannot carry that.
+  biometrics: icon(
+    'blue',
+    Icon.select({ ios: 'faceid', android: import('@expo/material-symbols/fingerprint.xml') })
+  ),
+  // Touch ID's glyph, where `biometrics` above is Face ID's. Which one a phone gets is
+  // decided by `biometricSupport()` asking it, not by the platform.
+  fingerprint: icon(
+    'blue',
+    Icon.select({ ios: 'touchid', android: import('@expo/material-symbols/fingerprint.xml') })
+  ),
+  clear: icon(
+    'grey',
+    Icon.select({
+      ios: 'xmark.circle.fill',
+      android: import('@expo/material-symbols/cancel.xml'),
+    })
+  ),
+  backspace: icon(
+    'grey',
+    Icon.select({
+      ios: 'delete.left',
+      android: import('@expo/material-symbols/backspace.xml'),
+    })
+  ),
+  pin: icon(
+    'indigo',
+    Icon.select({
+      ios: 'circle.grid.3x3.fill',
+      android: import('@expo/material-symbols/password.xml'),
+    })
   ),
 
   // States the app has to explain

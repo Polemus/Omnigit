@@ -9,11 +9,11 @@
  * native-driver transform and never touches JavaScript once it has started.
  */
 
-import { Host } from '@expo/ui';
 import { useEffect, useState } from 'react';
 import { Animated, Easing, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { AssistantColours } from '../theme/tokens';
+import { Host } from './host';
 import { Icon } from './icon';
 import { Icons } from './icons';
 

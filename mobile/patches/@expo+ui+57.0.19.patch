@@ -1,0 +1,56 @@
+diff --git a/node_modules/@expo/ui/android/src/main/java/expo/modules/ui/ExpoUIModule.kt b/node_modules/@expo/ui/android/src/main/java/expo/modules/ui/ExpoUIModule.kt
+index f7f0d1b..ce556ab 100644
+--- a/node_modules/@expo/ui/android/src/main/java/expo/modules/ui/ExpoUIModule.kt
++++ b/node_modules/@expo/ui/android/src/main/java/expo/modules/ui/ExpoUIModule.kt
+@@ -162,6 +162,10 @@ class ExpoUIModule : Module() {
+       return@Constant isDynamicColorSupported
+     }
+ 
++    Function("setFontScale") { scale: Float? ->
++      AppFontScale.value.value = scale
++    }
++
+     Function("getMaterialColors") { options: MaterialColorsOptions? ->
+       val context = appContext.currentActivity
+         ?: appContext.reactContext
+diff --git a/node_modules/@expo/ui/android/src/main/java/expo/modules/ui/HostView.kt b/node_modules/@expo/ui/android/src/main/java/expo/modules/ui/HostView.kt
+index 40f2b08..347b3fc 100644
+--- a/node_modules/@expo/ui/android/src/main/java/expo/modules/ui/HostView.kt
++++ b/node_modules/@expo/ui/android/src/main/java/expo/modules/ui/HostView.kt
+@@ -96,6 +96,17 @@ internal enum class ExpoColorScheme(val value: String) : Enumerable {
+   }
+ }
+ 
++/**
++ * The text scale the app asks for, or null to follow the phone's own setting.
++ *
++ * An app that draws at its own size rather than the system's has nowhere to put that for
++ * Compose: text here reads `fontScale` off the configuration. `ExpoUI.setFontScale` sets
++ * this instead, and every `Host` hands it to its content as the density's font scale.
++ */
++internal object AppFontScale {
++  val value: MutableState<Float?> = mutableStateOf(null)
++}
++
+ @SuppressLint("ViewConstructor")
+ internal class HostView(context: Context, appContext: AppContext) :
+   ExpoComposeView<HostProps>(context, appContext, withHostingView = true) {
+@@ -118,13 +129,17 @@ internal class HostView(context: Context, appContext: AppContext) :
+         ?: ExpoColorScheme.defaultColorScheme(context, isSystemInDarkTheme())
+     }
+     val layoutDirection = props.layoutDirection.value.toLayoutDirection()
++    val density = LocalDensity.current
++    val appFontScale = AppFontScale.value.value
+ 
+     // Material3's `MaterialTheme` does not provide `LocalContentColor` — only `Surface` does — so
+     // without this a `Text` or `Icon` with no explicit color falls back to the `Color.Black`
+     // default of `LocalContentColor` and is unreadable in the dark color scheme.
+     CompositionLocalProvider(
+       LocalLayoutDirection provides layoutDirection,
+-      LocalContentColor provides colorScheme.onSurface
++      LocalContentColor provides colorScheme.onSurface,
++      LocalDensity provides
++        if (appFontScale == null) density else Density(density.density, appFontScale)
+     ) {
+       MaterialExpressiveTheme(colorScheme = colorScheme) {
+         MaybeMatchContentsLayout {

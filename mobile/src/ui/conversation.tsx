@@ -6,7 +6,7 @@
  * comments came from, and the manifest has already dealt with that.
  */
 
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import type { Comment } from '../hosts/types';
 import { Radius, Spacing } from '../theme/tokens';
@@ -14,6 +14,7 @@ import { usePalette } from '../theme/use-palette';
 import { Avatar } from './identity';
 import { Markdown } from './markdown';
 import { relativeTime } from './relative-time';
+import { Text } from './scaled-text';
 
 export function Conversation({
   author,

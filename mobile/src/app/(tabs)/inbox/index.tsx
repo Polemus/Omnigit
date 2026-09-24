@@ -5,20 +5,22 @@
  * account filter, partial-failure state, and content sections inside a refreshable list.
  */
 
-import { FieldGroup, Host, List } from '@expo/ui';
+import { List } from '@expo/ui';
 import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { useCallback } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { useMarkNotificationRead, useNotifications } from '@/api/queries';
-import { notificationTarget } from '@/hosts/notification-target';
+import { useMarkNotificationRead, useNotifications, useRepositories } from '@/api/queries';
+import { notificationTarget, splitFullName } from '@/hosts/notification-target';
 import type { HostProvider } from '@/hosts/provider';
 import { accountKey, type Account, type Notification } from '@/hosts/types';
 import { useAccounts } from '@/state/accounts';
+import { FieldGroup } from '@/ui/field-group';
+import { Host } from '@/ui/host';
 import { Icon } from '@/ui/icon';
 import { hostLabel } from '@/ui/identity';
-import { AccountControlBar } from '@/ui/account-picker';
+import { ownerList, ScopeHeader } from '@/ui/header-scope';
 import { Icons } from '@/ui/icons';
 import { ListItem } from '@/ui/list-item';
 import { NotificationRow } from '@/ui/rows';
@@ -38,9 +40,11 @@ export default function InboxScreen() {
     accounts,
     visibleProviders,
     filter,
+    owner: ownerFilter,
     isLoading: accountsLoading,
   } = useAccounts();
   const { data, isLoading, error, refetch } = useNotifications();
+  const { data: repositoryData } = useRepositories();
   const { mutate: markNotificationRead } = useMarkNotificationRead();
 
   const open = useCallback(
@@ -74,6 +78,7 @@ export default function InboxScreen() {
   if (accountsLoading) {
     return (
       <TabScreen>
+        <ScopeHeader title="Inbox" />
         <Loading />
       </TabScreen>
     );
@@ -82,6 +87,7 @@ export default function InboxScreen() {
   if (accounts.length === 0) {
     return (
       <TabScreen>
+        <ScopeHeader title="Inbox" />
         <Empty
           icon={Icons.account}
           title="No accounts yet"
@@ -98,6 +104,7 @@ export default function InboxScreen() {
   if (isLoading && able.length > 0) {
     return (
       <TabScreen>
+        <ScopeHeader title="Inbox" />
         <Loading label="Checking every inbox…" />
       </TabScreen>
     );
@@ -106,12 +113,30 @@ export default function InboxScreen() {
   if (error && !data) {
     return (
       <TabScreen>
+        <ScopeHeader title="Inbox" />
         <Failed error={error} onRetry={() => void refetch()} />
       </TabScreen>
     );
   }
 
-  const items = data?.items ?? [];
+  // Use the repository list for the owner menu, exactly as the Repositories tab does. If
+  // this were derived only from notifications, an organisation with nothing currently in
+  // the inbox would disappear from the same left-hand control on this tab.
+  const loadedNotifications = data?.items ?? [];
+  const arrived = filter
+    ? loadedNotifications.filter(({ account }) => accountKey(account) === filter)
+    : loadedNotifications;
+  const repositories = filter
+    ? (repositoryData?.items ?? []).filter(({ account }) => accountKey(account) === filter)
+    : (repositoryData?.items ?? []);
+  const owners = ownerList([
+    ...repositories.map(({ item }) => item.owner),
+    ...arrived.map(({ item }) => splitFullName(item.repository).owner),
+  ]);
+  const items = ownerFilter
+    ? arrived.filter(({ item }) => splitFullName(item.repository).owner === ownerFilter)
+    : arrived;
+
   const unreadItems = items.filter(({ item }) => item.isUnread);
   const readItems = items.filter(({ item }) => !item.isUnread);
   const unread = unreadItems.length;
@@ -131,7 +156,6 @@ export default function InboxScreen() {
           key={`${accountKey(account)}/${item.id}`}
           notification={item}
           account={account}
-          grouped
           showChevron={actionable}
           onPress={actionable && provider ? () => open(provider, item) : undefined}
         />
@@ -141,7 +165,7 @@ export default function InboxScreen() {
 
   return (
     <TabScreen>
-      <AccountControlBar />
+      <ScopeHeader title="Inbox" owners={owners} />
       <Host style={[styles.fill, { paddingBottom: clearance }]}>
         <List
           onRefresh={async () => {
@@ -150,7 +174,13 @@ export default function InboxScreen() {
           <FieldGroup.Section style={androidSectionStyle}>
             <ListItem
               leading={<Icon name={Icons.inbox} size={40} />}
-              supportingText={inboxSummary(unread, items.length, selectedAccount, accounts.length)}>
+              supportingText={inboxSummary(
+                unread,
+                items.length,
+                selectedAccount,
+                accounts.length,
+                ownerFilter
+              )}>
               Your inbox
             </ListItem>
           </FieldGroup.Section>
@@ -183,7 +213,9 @@ export default function InboxScreen() {
                 <ListItem
                   onPress={() => void refetch()}
                   leading={<Icon name={Icons.inbox} size={20} />}
-                  supportingText="You are up to date."
+                  supportingText={
+                    ownerFilter ? `Nothing from ${ownerFilter} is waiting.` : 'You are up to date.'
+                  }
                   trailing={<Icon name={Icons.refresh} size={17} />}>
                   Nothing waiting
                 </ListItem>
@@ -219,24 +251,25 @@ export default function InboxScreen() {
   );
 }
 
+/** The owner is named here for the same reason it is on the repositories tab: the header's
+ * control has no room for it, and an unreadable filter reads as a bug. */
 function inboxSummary(
   unread: number,
   total: number,
   selectedAccount: Account | undefined,
-  accountCount: number
+  accountCount: number,
+  owner: string | undefined
 ): string {
   const count = `${unread} unread · ${total} ${total === 1 ? 'notification' : 'notifications'}`;
-  if (selectedAccount) {
-    return `${count} · ${selectedAccount.login} on ${hostLabel(selectedAccount)}`;
-  }
-  return `${count} · ${accountCount} ${accountCount === 1 ? 'account' : 'accounts'}`;
+  const scope = selectedAccount
+    ? `${selectedAccount.login} on ${hostLabel(selectedAccount)}`
+    : `${accountCount} ${accountCount === 1 ? 'account' : 'accounts'}`;
+  return owner ? `${count} · ${owner} · ${scope}` : `${count} · ${scope}`;
 }
 
 function canOpen(notification: Notification): boolean {
   const target = notificationTarget(notification);
-  return (
-    (target.number !== undefined && target.kind !== 'other') || Boolean(notification.webUrl)
-  );
+  return (target.number !== undefined && target.kind !== 'other') || Boolean(notification.webUrl);
 }
 
 function hostOf(url: string): string {

@@ -2,11 +2,13 @@
  * The small coloured things: review states, labels, counts.
  */
 
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
+import { useTextScale } from '../state/text-scale';
 import { labelColours, Radius, Spacing } from '../theme/tokens';
 import { useScheme, usePalette } from '../theme/use-palette';
 import type { Issue, Label, PullRequest } from '../hosts/types';
+import { Text } from './scaled-text';
 
 export type ReviewState = 'open' | 'merged' | 'closed' | 'draft';
 
@@ -55,6 +57,9 @@ export function StateBadge({ state }: { state: ReviewState }) {
 export function LabelChips({ labels, max = 3 }: { labels: Label[] | undefined; max?: number }) {
   const scheme = useScheme();
   const palette = usePalette();
+  // A chip is as wide as its longest sensible label and no wider, so bigger text needs a
+  // bigger ceiling: left where it was, a label at the largest size is cut off mid-word.
+  const scale = useTextScale();
 
   if (!labels || labels.length === 0) return null;
 
@@ -70,7 +75,11 @@ export function LabelChips({ labels, max = 3 }: { labels: Label[] | undefined; m
             key={label.name}
             style={[
               styles.chip,
-              { backgroundColor: colours.background, borderColor: colours.border },
+              {
+                backgroundColor: colours.background,
+                borderColor: colours.border,
+                maxWidth: CHIP_MAX_WIDTH * scale,
+              },
             ]}>
             <Text style={[styles.chipText, { color: colours.text }]} numberOfLines={1}>
               {label.name}
@@ -108,6 +117,9 @@ export function DiffCounts({
   );
 }
 
+/** As wide as a chip gets at the app's own text size. */
+const CHIP_MAX_WIDTH = 120;
+
 const styles = StyleSheet.create({
   badge: {
     paddingHorizontal: Spacing.two,
@@ -135,7 +147,6 @@ const styles = StyleSheet.create({
     paddingVertical: 1,
     borderRadius: Radius.pill,
     borderWidth: StyleSheet.hairlineWidth,
-    maxWidth: 120,
     flexShrink: 1,
   },
   chipText: {

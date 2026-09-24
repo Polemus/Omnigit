@@ -6,7 +6,7 @@
  * refresh; `FieldGroup.Section` supplies the shared grouped row treatment inside it.
  */
 
-import { FieldGroup, Host, List } from '@expo/ui';
+import { List } from '@expo/ui';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useRef } from 'react';
 import { StyleSheet } from 'react-native';
@@ -14,9 +14,11 @@ import { StyleSheet } from 'react-native';
 import { useRepositories } from '@/api/queries';
 import { accountKey, type Account } from '@/hosts/types';
 import { useAccounts } from '@/state/accounts';
+import { FieldGroup } from '@/ui/field-group';
+import { Host } from '@/ui/host';
 import { Icon } from '@/ui/icon';
 import { hostLabel } from '@/ui/identity';
-import { AccountControlBar } from '@/ui/account-picker';
+import { ownerList, ScopeHeader } from '@/ui/header-scope';
 import { Icons } from '@/ui/icons';
 import { ListItem } from '@/ui/list-item';
 import { RepositoryRow } from '@/ui/rows';
@@ -32,7 +34,7 @@ const androidSectionStyle =
 export default function RepositoriesScreen() {
   const router = useRouter();
   const clearance = useTabBarClearance();
-  const { accounts, filter, isLoading: accountsLoading } = useAccounts();
+  const { accounts, filter, owner: ownerFilter, isLoading: accountsLoading } = useAccounts();
   const { data, isLoading, error, refetch } = useRepositories();
 
   // TEMPORARY, and only in development: counts commits so that a runaway re-render shows
@@ -64,6 +66,7 @@ export default function RepositoriesScreen() {
   if (accountsLoading) {
     return (
       <TabScreen>
+        <ScopeHeader title="Repositories" />
         <Loading />
       </TabScreen>
     );
@@ -72,6 +75,7 @@ export default function RepositoriesScreen() {
   if (accounts.length === 0) {
     return (
       <TabScreen>
+        <ScopeHeader title="Repositories" />
         <Empty
           icon={Icons.account}
           title="No accounts yet"
@@ -86,6 +90,7 @@ export default function RepositoriesScreen() {
   if (isLoading) {
     return (
       <TabScreen>
+        <ScopeHeader title="Repositories" />
         <Loading label="Asking every site…" />
       </TabScreen>
     );
@@ -94,19 +99,33 @@ export default function RepositoriesScreen() {
   if (error && !data) {
     return (
       <TabScreen>
+        <ScopeHeader title="Repositories" />
         <Failed error={error} onRetry={() => void refetch()} />
       </TabScreen>
     );
   }
 
-  const items = data?.items ?? [];
+  // Every owner the loaded repositories belong to - your own login and any organisation.
+  // The menu is built from all of them and the rows from the ones that survive the filter,
+  // the same way the inbox and the search tab do it.
+  const loaded = data?.items ?? [];
+  // Scope cached rows synchronously as the account changes. The query key also changes,
+  // but this prevents the previous account's organisations flashing in the header while
+  // React Query swaps observers or serves a cached result for the new key.
+  const accountItems = filter
+    ? loaded.filter(({ account }) => accountKey(account) === filter)
+    : loaded;
+  const owners = ownerList(accountItems.map(({ item }) => item.owner));
+  const items = ownerFilter
+    ? accountItems.filter(({ item }) => item.owner === ownerFilter)
+    : accountItems;
   const selectedAccount = filter
     ? accounts.find((account) => accountKey(account) === filter)
     : undefined;
 
   return (
     <TabScreen>
-      <AccountControlBar />
+      <ScopeHeader title="Repositories" owners={owners} />
       <Host style={[styles.fill, { paddingBottom: clearance }]}>
         <List
           onRefresh={async () => {
@@ -115,7 +134,12 @@ export default function RepositoriesScreen() {
           <FieldGroup.Section style={androidSectionStyle}>
             <ListItem
               leading={<Icon name={Icons.repositories} size={40} />}
-              supportingText={repositorySummary(items.length, selectedAccount, accounts.length)}>
+              supportingText={repositorySummary(
+                items.length,
+                selectedAccount,
+                accounts.length,
+                ownerFilter
+              )}>
               Your repositories
             </ListItem>
           </FieldGroup.Section>
@@ -167,16 +191,24 @@ export default function RepositoriesScreen() {
   );
 }
 
+/**
+ * What is on screen, in words: how many, whose, and from where.
+ *
+ * The owner is named here because the header's control cannot name it - a nav bar has no
+ * room for an organisation's name beside its glyph - and a filter nobody can read is one
+ * people take for a bug.
+ */
 function repositorySummary(
   count: number,
   selectedAccount: Account | undefined,
-  accountCount: number
+  accountCount: number,
+  owner: string | undefined
 ): string {
   const repositoryLabel = `${count} ${count === 1 ? 'repository' : 'repositories'}`;
-  if (selectedAccount) {
-    return `${repositoryLabel} · ${selectedAccount.login} on ${hostLabel(selectedAccount)}`;
-  }
-  return `${repositoryLabel} · ${accountCount} ${accountCount === 1 ? 'account' : 'accounts'}`;
+  const scope = selectedAccount
+    ? `${selectedAccount.login} on ${hostLabel(selectedAccount)}`
+    : `${accountCount} ${accountCount === 1 ? 'account' : 'accounts'}`;
+  return owner ? `${repositoryLabel} · ${owner} · ${scope}` : `${repositoryLabel} · ${scope}`;
 }
 
 function hostOf(url: string): string {

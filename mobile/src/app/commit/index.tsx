@@ -6,13 +6,12 @@
  * conversation to choose between, so its changed files simply follow its details.
  */
 
-import { FieldGroup, Host } from '@expo/ui';
 import * as Clipboard from 'expo-clipboard';
 import * as Haptics from 'expo-haptics';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { useMemo } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { useCommit, useCommitFiles } from '@/api/queries';
 import { commitSummary, shortSha } from '@/hosts/types';
@@ -20,13 +19,17 @@ import { useProvider } from '@/state/accounts';
 import { Spacing } from '@/theme/tokens';
 import { usePalette } from '@/theme/use-palette';
 import { ChangedFileSummary, ChangeTotals } from '@/ui/changed-files';
+import { FieldGroup } from '@/ui/field-group';
 import { iconForFile } from '@/ui/file-icons';
 import { GroupedContent } from '@/ui/grouped-content';
 import { headerMenu } from '@/ui/header-menu';
+import { Host } from '@/ui/host';
 import { Icon } from '@/ui/icon';
 import { Icons } from '@/ui/icons';
 import { ListItem } from '@/ui/list-item';
 import { relativeTime } from '@/ui/relative-time';
+import { Text } from '@/ui/scaled-text';
+import { NavigationBarStrip } from '@/ui/screen';
 import { Empty, Failed, Loading } from '@/ui/states';
 
 export default function CommitScreen() {
@@ -233,6 +236,7 @@ export default function CommitScreen() {
           </FieldGroup.Section>
         </FieldGroup>
       </Host>
+      <NavigationBarStrip />
     </>
   );
 }

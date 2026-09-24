@@ -134,7 +134,9 @@
     "body": "description",
     "commentCount": "user_notes_count",
     "createdAt": "created_at",
-    "labels": "labels"
+    "labels": "labels",
+    "headSha": "diff_refs.head_sha",
+    "baseSha": "diff_refs.base_sha"
   },
 
   "//issueFields": "Same story as merge requests: iid rather than id, description rather than body, and labels that arrive as bare strings with no colour attached.",
@@ -166,7 +168,8 @@
     "author": "author_name",
     "committedAt": "committed_date",
     "additions": "stats.additions",
-    "deletions": "stats.deletions"
+    "deletions": "stats.deletions",
+    "parentSha": "parent_ids.0"
   },
 
   "branchFields": {
@@ -184,7 +187,8 @@
   "//changedFileFields": "GitLab describes a change with three booleans - new_file, deleted_file, renamed_file - rather than one status word, and counts no lines per file. So status and the counts are deliberately left unmapped: a row says Changed rather than guessing a word, and the provider counts the lines from the patch itself.",
   "changedFileFields": {
     "path": "new_path",
-    "patch": "diff"
+    "patch": "diff",
+    "previousPath": "old_path"
   },
 
   "//notificationFields": "A todo, described as a notification. state is pending until it is acted on, which is the nearest thing GitLab has to unread.",

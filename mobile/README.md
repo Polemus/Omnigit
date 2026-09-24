@@ -44,6 +44,15 @@ Three things GitLab forced into the format, each of which any site can now use:
 | `issueStates` | GitLab says `opened` where everyone else says `open` — and returns *everything* rather than failing when asked wrongly, so the closed filter would have silently done nothing. |
 | `pullRequestComments` | A merge request's conversation lives at its own address. Everywhere else, `comments` serves both. |
 
+And four that pictures forced, because a changed image has no patch to show, only its two
+versions — which have to be read at the commits either side of the change:
+
+| Key | Why |
+| --- | --- |
+| `pullRequestFields.headSha`, `.baseSha` | Commits, not branch names: a merged pull request's branch is often deleted, and a base branch moves on. The base is the one the site diffs against — Gitea's `merge_base` and GitLab's `diff_refs.base_sha`, not the base branch's tip. |
+| `commitFields.parentSha` | What a commit's diff is against. A path into an array: `parents.0.sha`, `parent_ids.0`. |
+| `changedFileFields.previousPath` | A renamed picture's old version is at its old path. |
+
 ## What it does
 
 - **Every repository from every site in one list**, newest first, with a badge saying
@@ -51,7 +60,8 @@ Three things GitLab forced into the format, each of which any site can now use:
 - **Pull requests** — state, branches, labels, the conversation, and the diff file by file
 - **Issues** — open and closed, labels, comments
 - **Browse the code** — the file tree with a tappable breadcrumb, and files rendered with
-  syntax highlighting in the same seven colours the desktop uses
+  syntax highlighting in the same seven colours the desktop uses; pictures — PNG, JPEG,
+  GIF, WebP, SVG and the rest — are drawn rather than read out as text
 - **Commits**, branches, and the README rendered as Markdown
 - **One inbox** merged across every site that has one (GitLab's todos count)
 - **Search across all sites at once**

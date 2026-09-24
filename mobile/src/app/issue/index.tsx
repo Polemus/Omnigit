@@ -5,7 +5,6 @@
  * bounded GroupedContent bridge lets that richer content live safely inside FieldGroup.
  */
 
-import { FieldGroup, Host } from '@expo/ui';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { useMemo } from 'react';
@@ -16,12 +15,15 @@ import { useProvider } from '@/state/accounts';
 import { usePalette } from '@/theme/use-palette';
 import { issueState } from '@/ui/badges';
 import { Conversation } from '@/ui/conversation';
+import { FieldGroup } from '@/ui/field-group';
 import { GroupedContent } from '@/ui/grouped-content';
 import { headerMenu } from '@/ui/header-menu';
+import { Host } from '@/ui/host';
 import { Icon } from '@/ui/icon';
 import { Icons } from '@/ui/icons';
 import { ListItem } from '@/ui/list-item';
 import { relativeTime } from '@/ui/relative-time';
+import { NavigationBarStrip } from '@/ui/screen';
 import { Empty, Failed, Loading } from '@/ui/states';
 
 export default function IssueScreen() {
@@ -161,6 +163,7 @@ export default function IssueScreen() {
           </FieldGroup.Section>
         </FieldGroup>
       </Host>
+      <NavigationBarStrip />
     </>
   );
 }

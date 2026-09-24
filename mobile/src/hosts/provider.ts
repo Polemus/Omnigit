@@ -543,6 +543,29 @@ export class HostProvider {
     return decodeContent(body);
   }
 
+  /**
+   * A file's bytes as the site encoded them, base64, for a file that is not text - an image,
+   * which `getFile`'s UTF-8 decoding would turn to noise. The same address and the same
+   * envelope as `getFile`, so every site that can show a file can show a picture.
+   *
+   * Undefined when the envelope carries no bytes: GitHub leaves them out of anything over a
+   * megabyte, saying `encoding: "none"`.
+   */
+  async getFileBase64(
+    owner: string,
+    repo: string,
+    path: string,
+    ref?: string
+  ): Promise<string | undefined> {
+    const endpoint = this.endpoint('contents');
+    if (!endpoint) return undefined;
+    const { body } = await this.send(fillEndpoint(endpoint, { owner, repo, path, ref }));
+    const encoded = readString(body, 'content');
+    if (!encoded || (readString(body, 'encoding') ?? 'base64') !== 'base64') return undefined;
+    // GitHub wraps its base64 at sixty columns.
+    return encoded.replace(/\s/g, '');
+  }
+
   private endpoint(name: keyof EndpointSet): string | undefined {
     const value = this.manifest.endpoints?.[name];
     return value && value.length > 0 ? value : undefined;
@@ -608,6 +631,8 @@ export class HostProvider {
       updatedAt: readString(raw, f.updatedAt ?? 'updated_at'),
       webUrl: readString(raw, f.webUrl ?? 'html_url'),
       labels: this.toLabels(raw, f.labels),
+      headSha: readString(raw, f.headSha),
+      baseSha: readString(raw, f.baseSha),
     };
   }
 
@@ -676,6 +701,7 @@ export class HostProvider {
       additions: readNumber(raw, f.additions),
       deletions: readNumber(raw, f.deletions),
       files: f.files ? readArray(raw, f.files).map((file) => this.toChangedFile(file)) : undefined,
+      parentSha: readString(raw, f.parentSha),
     };
   }
 
@@ -692,12 +718,18 @@ export class HostProvider {
     const counted =
       patch && (additions === undefined || deletions === undefined) ? lineCounts(patch) : undefined;
 
+    const path = readStringOr(raw, f.path ?? 'filename', '');
+    // GitLab names the old path on every file, renamed or not; only a different one says
+    // anything.
+    const previousPath = readString(raw, f.previousPath);
+
     return {
-      path: readStringOr(raw, f.path ?? 'filename', ''),
+      path,
       status: toChangeStatus(readString(raw, f.status ?? 'status')),
       additions: additions ?? counted?.additions ?? 0,
       deletions: deletions ?? counted?.deletions ?? 0,
       patch,
+      previousPath: previousPath && previousPath !== path ? previousPath : undefined,
     };
   }
 
@@ -915,11 +947,25 @@ function decodeContent(body: unknown): string | undefined {
   if (encoded === undefined) return readString(body, 'body');
 
   const encoding = readString(body, 'encoding') ?? 'base64';
+  // GitHub's word for a file too large to inline: the content is empty, and showing that
+  // as an empty file would be a claim about the file rather than about the envelope.
+  if (encoding === 'none') return undefined;
   if (encoding !== 'base64') return encoded;
 
+  return textFromBase64(encoded);
+}
+
+/**
+ * Base64 as text - or undefined for bytes that are not text, by git's own test: a NUL
+ * anywhere in the first 8000. UTF-8 decoding never fails, it substitutes, so without the
+ * test a binary file is shown as a screen of replacement characters rather than as the
+ * binary file it is.
+ */
+export function textFromBase64(encoded: string): string | undefined {
   try {
     const binary = atob(encoded.replace(/\s/g, ''));
     const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+    if (bytes.subarray(0, 8000).indexOf(0) !== -1) return undefined;
     return new TextDecoder('utf-8').decode(bytes);
   } catch {
     return undefined;

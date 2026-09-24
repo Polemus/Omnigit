@@ -107,7 +107,9 @@
     "deletions": "deletions",
     "changedFiles": "changed_files",
     "createdAt": "created_at",
-    "labels": "labels"
+    "labels": "labels",
+    "headSha": "head.sha",
+    "baseSha": "merge_base"
   },
 
   "issueFields": {
@@ -144,7 +146,8 @@
     "committedAt": "commit.author.date",
     "additions": "stats.additions",
     "deletions": "stats.deletions",
-    "files": "files"
+    "files": "files",
+    "parentSha": "parents.0.sha"
   },
 
   "branchFields": {
@@ -165,7 +168,8 @@
     "status": "status",
     "additions": "additions",
     "deletions": "deletions",
-    "patch": "patch"
+    "patch": "patch",
+    "previousPath": "previous_filename"
   },
 
   "notificationFields": {

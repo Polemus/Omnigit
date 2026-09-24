@@ -4,6 +4,12 @@
  * Four tabs, and the ceiling is five: Android's Material tab bar refuses more. Anything
  * further in - a repository, a pull request - is pushed onto the stack instead, which is
  * also what makes the back gesture behave the way people expect.
+ *
+ * Each trigger points at a folder rather than a file, because each tab owns a native stack
+ * of its own - see `TabStack` - and a stack needs a layout route to live in. The first is
+ * a group, `(home)`, so that the repositories tab is still the `/` route: a group adds a
+ * folder without adding a path segment, which is the only way to put a layout around the
+ * screen a tab bar opens on.
  */
 
 import * as Haptics from 'expo-haptics';
@@ -13,6 +19,7 @@ import { Platform } from 'react-native';
 import type { SFSymbol } from 'sf-symbols-typescript';
 
 import { useNotifications } from '@/api/queries';
+import { useUpdateWaiting } from '@/api/updates';
 import { Palettes } from '@/theme/tokens';
 import { useScheme } from '@/theme/use-palette';
 
@@ -43,12 +50,28 @@ export default function TabLayout() {
   const scheme = useScheme();
   const palette = Palettes[scheme];
   const { data } = useNotifications();
+  const updateWaiting = useUpdateWaiting();
 
   const unread = data?.items.filter((entry) => entry.item.isUnread).length ?? 0;
 
   return (
     <NativeTabs
       tintColor={palette.accent}
+      backgroundColor={palette.surface}
+      iconColor={{ default: palette.textTertiary, selected: palette.accent }}
+      labelStyle={{
+        default: { color: palette.textTertiary },
+        selected: { color: palette.accent },
+      }}
+      indicatorColor={palette.accentMuted}
+      rippleColor={palette.accentMuted}
+      shadowColor={palette.separator}
+      badgeBackgroundColor={palette.danger}
+      badgeTextColor={palette.chatOutgoingText}
+      // Four destinations make Android's automatic label mode eligible to shift the
+      // selected item. Keeping every label visible gives every icon the same vertical
+      // slot, including Search after its keyboard has closed and another tab is chosen.
+      labelVisibilityMode="labeled"
       // iOS 26 shrinks the bar to a pill as you scroll down and restores it on the way
       // back up, which is the system behaviour people already know from Safari and Mail.
       minimizeBehavior="onScrollDown"
@@ -62,29 +85,46 @@ export default function TabLayout() {
           if (process.env.EXPO_OS === 'ios') void Haptics.selectionAsync();
         },
       }}>
-      <NativeTabs.Trigger name="index">
+      <NativeTabs.Trigger
+        name="(home)"
+        contentStyle={{ backgroundColor: palette.background }}>
         <NativeTabs.Trigger.Icon {...ICONS.repositories} />
         <NativeTabs.Trigger.Label>Repositories</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
 
-      <NativeTabs.Trigger name="inbox">
+      <NativeTabs.Trigger
+        name="inbox"
+        contentStyle={{ backgroundColor: palette.background }}>
         <NativeTabs.Trigger.Icon {...ICONS.inbox} />
         <NativeTabs.Trigger.Label>Inbox</NativeTabs.Trigger.Label>
         {/* An empty badge would show a bare dot, so the tab carries none at zero. */}
         {unread > 0 ? (
-          <NativeTabs.Trigger.Badge>{unread > 99 ? '99+' : String(unread)}</NativeTabs.Trigger.Badge>
+          <NativeTabs.Trigger.Badge>
+            {unread > 99 ? '99+' : String(unread)}
+          </NativeTabs.Trigger.Badge>
         ) : null}
       </NativeTabs.Trigger>
 
-      <NativeTabs.Trigger name="settings">
+      <NativeTabs.Trigger
+        name="settings"
+        contentStyle={{ backgroundColor: palette.background }}>
         <NativeTabs.Trigger.Icon {...ICONS.settings} />
         <NativeTabs.Trigger.Label>Settings</NativeTabs.Trigger.Label>
+        {/* The same badge the inbox carries, for the same reason: something is waiting and
+            nothing else on screen would say so. One, because there is only ever one update
+            waiting - the newest - and a badge with no number is not a badge on Android. */}
+        {updateWaiting ? <NativeTabs.Trigger.Badge>1</NativeTabs.Trigger.Badge> : null}
       </NativeTabs.Trigger>
 
       {/* Last on purpose: iOS 26 can combine the system search tab with the native
           navigation search bar owned by this tab's nested stack. Other platforms keep
           the ordinary native tab and show their native search UI in the header. */}
-      <NativeTabs.Trigger name="search" role="search">
+      <NativeTabs.Trigger
+        name="search"
+        // `search` is an Apple system-tab role. Android should remain an ordinary
+        // Material destination so it keeps exactly the same layout as the other three.
+        role={process.env.EXPO_OS === 'ios' ? 'search' : undefined}
+        contentStyle={{ backgroundColor: palette.background }}>
         <NativeTabs.Trigger.Icon {...ICONS.search} />
         <NativeTabs.Trigger.Label>Search</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>

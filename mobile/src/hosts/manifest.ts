@@ -147,6 +147,17 @@ export interface PullRequestFieldMap {
   changedFiles?: FieldRef;
   createdAt?: FieldRef;
   labels?: FieldRef;
+  /**
+   * The commits the change runs between, so a picture can be read as it was and as it is:
+   * a binary file has no patch to show, only its two versions. Commits rather than branch
+   * names, because a merged pull request's branch is often deleted and a base branch moves
+   * on. The base is the commit the site diffs against - GitLab's `diff_refs.base_sha`,
+   * Gitea's `merge_base`; GitHub offers only the base branch's tip when the pull request
+   * was last updated, which differs from the merge base only when the base branch changed
+   * the same file since.
+   */
+  headSha?: FieldRef;
+  baseSha?: FieldRef;
 }
 
 /**
@@ -197,6 +208,11 @@ export interface CommitFieldMap {
    * them. Each is read with `changedFileFields`, like a pull request's files.
    */
   files?: FieldRef;
+  /**
+   * The first parent, which is what a commit's diff is against - so a changed picture can
+   * be shown as it was before it. A path into an array: `parents.0.sha`, `parent_ids.0`.
+   */
+  parentSha?: FieldRef;
 }
 
 export interface BranchFieldMap {
@@ -225,6 +241,8 @@ export interface ChangedFileFieldMap {
   additions?: FieldRef;
   deletions?: FieldRef;
   patch?: FieldRef;
+  /** Where a renamed file was before - which is where its old version is read from. */
+  previousPath?: FieldRef;
 }
 
 export interface NotificationFieldMap {

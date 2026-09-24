@@ -32,6 +32,18 @@ interface AccountsValue {
   /** The account key the lists are narrowed to, or undefined for all of them. */
   filter: string | undefined;
   setFilter: (key: string | undefined) => void;
+  /**
+   * The owner the repository list is narrowed to - your own login, or an organisation you
+   * belong to - or undefined for every owner the account can see.
+   *
+   * A second, finer filter than the account: one GitHub login reaches your own repositories
+   * and every organisation's, and on a work account the organisation is usually the only
+   * part anyone wants. Derived from the repositories already loaded rather than from the
+   * site's organisation list, so it needs no request of its own and names exactly the
+   * owners that actually have something in the list.
+   */
+  owner: string | undefined;
+  setOwner: (owner: string | undefined) => void;
   /** True until the tokens have been read once. */
   isLoading: boolean;
   /** Accounts whose token has gone and which need signing in again. */
@@ -51,6 +63,14 @@ export function AccountsProvider({ children }: { children: ReactNode }) {
   const [providers, setProviders] = useState<HostProvider[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<string | undefined>();
+  const [owner, setOwner] = useState<string | undefined>();
+
+  // An owner belongs to an account, so moving to a different one cannot keep it: the
+  // organisations under a work login mean nothing under a personal one.
+  const selectAccount = useCallback((key: string | undefined) => {
+    setFilter(key);
+    setOwner(undefined);
+  }, []);
 
   // Building the providers means reading tokens out of the keychain, which is async, so
   // it is a subscription to the account list rather than something derived during render.
@@ -114,14 +134,28 @@ export function AccountsProvider({ children }: { children: ReactNode }) {
       providers,
       visibleProviders,
       filter,
-      setFilter,
+      setFilter: selectAccount,
+      owner,
+      setOwner,
       isLoading,
       needsSignIn,
       signIn,
       signOut,
       refresh,
     }),
-    [accounts, providers, visibleProviders, filter, isLoading, needsSignIn, signIn, signOut, refresh]
+    [
+      accounts,
+      providers,
+      visibleProviders,
+      filter,
+      selectAccount,
+      owner,
+      isLoading,
+      needsSignIn,
+      signIn,
+      signOut,
+      refresh,
+    ]
   );
 
   return <AccountsContext.Provider value={value}>{children}</AccountsContext.Provider>;

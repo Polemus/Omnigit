@@ -6,15 +6,17 @@
  * Each says what happened and, where there is one, offers the next move.
  */
 
-import { Host, Button } from '@expo/ui';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { Button } from '@expo/ui';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { HostError } from '../hosts/provider';
 import { Radius, Spacing } from '../theme/tokens';
 import { usePalette } from '../theme/use-palette';
 import { GlassSurface } from './glass';
+import { Host } from './host';
 import { Icon } from './icon';
 import { Icons, type IconName } from './icons';
+import { Text } from './scaled-text';
 
 export function Centred({ children }: { children: React.ReactNode }) {
   return <View style={styles.centre}>{children}</View>;

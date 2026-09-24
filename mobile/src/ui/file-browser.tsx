@@ -13,7 +13,6 @@
  * and the back gesture should return to the folder it came from.
  */
 
-import { FieldGroup } from '@expo/ui';
 import * as Haptics from 'expo-haptics';
 import { useState } from 'react';
 import type { ViewStyle } from 'react-native';
@@ -22,7 +21,9 @@ import { useTree } from '../api/queries';
 import type { HostProvider } from '../hosts/provider';
 import type { TreeEntry } from '../hosts/types';
 import { usePalette } from '../theme/use-palette';
+import { FieldGroup } from './field-group';
 import { iconForFile, iconForFolder } from './file-icons';
+import { describeSize } from './file-view';
 import { Icon } from './icon';
 import { Icons } from './icons';
 import { ListItem } from './list-item';
@@ -126,13 +127,7 @@ export function FileBrowserSection({
 /** "Folder", or a file's language and size - whichever of those the site told us. */
 function describeEntry(entry: TreeEntry): string {
   if (entry.type === 'dir') return 'Folder';
-  const parts = [languageFor(entry.name), describeSize(entry.size)].filter(Boolean);
+  const size = entry.size === undefined ? undefined : describeSize(entry.size);
+  const parts = [languageFor(entry.name), size].filter(Boolean);
   return parts.length > 0 ? parts.join(' · ') : 'File';
-}
-
-function describeSize(bytes: number | undefined): string | undefined {
-  if (bytes === undefined) return undefined;
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
-  return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 }

@@ -76,6 +76,9 @@ export interface PullRequest {
   updatedAt?: string;
   webUrl?: string;
   labels?: Label[];
+  /** The commits the change runs between, where the site says - see `PullRequestFieldMap`. */
+  headSha?: string;
+  baseSha?: string;
 }
 
 export interface Issue {
@@ -118,6 +121,8 @@ export interface CommitDetail extends Commit {
   additions?: number;
   deletions?: number;
   files?: ChangedFile[];
+  /** The first parent, which the commit's diff is against. None for a repository's first. */
+  parentSha?: string;
 }
 
 export interface Branch {
@@ -143,6 +148,8 @@ export interface ChangedFile {
   deletions: number;
   /** A unified diff, when the site sends one. Absent for a binary or a very large file. */
   patch?: string;
+  /** Where a renamed file was before, where the site says. */
+  previousPath?: string;
 }
 
 export interface Notification {

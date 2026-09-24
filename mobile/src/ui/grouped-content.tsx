@@ -4,11 +4,16 @@
  * FieldGroup is rendered by SwiftUI/Compose, while conversations and diffs are React
  * Native views. RNHostView bridges the two, and the explicit width prevents long
  * Markdown or diff lines from making the native row wider than the phone.
+ *
+ * On Android the row pads nothing it did not draw itself, so this goes in `SectionRow`,
+ * which gives it a list row's padding - the 32 the Android chrome below allows for.
  */
 
 import { RNHostView } from '@expo/ui';
 import type { ReactNode } from 'react';
 import { Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
+
+import { SectionRow } from './field-group';
 
 const GROUPED_ROW_CHROME = Platform.OS === 'ios' ? 72 : 64;
 
@@ -28,15 +33,17 @@ export function GroupedContent({
   const { width } = useWindowDimensions();
 
   return (
-    <RNHostView matchContents>
-      <View
-        style={[
-          styles.content,
-          { width: Math.max(240, width - GROUPED_ROW_CHROME - extraChrome) },
-        ]}>
-        {children}
-      </View>
-    </RNHostView>
+    <SectionRow>
+      <RNHostView matchContents>
+        <View
+          style={[
+            styles.content,
+            { width: Math.max(240, width - GROUPED_ROW_CHROME - extraChrome) },
+          ]}>
+          {children}
+        </View>
+      </RNHostView>
+    </SectionRow>
   );
 }
 

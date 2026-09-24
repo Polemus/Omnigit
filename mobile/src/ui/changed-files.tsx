@@ -9,13 +9,16 @@
  * diff itself.
  */
 
-import { StyleSheet, Text, View } from 'react-native';
+import type { ReactNode } from 'react';
+import { StyleSheet, View } from 'react-native';
 
 import { lineCounts } from '../hosts/diff';
 import type { ChangedFile, ChangeStatus } from '../hosts/types';
 import { Spacing } from '../theme/tokens';
 import { usePalette } from '../theme/use-palette';
 import { ChangeText, type TextRun } from './change-text';
+import { Legend } from './legend';
+import { Text } from './scaled-text';
 
 /**
  * The line under a changed file's row: what happened to it, and by how many lines.
@@ -73,62 +76,75 @@ export function ChangeTotals({
 }
 
 /**
- * The file's path, where it came from, and its counts - then the old/new legend lined up
- * over the diff's two gutters.
+ * The file's path, where it came from, and its counts - then, over a diff, the old/new
+ * legend lined up over its two gutters.
  *
+ * Drawn whatever state the file is in - still arriving, binary, gone from the change - so
+ * the path bar and the tree toggle at its start stay put while the next file is chosen.
  * `patch` is the one about to be shown. When the file arrived without counts, they are
  * read off that patch, rather than the bar claiming +0 −0 over a diff that plainly
- * changed lines.
+ * changed lines; with neither, there are no counts to show.
  */
 export function DiffHeader({
+  path,
+  context,
   file,
   patch,
-  context,
+  leading,
 }: {
-  file: ChangedFile;
-  patch: string;
+  /** From the route, so it is there before the file is. */
+  path: string;
   /** What the file belongs to - `owner/name · #12`, or `owner/name · 1a2b3c4`. */
   context: string;
+  /** Once it has arrived and is in the change. */
+  file?: ChangedFile;
+  /** The diff about to be shown. The legend is drawn only over one. */
+  patch?: string;
+  /** Before the path: the sidebar's toggle (`SidebarToggle`). */
+  leading?: ReactNode;
 }) {
   const palette = usePalette();
-  const counts = file.additions > 0 || file.deletions > 0 ? file : lineCounts(patch);
+  const counts =
+    file && (file.additions > 0 || file.deletions > 0)
+      ? file
+      : patch
+        ? lineCounts(patch)
+        : undefined;
 
   return (
     <>
       <View style={[styles.pathBar, { borderBottomColor: palette.separator }]}>
+        {leading}
         <View style={styles.pathText}>
           <Text
             selectable
             style={[styles.path, { color: palette.textSecondary }]}
             numberOfLines={2}>
-            {file.path}
+            {path}
           </Text>
           <Text selectable style={[styles.context, { color: palette.textTertiary }]}>
             {context}
           </Text>
         </View>
-        <View style={styles.counts}>
-          <Text selectable style={[styles.count, { color: palette.added }]}>
-            +{counts.additions}
-          </Text>
-          <Text selectable style={[styles.count, { color: palette.removed }]}>
-            −{counts.deletions}
-          </Text>
-        </View>
+        {counts ? (
+          <View style={styles.counts}>
+            <Text selectable style={[styles.count, { color: palette.added }]}>
+              +{counts.additions}
+            </Text>
+            <Text selectable style={[styles.count, { color: palette.removed }]}>
+              −{counts.deletions}
+            </Text>
+          </View>
+        ) : null}
       </View>
 
-      <View style={styles.legend}>
-        <Text style={[styles.legendText, { color: palette.textTertiary }]}>old</Text>
-        <Text style={[styles.legendText, { color: palette.textTertiary }]}>new</Text>
-        <Text style={[styles.legendDetail, { color: palette.textSecondary }]}>
-          {statusLabel(file.status)}
-        </Text>
-      </View>
+      {file && patch ? <Legend gutters={['old', 'new']} detail={statusLabel(file.status)} /> : null}
     </>
   );
 }
 
-function statusLabel(status: ChangeStatus): string {
+/** What the legend over a diff says happened: `Modified file`, `Added file`… */
+export function statusLabel(status: ChangeStatus): string {
   if (status === 'unknown') return 'Changed lines';
   return `${status.charAt(0).toUpperCase()}${status.slice(1)} file`;
 }
@@ -164,23 +180,5 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     fontWeight: '700',
     fontVariant: ['tabular-nums'],
-  },
-  legend: {
-    minHeight: 24,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.two,
-    paddingHorizontal: Spacing.two,
-  },
-  legendText: {
-    width: 24,
-    fontSize: 9,
-    textAlign: 'right',
-    textTransform: 'uppercase',
-  },
-  legendDetail: {
-    flex: 1,
-    paddingLeft: Spacing.two,
-    fontSize: 11,
   },
 });

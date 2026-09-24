@@ -8,11 +8,12 @@
  */
 
 import { Image } from 'expo-image';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import type { Account } from '../hosts/types';
 import { Radius, Spacing } from '../theme/tokens';
 import { usePalette } from '../theme/use-palette';
+import { Text } from './scaled-text';
 
 export function Avatar({
   url,

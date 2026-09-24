@@ -6,16 +6,18 @@
  * that structure rather than changing visual language halfway through the flow.
  */
 
-import { FieldGroup, Host } from '@expo/ui';
 import * as Haptics from 'expo-haptics';
 import { Stack, useRouter } from 'expo-router';
 import { StyleSheet } from 'react-native';
 
 import { capabilitiesOf, type HostManifest } from '@/hosts/manifest';
 import { allManifests } from '@/hosts/registry';
+import { FieldGroup } from '@/ui/field-group';
+import { Host } from '@/ui/host';
 import { Icon } from '@/ui/icon';
 import { Icons } from '@/ui/icons';
 import { ListItem } from '@/ui/list-item';
+import { NavigationBarStrip } from '@/ui/screen';
 import { Text } from '@/ui/text';
 
 export default function SignInScreen() {
@@ -67,6 +69,7 @@ export default function SignInScreen() {
           </FieldGroup.Section>
         </FieldGroup>
       </Host>
+      <NavigationBarStrip />
     </>
   );
 }

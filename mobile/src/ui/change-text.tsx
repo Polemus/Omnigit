@@ -11,9 +11,10 @@
  * Native, and the one TypeScript reads.
  */
 
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { usePalette } from '../theme/use-palette';
+import { Text } from './scaled-text';
 
 export interface TextRun {
   text: string;

@@ -5,12 +5,23 @@
  */
 
 import { Text as UniversalText, type TextProps } from '@expo/ui';
+import { bold } from '@expo/ui/swift-ui/modifiers';
 
+import { useDisplayPreferences } from '../state/display-preferences';
 import { foreground } from './swiftui-colour';
 
 export function Text({ textStyle, modifiers, ...props }: TextProps) {
+  const { boldText } = useDisplayPreferences();
+  const withBold = boldText ? [bold()] : [];
+
   if (!textStyle?.color) {
-    return <UniversalText {...props} textStyle={textStyle} modifiers={modifiers} />;
+    return (
+      <UniversalText
+        {...props}
+        textStyle={textStyle}
+        modifiers={[...(modifiers ?? []), ...withBold]}
+      />
+    );
   }
 
   const { color, ...rest } = textStyle;
@@ -18,7 +29,7 @@ export function Text({ textStyle, modifiers, ...props }: TextProps) {
     <UniversalText
       {...props}
       textStyle={rest}
-      modifiers={[...(modifiers ?? []), foreground(color)]}
+      modifiers={[...(modifiers ?? []), foreground(color), ...withBold]}
     />
   );
 }

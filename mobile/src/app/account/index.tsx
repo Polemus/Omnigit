@@ -6,7 +6,6 @@
  * token, change servers, or refresh profile data without inventing it locally.
  */
 
-import { FieldGroup, Host } from '@expo/ui';
 import * as Haptics from 'expo-haptics';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
@@ -16,10 +15,13 @@ import { manifestFor } from '@/hosts/registry';
 import { accountKey } from '@/hosts/types';
 import { useAccounts } from '@/state/accounts';
 import { usePalette } from '@/theme/use-palette';
+import { FieldGroup } from '@/ui/field-group';
+import { Host } from '@/ui/host';
 import { Icon } from '@/ui/icon';
 import { Avatar, hostLabel } from '@/ui/identity';
 import { Icons } from '@/ui/icons';
 import { ListItem } from '@/ui/list-item';
+import { NavigationBarStrip } from '@/ui/screen';
 import { Empty } from '@/ui/states';
 import { Text } from '@/ui/text';
 
@@ -150,6 +152,7 @@ export default function AccountScreen() {
           </FieldGroup.Section>
         </FieldGroup>
       </Host>
+      <NavigationBarStrip />
     </>
   );
 }
