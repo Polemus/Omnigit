@@ -12,10 +12,17 @@
  * in one place, and erring generous only ever costs empty space at the end of a scroll.
  */
 
-import type { ReactNode } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { createContext, useCallback, useContext, useState, type ReactNode } from 'react';
+import {
+  Platform,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+  type LayoutChangeEvent,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useNavigationPreferences } from '../state/navigation-preferences';
 import { usePalette } from '../theme/use-palette';
 
 /**
@@ -28,6 +35,24 @@ import { usePalette } from '../theme/use-palette';
 const TAB_BAR_HEIGHT = Platform.select({ ios: 56, android: 72 }) ?? 56;
 
 /**
+ * The width a screen actually received from its navigator.
+ *
+ * In the ordinary tab layout that is the window width. In iOS Split View it is only the
+ * secondary column, while `useWindowDimensions()` still reports the entire device. Native
+ * rows with measured React Native content need the former or their content grows under the
+ * sidebar and is clipped at both ends.
+ */
+const ContentWidthContext = createContext<number | undefined>(undefined);
+
+/**
+ * SwiftUI's inset grouped lists stop growing once a regular-width column becomes wide
+ * enough to read comfortably. React Native content beside those lists does not know about
+ * that limit, so it needs the same ceiling when Split View is using a wide detail column.
+ */
+const IOS_SPLIT_LIST_MAX_WIDTH = 540;
+const LIST_HORIZONTAL_INSET = 32;
+
+/**
  * Wraps a tab screen's content below its header.
  *
  * It fills, and that is all it does - the top inset it used to apply belongs to the header
@@ -35,17 +60,64 @@ const TAB_BAR_HEIGHT = Platform.select({ ios: 56, android: 72 }) ?? 56;
  * headers ever go again.
  */
 export function TabScreen({ children }: { children: ReactNode }) {
-  return <View style={styles.fill}>{children}</View>;
+  return <ContentWidthProvider>{children}</ContentWidthProvider>;
+}
+
+/** Measures the navigator column once and shares that width with every screen below it. */
+export function ContentWidthProvider({ children }: { children: ReactNode }) {
+  const [contentWidth, setContentWidth] = useState<number>();
+  const measure = useCallback((event: LayoutChangeEvent) => {
+    const next = event.nativeEvent.layout.width;
+    setContentWidth((current) => (current === next ? current : next));
+  }, []);
+
+  return (
+    <ContentWidthContext.Provider value={contentWidth}>
+      <View style={styles.fill} onLayout={measure}>
+        {children}
+      </View>
+    </ContentWidthContext.Provider>
+  );
+}
+
+/** The current navigator column width, falling back to the window before first layout. */
+export function useContentWidth(): number {
+  const measured = useContext(ContentWidthContext);
+  const { width: windowWidth } = useWindowDimensions();
+  return measured ?? windowWidth;
 }
 
 /**
- * How much room the bottom of a scrolling tab screen needs below its last row.
+ * The outer width of an inset native list section in the current navigator column.
  *
- * The tab bar plus whatever the hardware takes under it - the home indicator on iOS, the
- * gesture bar on Android.
+ * On a phone-sized column the section keeps 16 points clear on either side. In a wide
+ * iOS Split View detail column, SwiftUI additionally applies its readable-width ceiling;
+ * matching that here keeps controls above the list and React Native islands inside the
+ * list on the same leading edge and prevents either from disappearing below the sidebar.
+ */
+export function useNativeListFrameWidth(): number {
+  const width = useContentWidth();
+  const { splitViewEnabled } = useNavigationPreferences();
+  const insetWidth = Math.max(1, width - LIST_HORIZONTAL_INSET);
+
+  if (process.env.EXPO_OS === 'ios' && splitViewEnabled) {
+    return Math.min(insetWidth, IOS_SPLIT_LIST_MAX_WIDTH);
+  }
+
+  return insetWidth;
+}
+
+/**
+ * How much room the bottom of a scrolling destination needs below its last row.
+ *
+ * Ordinarily this is the tab bar plus whatever the hardware takes under it. The iOS Split
+ * View experiment removes the tab bar, so its destinations keep only the home-indicator
+ * inset instead of ending in a tab-bar-sized band of empty space.
  */
 export function useTabBarClearance(): number {
-  return useSafeAreaInsets().bottom + TAB_BAR_HEIGHT;
+  const { bottom } = useSafeAreaInsets();
+  const { splitViewEnabled } = useNavigationPreferences();
+  return bottom + (process.env.EXPO_OS === 'ios' && splitViewEnabled ? 0 : TAB_BAR_HEIGHT);
 }
 
 /**

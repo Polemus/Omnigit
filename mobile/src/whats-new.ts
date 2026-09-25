@@ -41,6 +41,34 @@ interface ReleaseDefinition {
 
 const RELEASES: ReleaseDefinition[] = [
   {
+    date: '2026-09-25',
+    title: 'Split View content that fits',
+    platforms: ['ios'],
+    changes: [
+      "A repository's view and branch controls now follow the same readable width as its lists when the app is rotated.",
+      'README files, issue and pull request conversations, and commit messages now stay inside their grouped cards in Split View.',
+    ],
+  },
+  {
+    date: '2026-09-25',
+    title: 'Performance insights on iPhone and Android',
+    changes: [
+      'Omnigit can now report production startup and screen performance to EAS Observe, helping slow launches and navigation get found and fixed.',
+      'Repository, account, file, commit, and sign-in values are excluded from navigation performance reports.',
+    ],
+  },
+  {
+    date: '2026-09-25',
+    title: 'Experimental Split View on iPhone and iPad',
+    platforms: ['ios'],
+    changes: [
+      'Settings now has an optional Split View experiment. It replaces the tab bar with a native sidebar beside the app on iPad and a collapsible sidebar flow on iPhone.',
+      'While Split View is enabled, the entire app can rotate between portrait and landscape.',
+      'Repository, inbox, search, pull request, issue, and commit rows now stay within the narrower Split View column when the app rotates.',
+      'The experiment is off by default and can be turned off again immediately from Settings.',
+    ],
+  },
+  {
     date: '2026-09-24',
     title: 'Android Settings stability',
     platforms: ['android'],

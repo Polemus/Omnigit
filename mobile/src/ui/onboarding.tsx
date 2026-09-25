@@ -9,6 +9,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
+import { Observe } from 'expo-observe';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import {
@@ -26,6 +27,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { promptBiometrics } from '@/security/biometrics';
+import { useAccounts } from '@/state/accounts';
 import { useLock } from '@/state/lock';
 import { hasSeenIntroduction, rememberIntroduction } from '@/storage/onboarding';
 import { Radius, Spacing } from '@/theme/tokens';
@@ -44,19 +46,25 @@ export function OnboardingGate() {
   const palette = usePalette();
   const queryClient = useQueryClient();
   const { isLoading: lockIsLoading, requiresPinSetup } = useLock();
+  const { isLoading: accountsAreLoading } = useAccounts();
   const introduction = useQuery({
     queryKey: INTRODUCTION_QUERY,
     queryFn: hasSeenIntroduction,
     staleTime: Infinity,
     gcTime: Infinity,
   });
+  const startupIsReady = !introduction.isPending && !lockIsLoading && !accountsAreLoading;
+
+  useEffect(() => {
+    if (startupIsReady) Observe.markInteractive();
+  }, [startupIsReady]);
 
   const finish = useCallback(async () => {
     await rememberIntroduction();
     queryClient.setQueryData(INTRODUCTION_QUERY, true);
   }, [queryClient]);
 
-  if (introduction.isPending || lockIsLoading) {
+  if (!startupIsReady) {
     return (
       <View style={[styles.gate, styles.loading, { backgroundColor: palette.background }]}>
         <ActivityIndicator color={palette.accent} />

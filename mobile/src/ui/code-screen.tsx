@@ -21,12 +21,12 @@ import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useFileTreeVisible } from '../state/preferences';
-import { NavigationBarStrip } from './screen';
 import { Spacing } from '../theme/tokens';
 import { usePalette } from '../theme/use-palette';
 import { Host } from './host';
 import { Icon } from './icon';
 import { Icons } from './icons';
+import { NavigationBarStrip, useContentWidth } from './screen';
 
 export interface CodeSidebar {
   /** Sideways: there is room beside the code, so the toggle shows. */
@@ -64,7 +64,7 @@ export function CodeScreenBody({
   sidebar?: ReactNode;
 }) {
   const palette = usePalette();
-  const { width } = useWindowDimensions();
+  const width = useContentWidth();
 
   // About a third of the screen, within bounds: narrower and names are all ellipsis, wider
   // and it is eating the line length that turning the phone was for.

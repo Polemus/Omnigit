@@ -14,10 +14,11 @@
  */
 
 import { RNHostView } from '@expo/ui';
-import { StyleSheet, useWindowDimensions, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import type { Account, Commit, Issue, Notification, PullRequest, Repository } from '../hosts/types';
 import { commitSummary, shortSha } from '../hosts/types';
+import { useNavigationPreferences } from '../state/navigation-preferences';
 import { Spacing } from '../theme/tokens';
 import { usePalette } from '../theme/use-palette';
 import { DiffCounts, issueState, LabelChips, pullRequestState, StateBadge } from './badges';
@@ -27,6 +28,7 @@ import { Avatar, HostBadge, hostLabel } from './identity';
 import { Icons } from './icons';
 import { ListItem } from './list-item';
 import { relativeTime } from './relative-time';
+import { useContentWidth } from './screen';
 import { Text } from './scaled-text';
 
 /**
@@ -39,6 +41,18 @@ import { Text } from './scaled-text';
  * puts the end of the line off the side of the screen.
  */
 const ROW_CHROME = 116;
+
+/**
+ * A rich React Native supporting row cannot learn the width SwiftUI actually gives a
+ * `ListItem` inside Split View. In landscape its intrinsic width can therefore make the
+ * native HStack wider than the detail column and push the headline and leading accessory
+ * under the sidebar. Let SwiftUI draw one plain supporting string in that mode instead:
+ * it then owns the measurement and truncation from end to end.
+ */
+function useSplitViewSupportingText(): boolean {
+  const { splitViewEnabled } = useNavigationPreferences();
+  return process.env.EXPO_OS === 'ios' && splitViewEnabled;
+}
 
 /**
  * The line under a row's title.
@@ -66,7 +80,7 @@ function Meta({
    */
   extraChrome?: number;
 }) {
-  const { width } = useWindowDimensions();
+  const width = useContentWidth();
 
   return (
     <RNHostView matchContents>
@@ -115,13 +129,14 @@ export function RepositoryRow({
   grouped?: boolean;
 }) {
   const palette = usePalette();
+  const usePlainSupportingText = useSplitViewSupportingText();
 
   // Android draws this line as the native row's own supporting text rather than as a React
   // Native island. `Meta` costs one Jetpack Compose host per row, and a real account's
   // worth of repositories - thirty-odd, all rendered at once - is thirty-odd Compose hosts
   // built on the main thread, which is what froze this list. SwiftUI hosts are cheap enough
   // that iOS keeps the badges and the language dot.
-  if (process.env.EXPO_OS === 'android') {
+  if (process.env.EXPO_OS === 'android' || usePlainSupportingText) {
     return (
       <ListItem
         onPress={onPress}
@@ -222,6 +237,20 @@ export function PullRequestRow({
   showChevron?: boolean;
   grouped?: boolean;
 }) {
+  const usePlainSupportingText = useSplitViewSupportingText();
+
+  if (usePlainSupportingText) {
+    return (
+      <ListItem
+        onPress={onPress}
+        leading={<Avatar url={pull.authorAvatarUrl} size={30} fallback={pull.author} />}
+        supportingText={pullRequestMeta(pull, account)}
+        trailing={showChevron ? <Icon name={Icons.chevron} size={16} /> : undefined}>
+        {pull.title}
+      </ListItem>
+    );
+  }
+
   return (
     <ListItem onPress={onPress}>
       <ListItem.Leading>
@@ -280,6 +309,20 @@ export function IssueRow({
   showChevron?: boolean;
   grouped?: boolean;
 }) {
+  const usePlainSupportingText = useSplitViewSupportingText();
+
+  if (usePlainSupportingText) {
+    return (
+      <ListItem
+        onPress={onPress}
+        leading={<Avatar url={issue.authorAvatarUrl} size={30} fallback={issue.author} />}
+        supportingText={issueMeta(issue)}
+        trailing={showChevron ? <Icon name={Icons.chevron} size={16} /> : undefined}>
+        {issue.title}
+      </ListItem>
+    );
+  }
+
   return (
     <ListItem onPress={onPress}>
       <ListItem.Leading>
@@ -325,6 +368,7 @@ export function CommitRow({
   showChevron?: boolean;
 }) {
   const palette = usePalette();
+  const usePlainSupportingText = useSplitViewSupportingText();
 
   // Android draws this line as the row's own supporting text, as `RepositoryRow` and
   // `NotificationRow` do, and for the reason that matters most here: history is the one
@@ -332,7 +376,7 @@ export function CommitRow({
   // screen, and a React Native island in each one is a Compose host per row that the phone
   // keeps building as the list grows. The short sha loses its monospace, which is the whole
   // cost.
-  if (process.env.EXPO_OS === 'android') {
+  if (process.env.EXPO_OS === 'android' || usePlainSupportingText) {
     return (
       <ListItem
         onPress={onPress}
@@ -396,6 +440,7 @@ export function NotificationRow({
   showChevron?: boolean;
 }) {
   const palette = usePalette();
+  const usePlainSupportingText = useSplitViewSupportingText();
 
   const mark = (
     <View
@@ -412,7 +457,7 @@ export function NotificationRow({
   // a second account's fifty under them - so it is where that cost lands hardest, and where
   // the hosts are built and thrown away again every time the list changes shape. The colour
   // is what is lost: the host badge becomes the host's name in the same grey as the rest.
-  if (process.env.EXPO_OS === 'android') {
+  if (process.env.EXPO_OS === 'android' || usePlainSupportingText) {
     return (
       <ListItem
         onPress={onPress}
@@ -477,6 +522,53 @@ function notificationMeta(account: Account, notification: Notification): string 
   ]
     .filter((part): part is string => !!part)
     .join(' · ');
+}
+
+function pullRequestMeta(pull: PullRequest, account?: Account): string {
+  return [
+    stateWord(pullRequestState(pull)),
+    `#${pull.number}`,
+    pull.author || undefined,
+    account ? hostLabel(account) : undefined,
+    pull.updatedAt ? relativeTime(pull.updatedAt) : undefined,
+    diffMeta(pull.additions, pull.deletions),
+  ]
+    .filter((part): part is string => !!part)
+    .join(' · ');
+}
+
+function issueMeta(issue: Issue): string {
+  const shownLabels = issue.labels?.slice(0, 2).map((label) => label.name) ?? [];
+  const extraLabels = Math.max(0, (issue.labels?.length ?? 0) - shownLabels.length);
+
+  return [
+    stateWord(issueState(issue)),
+    `#${issue.number}`,
+    issue.updatedAt ? relativeTime(issue.updatedAt) : undefined,
+    shownLabels.length > 0
+      ? `${shownLabels.join(', ')}${extraLabels > 0 ? ` +${extraLabels}` : ''}`
+      : undefined,
+  ]
+    .filter((part): part is string => !!part)
+    .join(' · ');
+}
+
+function stateWord(state: ReturnType<typeof pullRequestState>): string {
+  return {
+    open: 'Open',
+    merged: 'Merged',
+    closed: 'Closed',
+    draft: 'Draft',
+  }[state];
+}
+
+function diffMeta(additions?: number, deletions?: number): string | undefined {
+  const parts = [
+    additions !== undefined ? `+${additions}` : undefined,
+    deletions !== undefined ? `-${deletions}` : undefined,
+  ].filter((part): part is string => !!part);
+
+  return parts.length > 0 ? parts.join(' ') : undefined;
 }
 
 const styles = StyleSheet.create({

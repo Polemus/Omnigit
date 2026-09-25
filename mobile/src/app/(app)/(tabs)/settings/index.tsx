@@ -6,6 +6,7 @@
  * being imitated in JavaScript.
  */
 
+import { Switch } from '@expo/ui';
 import Constants from 'expo-constants';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
@@ -19,6 +20,7 @@ import { accountKey } from '@/hosts/types';
 import { useAccounts } from '@/state/accounts';
 import { useDisplayPreferences } from '@/state/display-preferences';
 import { useLock } from '@/state/lock';
+import { useNavigationPreferences } from '@/state/navigation-preferences';
 import { usePalette } from '@/theme/use-palette';
 import { FieldGroup } from '@/ui/field-group';
 import { Host } from '@/ui/host';
@@ -28,6 +30,7 @@ import { Icons } from '@/ui/icons';
 import { ListItem } from '@/ui/list-item';
 import { TabScreen, useTabBarClearance } from '@/ui/screen';
 import { StatusDot } from '@/ui/status-dot';
+import { Text } from '@/ui/text';
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -36,6 +39,7 @@ export default function SettingsScreen() {
   const updateWaiting = useUpdateWaiting();
   const lock = useLock();
   const { appearance } = useDisplayPreferences();
+  const { splitViewEnabled, setSplitViewEnabled } = useNavigationPreferences();
 
   // Off with accounts signed in is the one combination worth marking, because it is the
   // only one where something is at stake and nothing is guarding it.
@@ -94,6 +98,31 @@ export default function SettingsScreen() {
               Display
             </ListItem>
           </FieldGroup.Section>
+
+          {process.env.EXPO_OS === 'ios' ? (
+            <FieldGroup.Section title="Experimental">
+              <ListItem
+                leading={<Icon name={Icons.sidebar} size={20} />}
+                supportingText="Use a native sidebar on iPad and a collapsible sidebar flow on iPhone."
+                trailing={
+                  <Switch
+                    value={splitViewEnabled}
+                    onValueChange={(enabled) => {
+                      void Haptics.selectionAsync();
+                      setSplitViewEnabled(enabled);
+                    }}
+                  />
+                }>
+                Split View
+              </ListItem>
+              <FieldGroup.SectionFooter>
+                <Text>
+                  This Expo navigation API is still experimental. Turn it off here to return
+                  to the normal tab bar immediately.
+                </Text>
+              </FieldGroup.SectionFooter>
+            </FieldGroup.Section>
+          ) : null}
 
           <FieldGroup.Section title="Security">
             <ListItem

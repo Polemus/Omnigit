@@ -15,13 +15,13 @@
  */
 
 import { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Fonts, Spacing, type Palette } from '../theme/tokens';
 import { usePalette } from '../theme/use-palette';
 import { Text } from './scaled-text';
-import { useBottomClearance } from './screen';
+import { useBottomClearance, useContentWidth } from './screen';
 import { CATEGORY_TOKEN, grammarFor, highlightSource, type Span } from './syntax';
 
 /** Past this, the file is cut and the reader told. Matches `DiffView`. */
@@ -51,7 +51,7 @@ export function sourceLines(source: string): string[] {
 
 export function CodeView({ source, path }: CodeViewProps) {
   const palette = usePalette();
-  const { width } = useWindowDimensions();
+  const width = useContentWidth();
   const insets = useSafeAreaInsets();
   const clearance = useBottomClearance();
   // The width the code actually has - less than the screen's beside the file tree, or

@@ -7,14 +7,14 @@
  */
 
 import { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { ChangedFile } from '../hosts/types';
 import { Fonts, Spacing, type Palette } from '../theme/tokens';
 import { usePalette } from '../theme/use-palette';
 import { Text } from './scaled-text';
-import { useBottomClearance } from './screen';
+import { useBottomClearance, useContentWidth } from './screen';
 import {
   CATEGORY_TOKEN,
   grammarFor,
@@ -38,7 +38,7 @@ interface DiffLine {
 
 export function DiffView({ file }: { file: ChangedFile }) {
   const palette = usePalette();
-  const { width } = useWindowDimensions();
+  const width = useContentWidth();
   const insets = useSafeAreaInsets();
   const clearance = useBottomClearance();
   // The width the diff actually has, measured as `CodeView` measures it.

@@ -23,9 +23,12 @@ import { Radius, Spacing } from '../theme/tokens';
 import { usePalette } from '../theme/use-palette';
 import { GlassSurface } from './glass';
 import { NativeMenuPicker, type NativeMenuPickerOption } from './native-menu-picker';
+import { useNativeListFrameWidth } from './screen';
 import { Text } from './scaled-text';
 
 export function ControlBar({ children }: { children: ReactNode }) {
+  const listFrameWidth = useNativeListFrameWidth();
+
   // Android's repository choices are individual pills that need the whole row in order
   // to wrap naturally. A surface around them would be a second, much larger pill behind
   // the real controls. iOS keeps the glass island around its native segmented control.
@@ -34,7 +37,7 @@ export function ControlBar({ children }: { children: ReactNode }) {
   }
 
   return (
-    <GlassSurface variant="clear" style={styles.bar}>
+    <GlassSurface variant="clear" style={[styles.bar, { width: listFrameWidth }]}>
       {children}
     </GlassSurface>
   );
@@ -180,7 +183,8 @@ export function MenuPickerRow({
 
 const styles = StyleSheet.create({
   bar: {
-    marginHorizontal: Spacing.four,
+    alignSelf: 'flex-start',
+    marginLeft: Spacing.four,
     marginVertical: Spacing.three,
     padding: Spacing.two,
     gap: Spacing.two,

@@ -1,25 +1,49 @@
 /**
- * The root of the app: caching, accounts, theme, and the stack the tabs sit inside.
+ * The root of the app: caching, accounts, theme, and the optional iOS navigation shell.
  */
 
 import { QueryClient, QueryClientProvider, focusManager } from '@tanstack/react-query';
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import { Observe, ObserveRoot } from 'expo-observe';
+import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import { AppState, type AppStateStatus } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AccountsProvider } from '@/state/accounts';
 import { DisplayPreferencesProvider } from '@/state/display-preferences';
 import { LockProvider } from '@/state/lock';
+import { NavigationPreferencesProvider } from '@/state/navigation-preferences';
 import { Palettes } from '@/theme/tokens';
 import { useScheme } from '@/theme/use-palette';
 import { AssistantGlowHost } from '@/ui/assistant-glow';
+import { AppNavigation } from '@/ui/app-navigation';
 import { AppLockGate } from '@/ui/lock-screen';
 import { useNavigationBarButtons } from '@/ui/navigation-bar';
 import { OnboardingGate } from '@/ui/onboarding';
-import { lockUpright } from '@/ui/rotation';
+import { useAppRotationPolicy } from '@/ui/rotation';
+
+// Navigation metrics must be enabled before any route mounts. Omnigit passes repository,
+// account and file identity in query parameters, so hide those values (and therefore the
+// resolved URL) while keeping the stable route pattern available for performance reports.
+Observe.configure({
+  integrations: {
+    'expo-router': {
+      filteredParams: [
+        'account',
+        'owner',
+        'name',
+        'number',
+        'path',
+        'sha',
+        'ref',
+        'baseUrl',
+        'replace',
+      ],
+    },
+  },
+});
 
 SplashScreen.preventAutoHideAsync();
 
@@ -60,26 +84,24 @@ function useRefetchOnForeground() {
   }, []);
 }
 
-export default function RootLayout() {
+function RootLayout() {
   return (
     <DisplayPreferencesProvider>
-      <AppLayout />
+      <NavigationPreferencesProvider>
+        <AppLayout />
+      </NavigationPreferencesProvider>
     </DisplayPreferencesProvider>
   );
 }
+
+export default ObserveRoot.wrap(RootLayout);
 
 function AppLayout() {
   const scheme = useScheme();
   const palette = Palettes[scheme];
   useRefetchOnForeground();
   useNavigationBarButtons(scheme);
-
-  // Upright until a code screen says otherwise. A layout effect so that it lands before
-  // any screen's focus effect: opened straight onto a file from a link, the file's unlock
-  // has to come second, or this would lock the one screen that may turn.
-  useLayoutEffect(() => {
-    lockUpright();
-  }, []);
+  useAppRotationPolicy();
 
   useEffect(() => {
     // Nothing here waits on the network - the account list is a local file - so the
@@ -106,61 +128,7 @@ function AppLayout() {
             <AccountsProvider>
               <ThemeProvider value={navigationTheme}>
                 <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
-                <Stack
-                  screenOptions={{
-                    headerLargeTitleEnabled: false,
-                    // The root stack owns every pushed page and modal. Set this once so
-                    // Android centres their titles consistently; iOS keeps its native
-                    // navigation-bar alignment.
-                    headerTitleAlign: process.env.EXPO_OS === 'android' ? 'center' : undefined,
-                    // Native-stack transitions briefly expose the scene behind the card.
-                    // Paint it explicitly so dark mode never falls through to white.
-                    contentStyle: { backgroundColor: palette.background },
-                  }}>
-                  {/* No header *here*, because each tab brings its own: one nav bar above the
-                    whole tab bar could only ever show one title and one set of controls, and
-                    the account and owner a list is drawn from differ per tab. So every tab
-                    wraps its screen in a stack of its own - see `TabStack` - and this screen
-                    stays bare so there are never two bars stacked up. */}
-                  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                  <Stack.Screen
-                    name="sign-in/index"
-                    options={{ title: 'Add an account', presentation: 'modal' }}
-                  />
-                  <Stack.Screen name="sign-in/host" options={{ title: 'Sign in' }} />
-                  <Stack.Screen
-                    name="account/index"
-                    options={{ title: 'Account', presentation: 'modal' }}
-                  />
-                  {/* A modal, like Add an account: a short errand you finish and dismiss,
-                    rather than somewhere in the app you navigate to and come back from. */}
-                  <Stack.Screen
-                    name="updates/index"
-                    options={{ title: 'Updates', presentation: 'modal' }}
-                  />
-                  {/* Pushed from inside the Updates modal, as the sign-in form is from Add an
-                    account. */}
-                  <Stack.Screen name="updates/whats-new" options={{ title: "What's new" }} />
-                  <Stack.Screen
-                    name="app-lock/index"
-                    options={{ title: 'App lock', presentation: 'modal' }}
-                  />
-                  <Stack.Screen
-                    name="display/index"
-                    options={{ title: 'Display', headerBackTitle: 'Settings' }}
-                  />
-                  <Stack.Screen name="text-size/index" options={{ title: 'Text Size' }} />
-                  <Stack.Screen name="repo/index" options={{ title: '' }} />
-                  <Stack.Screen name="pull/index" options={{ title: '' }} />
-                  <Stack.Screen name="issue/index" options={{ title: '' }} />
-                  <Stack.Screen name="file/index" options={{ title: '' }} />
-                  <Stack.Screen name="diff/index" options={{ title: '' }} />
-                  <Stack.Screen name="commit/index" options={{ title: '' }} />
-                  <Stack.Screen name="commit/file" options={{ title: '' }} />
-                  {/* The assistant draws its own header: the orb and its name over the
-                    conversation, as iMessage puts a contact's photo over one. */}
-                  <Stack.Screen name="chat/index" options={{ headerShown: false }} />
-                </Stack>
+                <AppNavigation />
                 {/* Over the whole navigator, so the glow frames the display - header and all -
                   while the conversation slides in beneath it. */}
                 <AssistantGlowHost />

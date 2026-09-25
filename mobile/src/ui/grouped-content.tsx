@@ -11,11 +11,13 @@
 
 import { RNHostView } from '@expo/ui';
 import type { ReactNode } from 'react';
-import { Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 
 import { SectionRow } from './field-group';
+import { useContentWidth, useNativeListFrameWidth } from './screen';
 
-const GROUPED_ROW_CHROME = Platform.OS === 'ios' ? 72 : 64;
+const IOS_GROUPED_ROW_INSET = 40;
+const ANDROID_GROUPED_ROW_CHROME = 64;
 
 export function GroupedContent({
   children,
@@ -30,7 +32,12 @@ export function GroupedContent({
    */
   extraChrome?: number;
 }) {
-  const { width } = useWindowDimensions();
+  const width = useContentWidth();
+  const listFrameWidth = useNativeListFrameWidth();
+  const contentWidth =
+    Platform.OS === 'ios'
+      ? listFrameWidth - IOS_GROUPED_ROW_INSET - extraChrome
+      : width - ANDROID_GROUPED_ROW_CHROME - extraChrome;
 
   return (
     <SectionRow>
@@ -38,7 +45,9 @@ export function GroupedContent({
         <View
           style={[
             styles.content,
-            { width: Math.max(240, width - GROUPED_ROW_CHROME - extraChrome) },
+            // Never enforce a minimum wider than the native row. A very narrow Split View
+            // column should reflow Markdown and comments, not push their leading edge away.
+            { width: Math.max(1, contentWidth) },
           ]}>
           {children}
         </View>

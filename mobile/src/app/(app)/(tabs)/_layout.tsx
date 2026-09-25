@@ -13,6 +13,7 @@
  */
 
 import * as Haptics from 'expo-haptics';
+import { Slot } from 'expo-router';
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import { unstable_getMaterialSymbolSourceAsync, type AndroidSymbol } from 'expo-symbols';
 import { Platform } from 'react-native';
@@ -20,6 +21,7 @@ import type { SFSymbol } from 'sf-symbols-typescript';
 
 import { useNotifications } from '@/api/queries';
 import { useUpdateWaiting } from '@/api/updates';
+import { useNavigationPreferences } from '@/state/navigation-preferences';
 import { Palettes } from '@/theme/tokens';
 import { useScheme } from '@/theme/use-palette';
 
@@ -47,6 +49,17 @@ const ICONS = {
 };
 
 export default function TabLayout() {
+  const { splitViewEnabled } = useNavigationPreferences();
+
+  // The Split View sidebar owns these four destinations while the experiment is on.
+  // A Slot keeps each destination's existing stack and header without drawing a second
+  // navigation control at the bottom of the secondary column.
+  if (process.env.EXPO_OS === 'ios' && splitViewEnabled) return <Slot />;
+
+  return <NativeTabLayout />;
+}
+
+function NativeTabLayout() {
   const scheme = useScheme();
   const palette = Palettes[scheme];
   const { data } = useNotifications();

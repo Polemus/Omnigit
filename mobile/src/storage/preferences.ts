@@ -20,6 +20,8 @@ export interface Preferences {
   boldText?: boolean;
   /** Whether a file tree shows beside the code or a diff when the phone is on its side. */
   fileTreeVisible?: boolean;
+  /** Whether iOS uses the experimental native sidebar instead of its tab bar. */
+  splitViewEnabled?: boolean;
   /**
    * How much bigger than its designed size the app draws its text - 1 to 1.5, and 1 unless
    * the reader has moved the slider in Settings. The phone's own text size is deliberately
