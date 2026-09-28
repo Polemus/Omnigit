@@ -299,6 +299,18 @@ public sealed partial class GitService : IGitService
 
         foreach (var entry in entries.OrderBy(e => e.FilePath, StringComparer.Ordinal))
         {
+            // libgit2 has no patch for a conflicted path - the index holds three versions
+            // and none of them is "the" staged one - so it came out as +0 -0 and an empty
+            // pane, for the one file the user most needs to read. Shown from the working
+            // file instead, markers and all. Checked first: a conflicted path can also be
+            // missing from the patch entirely, and would otherwise be described as a new
+            // untracked file.
+            if (entry.State.HasFlag(FileStatus.Conflicted))
+            {
+                changes.Add(DescribeConflict(workdir, entry.FilePath));
+                continue;
+            }
+
             if (patches.TryGetValue(entry.FilePath, out var pec))
             {
                 changes.Add(new FileChange
@@ -1822,6 +1834,130 @@ public sealed partial class GitService : IGitService
             Deletions = 0,
             Diff = lines,
         };
+    }
+
+    /// <summary>
+    /// A conflicted file as it sits in the working tree: the lines on this branch's side
+    /// of each conflict in red, the incoming side in green, and the markers as headers.
+    /// </summary>
+    /// <remarks>
+    /// Red and green read as "taking theirs replaces this with that", which is exactly
+    /// what the Take theirs button beside it does. The two sides are then paired by
+    /// <see cref="WordDiff"/> like any other edit, so a conflict over one number shows
+    /// that number. A <c>|||||||</c> base section (diff3 style) is shown as context,
+    /// being neither side.
+    /// </remarks>
+    internal static FileChange DescribeConflict(string workdir, string relativePath)
+    {
+        var lines = new List<DiffLine>();
+        int ours = 0, theirs = 0;
+
+        try
+        {
+            var full = Path.Combine(workdir, relativePath);
+            var info = new FileInfo(full);
+
+            if (!info.Exists)
+                lines.Add(new DiffLine { Kind = DiffLineKind.HunkHeader, Text = Strings.Get("Deleted on one side of the conflict") });
+            else if (info.Length > MaxUntrackedDiffBytes || LooksBinary(full))
+                lines.Add(new DiffLine { Kind = DiffLineKind.HunkHeader, Text = Strings.Get("Binary file - no preview") });
+            else
+            {
+                var highlighter = SyntaxHighlighter.For(relativePath);
+                var state = new SyntaxState();
+                var section = ConflictSection.None;
+                var text = File.ReadAllLines(full);
+
+                // Each conflict's two sides, paired by position once it closes. Not
+                // WordDiff.Apply: that pairs red directly followed by green, and here the
+                // ======= marker always sits between them.
+                var oursLines = new List<DiffLine>();
+                var theirsLines = new List<DiffLine>();
+
+                void PairSides()
+                {
+                    for (var p = 0; p < Math.Min(oursLines.Count, theirsLines.Count); p++)
+                    {
+                        if (WordDiff.Compare(oursLines[p].Text, theirsLines[p].Text) is { } pair)
+                        {
+                            oursLines[p].Emphasis = pair.Old;
+                            theirsLines[p].Emphasis = pair.New;
+                        }
+                    }
+
+                    oursLines.Clear();
+                    theirsLines.Clear();
+                }
+
+                for (var i = 0; i < text.Length && lines.Count < UnifiedDiffParser.MaxLines; i++)
+                {
+                    var line = text[i];
+                    var marker = line.StartsWith("<<<<<<<", StringComparison.Ordinal) ? ConflictSection.Ours
+                        : line.StartsWith("|||||||", StringComparison.Ordinal) ? ConflictSection.Base
+                        : line.StartsWith("=======", StringComparison.Ordinal) && section != ConflictSection.None ? ConflictSection.Theirs
+                        : line.StartsWith(">>>>>>>", StringComparison.Ordinal) ? ConflictSection.None
+                        : (ConflictSection?)null;
+
+                    if (marker is { } next)
+                    {
+                        if (next == ConflictSection.None)
+                            PairSides();
+
+                        section = next;
+                        state = new SyntaxState();
+                        lines.Add(new DiffLine { Kind = DiffLineKind.HunkHeader, Text = line, NewNumber = (i + 1).ToString() });
+                        continue;
+                    }
+
+                    var kind = section switch
+                    {
+                        ConflictSection.Ours => DiffLineKind.Removed,
+                        ConflictSection.Theirs => DiffLineKind.Added,
+                        _ => DiffLineKind.Context,
+                    };
+
+                    if (kind == DiffLineKind.Removed)
+                        ours++;
+                    else if (kind == DiffLineKind.Added)
+                        theirs++;
+
+                    var row = new DiffLine
+                    {
+                        Kind = kind,
+                        Text = line,
+                        NewNumber = (i + 1).ToString(),
+                        Spans = highlighter is null ? [] : highlighter.Highlight(line, state),
+                    };
+                    lines.Add(row);
+
+                    if (kind == DiffLineKind.Removed)
+                        oursLines.Add(row);
+                    else if (kind == DiffLineKind.Added)
+                        theirsLines.Add(row);
+                }
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            lines.Add(new DiffLine { Kind = DiffLineKind.HunkHeader, Text = Strings.Get("Unable to read file") });
+        }
+
+        return new FileChange
+        {
+            Path = relativePath,
+            Status = ChangeStatus.Conflicted,
+            Additions = theirs,
+            Deletions = ours,
+            Diff = lines,
+        };
+    }
+
+    private enum ConflictSection
+    {
+        None,
+        Ours,
+        Base,
+        Theirs,
     }
 
     private static bool LooksBinary(string file)
