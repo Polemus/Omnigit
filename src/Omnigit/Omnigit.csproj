@@ -16,6 +16,13 @@
     <ApplicationIcon>Assets/omnigit.ico</ApplicationIcon>
     <InvariantGlobalization>true</InvariantGlobalization>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
+
+    <!-- The plugin SDK writes an XML documentation file for plugin authors, and a publish
+         copies a referenced project's XML beside its DLL. On macOS that lands in
+         Contents/MacOS, which codesign treats as code: it refused to seal a bundle
+         holding a text file, and the v0.6.0 build failed on it (#22). Authors compile
+         against the SDK project, not the app, so nothing needs it here. -->
+    <PublishReferencesDocumentationFiles>false</PublishReferencesDocumentationFiles>
   </PropertyGroup>
 
   <ItemGroup>
