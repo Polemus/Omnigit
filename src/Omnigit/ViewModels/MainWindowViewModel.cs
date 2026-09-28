@@ -1734,6 +1734,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         Repositories.Remove(repository);
         RebuildGroups();
+        _commitDrafts.Remove(repository.LocalPath);
 
         if (SelectedRepository == repository)
         {
@@ -3362,6 +3363,36 @@ public partial class MainWindowViewModel : ViewModelBase
     private void SaveRepositories()
         => _store.Save(Repositories.Select(r => r.LocalPath), SelectedRepository?.LocalPath);
 
+    /// <summary>What was in the commit box of each repository the user switched away from.</summary>
+    private readonly Dictionary<string, (string Summary, string Description)> _commitDrafts = new(StringComparer.Ordinal);
+
+    /// <summary>
+    /// The commit box belongs to a repository. It used to carry across a switch, so a
+    /// half-typed message - or the "Revert …" git prepared for a revert stopped on a
+    /// conflict - sat ready to commit in a different repository with Commit enabled.
+    /// Now it is put away on the way out and brought back on return.
+    /// </summary>
+    private void SwapCommitDraft(string? leaving, string arriving)
+    {
+        if (IsAmending)
+        {
+            // Amend is about the last commit of the repository being left; turning it
+            // off clears the message it loaded, which is that commit's and not a draft.
+            IsAmending = false;
+        }
+        else if (leaving is not null)
+        {
+            if (string.IsNullOrWhiteSpace(CommitSummary) && string.IsNullOrWhiteSpace(CommitDescription))
+                _commitDrafts.Remove(leaving);
+            else
+                _commitDrafts[leaving] = (CommitSummary, CommitDescription);
+        }
+
+        (CommitSummary, CommitDescription) = _commitDrafts.Remove(arriving, out var draft)
+            ? draft
+            : (string.Empty, string.Empty);
+    }
+
     private async Task OpenRepositoryAsync(RepositoryInfo repository)
     {
         // The list in hand belongs to whatever was open before. Cleared rather than
@@ -3378,6 +3409,9 @@ public partial class MainWindowViewModel : ViewModelBase
         // Reloads pass the repository that is already open; only a genuine switch is
         // worth a fetch, or every commit would trigger one.
         var switched = SelectedRepository?.LocalPath != repository.LocalPath;
+
+        if (switched)
+            SwapCommitDraft(SelectedRepository?.LocalPath, repository.LocalPath);
 
         SelectedRepository = repository;
         OnPropertyChanged(nameof(SyncDetailLabel));
