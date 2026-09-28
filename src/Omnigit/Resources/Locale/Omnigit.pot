@@ -994,6 +994,7 @@ msgstr[1] ""
 #: src/Omnigit/ViewModels/MainWindowViewModel.cs:2385
 #: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:57
 #: src/Omnigit/Views/Viewers/LockfileViewer.cs:43
+#: src/Omnigit/Views/Viewers/TableViewer.cs:44
 msgid "Loading…"
 msgstr ""
 
@@ -1101,6 +1102,10 @@ msgstr ""
 
 #: src/Omnigit/ViewModels/MainWindowViewModel.cs:1091
 msgid "No branches yet - the first commit makes one."
+msgstr ""
+
+#: src/Omnigit/Views/Viewers/TableViewer.cs:80
+msgid "No cell changed. The file changed in some other way - switch to Text to see how."
 msgstr ""
 
 #: src/Omnigit/HostProviders/HostConnectionTester.cs:179
@@ -1556,6 +1561,10 @@ msgstr ""
 msgid "Show in your file manager"
 msgstr ""
 
+#: src/Omnigit/Views/Viewers/TableViewer.cs:110
+msgid "Showing the first {0} rows of the comparison."
+msgstr ""
+
 #: src/Omnigit/Views/Viewers/SideBySideViewer.cs:16
 msgid "Side by side"
 msgstr ""
@@ -1656,6 +1665,10 @@ msgstr ""
 
 #: src/Omnigit/Views/SettingsView.axaml:483
 msgid "TOKEN HEADER"
+msgstr ""
+
+#: src/Omnigit/Views/Viewers/TableViewer.cs:21
+msgid "Table"
 msgstr ""
 
 #: src/Omnigit/Services/GitService.CommitOperations.cs:48
@@ -1822,6 +1835,10 @@ msgstr ""
 
 #: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:121
 msgid "This file couldn't be decoded as an image. Switch to Text to see what changed."
+msgstr ""
+
+#: src/Omnigit/Views/Viewers/TableViewer.cs:71
+msgid "This file is too large to show as a table. Switch to Text to see the diff."
 msgstr ""
 
 #: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:87
@@ -2388,6 +2405,12 @@ msgstr[1] ""
 #: src/Omnigit/Views/SettingsView.axaml:24
 msgid "← Back to repository"
 msgstr ""
+
+#: src/Omnigit/Views/Viewers/TableViewer.cs:118
+msgid "⋯ {0} unchanged row"
+msgid_plural "⋯ {0} unchanged rows"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/Omnigit/Services/GitService.CommitOperations.cs:375
 #: src/Omnigit/Services/GitService.cs:576

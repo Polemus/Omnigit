@@ -995,6 +995,7 @@ msgstr[1] "[!!Ļöåđéđ, {0} ṽïéŵéŗš ······!!]"
 #: src/Omnigit/ViewModels/MainWindowViewModel.cs:2385
 #: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:57
 #: src/Omnigit/Views/Viewers/LockfileViewer.cs:43
+#: src/Omnigit/Views/Viewers/TableViewer.cs:44
 msgid "Loading…"
 msgstr "[!!Ļöåđïñğ… ··!!]"
 
@@ -1103,6 +1104,10 @@ msgstr "[!!Ñö ƀŗåñçĥ ïš çĥéçķéđ öûţ. ········!!]"
 #: src/Omnigit/ViewModels/MainWindowViewModel.cs:1091
 msgid "No branches yet - the first commit makes one."
 msgstr "[!!Ñö ƀŗåñçĥéš ýéţ - ţĥé ƒïŗšţ çöṁṁïţ ṁåķéš öñé. ··············!!]"
+
+#: src/Omnigit/Views/Viewers/TableViewer.cs:80
+msgid "No cell changed. The file changed in some other way - switch to Text to see how."
+msgstr "[!!Ñö çéļļ çĥåñğéđ. Ţĥé ƒïļé çĥåñğéđ ïñ šöṁé öţĥéŗ ŵåý - šŵïţçĥ ţö Ţéẋţ ţö šéé ĥöŵ. ························!!]"
 
 #: src/Omnigit/HostProviders/HostConnectionTester.cs:179
 msgid "No current-user endpoint, so sign-in cannot work."
@@ -1557,6 +1562,10 @@ msgstr "[!!Šĥöŵ ïñ ƒïļé ṁåñåğéŗ ······!!]"
 msgid "Show in your file manager"
 msgstr "[!!Šĥöŵ ïñ ýöûŗ ƒïļé ṁåñåğéŗ ········!!]"
 
+#: src/Omnigit/Views/Viewers/TableViewer.cs:110
+msgid "Showing the first {0} rows of the comparison."
+msgstr "[!!Šĥöŵïñğ ţĥé ƒïŗšţ {0} ŗöŵš öƒ ţĥé çöṁþåŗïšöñ. ··············!!]"
+
 #: src/Omnigit/Views/Viewers/SideBySideViewer.cs:16
 msgid "Side by side"
 msgstr "[!!Šïđé ƀý šïđé ····!!]"
@@ -1658,6 +1667,10 @@ msgstr "[!!ŢÉŠŢ ÏŢ ÅĞÅÏÑŠŢ Å ŠÉŖṼÉŖ ·······!!]"
 #: src/Omnigit/Views/SettingsView.axaml:483
 msgid "TOKEN HEADER"
 msgstr "[!!ŢÖĶÉÑ ĤÉÅĐÉŖ ····!!]"
+
+#: src/Omnigit/Views/Viewers/TableViewer.cs:21
+msgid "Table"
+msgstr "[!!Ţåƀļé ··!!]"
 
 #: src/Omnigit/Services/GitService.CommitOperations.cs:48
 msgid "Tag '{0}' already exists."
@@ -1824,6 +1837,10 @@ msgstr "[!!Ţĥïš çļöñé ĥöļđš {0} — ñöñé öƒ ŵĥïçĥ åŗ�
 #: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:121
 msgid "This file couldn't be decoded as an image. Switch to Text to see what changed."
 msgstr "[!!Ţĥïš ƒïļé çöûļđñ'ţ ƀé đéçöđéđ åš åñ ïṁåğé. Šŵïţçĥ ţö Ţéẋţ ţö šéé ŵĥåţ çĥåñğéđ. ·······················!!]"
+
+#: src/Omnigit/Views/Viewers/TableViewer.cs:71
+msgid "This file is too large to show as a table. Switch to Text to see the diff."
+msgstr "[!!Ţĥïš ƒïļé ïš ţöö ļåŗğé ţö šĥöŵ åš å ţåƀļé. Šŵïţçĥ ţö Ţéẋţ ţö šéé ţĥé đïƒƒ. ······················!!]"
 
 #: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:87
 msgid "This image is too large to preview ({0})."
@@ -2389,6 +2406,12 @@ msgstr[1] "[!!{1} öƒ {0} ûñçöṁṁïţţéđ çĥåñğéš ŵïļļ çö
 #: src/Omnigit/Views/SettingsView.axaml:24
 msgid "← Back to repository"
 msgstr "[!!← Ƀåçķ ţö ŗéþöšïţöŗý ······!!]"
+
+#: src/Omnigit/Views/Viewers/TableViewer.cs:118
+msgid "⋯ {0} unchanged row"
+msgid_plural "⋯ {0} unchanged rows"
+msgstr[0] "[!!⋯ {0} ûñçĥåñğéđ ŗöŵ ······!!]"
+msgstr[1] "[!!⋯ {0} ûñçĥåñğéđ ŗöŵš ······!!]"
 
 #: src/Omnigit/Services/GitService.CommitOperations.cs:375
 #: src/Omnigit/Services/GitService.cs:576
