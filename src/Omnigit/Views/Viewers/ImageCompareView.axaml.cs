@@ -37,6 +37,9 @@ public partial class ImageCompareView : UserControl
         };
         SwipeMode.IsCheckedChanged += (_, _) => Arrange();
 
+        // The fitted scale changes with the pane, and the divider is drawn inside it.
+        Fit.SizeChanged += (_, _) => Arrange();
+
         Stage.PointerPressed += OnStagePointer;
         Stage.PointerMoved += OnStagePointer;
 
@@ -155,6 +158,9 @@ public partial class ImageCompareView : UserControl
 
     private void Arrange()
     {
+        if (Fit.Bounds.Width > 0 && Stage.Width > 0)
+            Board.Scale = Fit.Bounds.Width / Stage.Width;
+
         if (_old is null || _new is null)
         {
             NewImage.Clip = null;
@@ -171,8 +177,15 @@ public partial class ImageCompareView : UserControl
             var split = Math.Round(width * Mix.Value);
             NewImage.Opacity = 1;
             NewImage.Clip = new RectangleGeometry(new Rect(split, 0, Math.Max(0, width - split), height));
+            // The divider is inside the Viewbox, so it shrinks with the picture - to a
+            // fraction of a pixel on a large one. Dividing by the scale keeps it two
+            // pixels on screen whatever size the image is drawn.
+            var scale = Fit.Bounds.Width > 0 && width > 0 ? Fit.Bounds.Width / width : 1;
+            var thickness = 2 / scale;
+
             Divider.IsVisible = true;
-            Divider.Margin = new Thickness(Math.Clamp(split - 1, 0, Math.Max(0, width - 2)), 0, 0, 0);
+            Divider.Width = thickness;
+            Divider.Margin = new Thickness(Math.Clamp(split - thickness / 2, 0, Math.Max(0, width - thickness)), 0, 0, 0);
             Divider.Height = height;
         }
         else

@@ -24,14 +24,15 @@
                        VerticalAlignment="Center" />
         </Grid>
 
-        <!-- Down-only: a picture larger than the pane shrinks to fit, and one smaller
-             is drawn at its real size rather than blown up into a blur. Both images
-             sit at the top-left of a canvas the size of the larger one, so a resize
-             reads as the edges moving rather than as everything shifting. -->
-        <Viewbox Grid.Row="1" Stretch="Uniform" StretchDirection="DownOnly"
+        <!-- Down-only: a picture larger than the pane shrinks to fit, keeping its
+             aspect ratio, and one smaller is drawn at its real size rather than blown
+             up into a blur. Both images sit at the top-left of a canvas the size of
+             the larger one, so a resize reads as the edges moving rather than as
+             everything shifting. -->
+        <Viewbox x:Name="Fit" Grid.Row="1" Stretch="Uniform" StretchDirection="DownOnly"
                  Margin="13,0,13,13" HorizontalAlignment="Center" VerticalAlignment="Top">
             <Panel x:Name="Stage" HorizontalAlignment="Left" VerticalAlignment="Top">
-                <vv:Checkerboard />
+                <vv:Checkerboard x:Name="Board" />
                 <Image x:Name="OldImage" Stretch="None"
                        HorizontalAlignment="Left" VerticalAlignment="Top" />
                 <Image x:Name="NewImage" Stretch="None"
