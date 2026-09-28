@@ -20,6 +20,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Omnigit\Omnigit.csproj" />
+
+    <!-- Built alongside so PluginLoaderTests can install the real DLL into a plugins
+         folder and load it. Nothing here calls into it directly - doing so would load
+         it into the default context and prove nothing about the plugin one. -->
+    <ProjectReference Include="..\..\samples\SizeViewer\SizeViewer.csproj" />
   </ItemGroup>
 
 </Project>

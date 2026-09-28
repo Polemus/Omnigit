@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- The smallest real plugin: one viewer, built against the SDK and nothing else.
+       It is both the worked example docs/plugins.md points at and the plugin the
+       loader's tests load, so the example cannot drift from what actually works. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Private=false: the SDK and Avalonia are Omnigit's, shared with every plugin.
+         Shipping a copy in the plugin folder would be ignored at best. -->
+    <ProjectReference Include="..\..\src\Omnigit.Plugins\Omnigit.Plugins.csproj" Private="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="plugin.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

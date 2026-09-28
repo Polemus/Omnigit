@@ -3,6 +3,9 @@
     <Project Path="src/Omnigit/Omnigit.csproj" />
     <Project Path="src/Omnigit.Plugins/Omnigit.Plugins.csproj" />
   </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/SizeViewer/SizeViewer.csproj" />
+  </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Omnigit.Tests/Omnigit.Tests.csproj" />
   </Folder>

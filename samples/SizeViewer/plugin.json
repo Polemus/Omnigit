@@ -1,0 +1,8 @@
+{
+  "id": "omnigit.sample.sizes",
+  "name": "Sizes (sample)",
+  "version": "1.0.0",
+  "author": "Omnigit",
+  "assembly": "SizeViewer.dll",
+  "apiVersion": "1.0"
+}

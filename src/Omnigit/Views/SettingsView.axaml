@@ -49,6 +49,14 @@
                     </Button.CommandParameter>
                 </Button>
 
+                <Button Classes="settingsTab" Content="{Loc 'Plugins'}"
+                        Classes.active="{Binding IsPluginsSection}"
+                        Command="{Binding ShowSettingsSectionCommand}">
+                    <Button.CommandParameter>
+                        <x:Int32>4</x:Int32>
+                    </Button.CommandParameter>
+                </Button>
+
                 <!-- The dot is inside the tab rather than beside it because the rail
                      stretches its buttons; a sibling would sit at the far edge of a
                      220-pixel column, three inches from the word it is about. -->
@@ -118,6 +126,80 @@
                         </ContentControl.ContentTemplate>
                     </ContentControl>
                 </StackPanel>
+            </ScrollViewer>
+
+            <!-- ===================== Plugins ===================== -->
+            <ScrollViewer IsVisible="{Binding IsPluginsSection}">
+                <ContentControl Content="{Binding Plugins}">
+                    <ContentControl.ContentTemplate>
+                        <DataTemplate x:DataType="vm:PluginsViewModel">
+                            <StackPanel MaxWidth="880" Margin="32,28,32,48" Spacing="22"
+                                        HorizontalAlignment="Left">
+
+                                <StackPanel Spacing="8">
+                                    <TextBlock Classes="h1" Text="{Loc 'Plugins'}" />
+                                    <TextBlock Classes="caption" TextWrapping="Wrap"
+                                               Text="{Loc 'Plugins add new ways to show a changed file - a picture as a picture, a spreadsheet as a grid. Each one is a folder in the plugins folder, and nothing in it runs until you switch it on here.'}" />
+                                </StackPanel>
+
+                                <!-- The one thing worth knowing before switching anything
+                                     on, said once and plainly: Omnigit hands a plugin
+                                     only the file it is showing, but cannot stop it
+                                     reaching for more. -->
+                                <Border Background="{DynamicResource ElevatedBackground}"
+                                        BorderBrush="{DynamicResource BannerWarningBorder}"
+                                        BorderThickness="1" CornerRadius="8" Padding="14,11">
+                                    <TextBlock TextWrapping="Wrap"
+                                               Text="{Loc 'Plugins run with the same access as Omnigit. Install ones you trust.'}" />
+                                </Border>
+
+                                <StackPanel Orientation="Horizontal" Spacing="10">
+                                    <Button Classes="secondary"
+                                            Command="{Binding OpenFolderCommand}"
+                                            Content="{Loc 'Open plugins folder'}" />
+                                    <TextBlock Classes="caption mono" VerticalAlignment="Center"
+                                               Text="{Binding Root}" />
+                                </StackPanel>
+
+                                <TextBlock Classes="muted" TextWrapping="Wrap"
+                                           IsVisible="{Binding !HasPlugins}"
+                                           Text="{Loc 'No plugins installed. Put a plugin folder in the plugins folder and restart Omnigit.'}" />
+
+                                <ItemsControl ItemsSource="{Binding Plugins}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Spacing="10" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="vm:PluginRowViewModel">
+                                            <Border Classes="card">
+                                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                                                    <StackPanel Spacing="3">
+                                                        <TextBlock Classes="h2" Text="{Binding Name}" />
+                                                        <TextBlock Classes="caption mono" Text="{Binding Details}"
+                                                                   TextWrapping="Wrap" />
+                                                        <TextBlock Classes="muted" TextWrapping="Wrap"
+                                                                   IsVisible="{Binding !IsProblem}"
+                                                                   Text="{Binding Status}" />
+                                                        <TextBlock Classes="caption" TextWrapping="Wrap"
+                                                                   Foreground="{DynamicResource BannerWarningBorder}"
+                                                                   IsVisible="{Binding IsProblem}"
+                                                                   Text="{Binding Status}" />
+                                                    </StackPanel>
+                                                    <ToggleSwitch Grid.Column="1" VerticalAlignment="Center"
+                                                                  OnContent="" OffContent=""
+                                                                  IsEnabled="{Binding CanToggle}"
+                                                                  IsChecked="{Binding IsEnabled}" />
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ContentControl.ContentTemplate>
+                </ContentControl>
             </ScrollViewer>
 
             <ScrollViewer IsVisible="{Binding IsAccountsSection}">

@@ -13,44 +13,44 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/Omnigit/Services/GitService.CommitOperations.cs:377
-#: src/Omnigit/Services/GitService.cs:574
+#: src/Omnigit/Services/GitService.cs:579
 msgid " and {0} more"
 msgid_plural " and {0} more"
 msgstr[0] "[!! åñđ {0} ṁöŗé ····!!]"
 msgstr[1] "[!! åñđ {0} ṁöŗé ····!!]"
 
-#: src/Omnigit/Services/GitService.cs:1545
+#: src/Omnigit/Services/GitService.cs:1550
 msgid " — a bug in libgit2's TLS 1.3 support on Windows, not a problem with your sign-in or this repository. Trying again often gets through, and git on the command line is unaffected; the server side fix is to stop offering TLS 1.3 on that host."
 msgstr "[!! — å ƀûğ ïñ ļïƀğïţ2'š ŢĻŠ 1.3 šûþþöŗţ öñ Ŵïñđöŵš, ñöţ å þŗöƀļéṁ ŵïţĥ ýöûŗ šïğñ-ïñ öŗ ţĥïš ŗéþöšïţöŗý. Ţŗýïñğ åğåïñ öƒţéñ ğéţš ţĥŗöûğĥ, åñđ ğïţ öñ ţĥé çöṁṁåñđ ļïñé ïš ûñåƒƒéçţéđ; ţĥé šéŗṽéŗ šïđé ƒïẋ ïš ţö šţöþ öƒƒéŗïñğ ŢĻŠ 1.3 öñ ţĥåţ ĥöšţ. ········································································!!]"
 
-#: src/Omnigit/Services/GitService.cs:1556
+#: src/Omnigit/Services/GitService.cs:1561
 msgid " — a path in this repository is longer than Windows allows by default. Run \"git config --global core.longpaths true\", enable Win32 long paths in Windows, and clone somewhere with a shorter path."
 msgstr "[!! — å þåţĥ ïñ ţĥïš ŗéþöšïţöŗý ïš ļöñğéŗ ţĥåñ Ŵïñđöŵš åļļöŵš ƀý đéƒåûļţ. Ŗûñ \"ğïţ çöñƒïğ --ğļöƀåļ çöŗé.ļöñğþåţĥš ţŗûé\", éñåƀļé Ŵïñ32 ļöñğ þåţĥš ïñ Ŵïñđöŵš, åñđ çļöñé šöṁéŵĥéŗé ŵïţĥ å šĥöŗţéŗ þåţĥ. ··························································!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3504
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3545
 msgid " — {0}"
 msgstr "[!! — {0} ··!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1532
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1573
 msgid "'{0}' is not a git repository."
 msgstr "[!!'{0}' ïš ñöţ å ğïţ ŗéþöšïţöŗý. ·········!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:529
-#: src/Omnigit/Views/SettingsView.axaml:532
+#: src/Omnigit/Views/SettingsView.axaml:611
+#: src/Omnigit/Views/SettingsView.axaml:614
 msgid "(empty for true/false)"
 msgstr "[!!(éṁþţý ƒöŗ ţŗûé/ƒåļšé) ·······!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:504
+#: src/Omnigit/Views/SettingsView.axaml:586
 msgid "(leave empty for a name)"
 msgstr "[!!(ļéåṽé éṁþţý ƒöŗ å ñåṁé) ·······!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:492
+#: src/Omnigit/Views/SettingsView.axaml:574
 msgid "(leave empty for true/false)"
 msgstr "[!!(ļéåṽé éṁþţý ƒöŗ ţŗûé/ƒåļšé) ········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3507
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3511
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3514
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3548
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3552
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3555
 msgid ", {0}"
 msgstr "[!!, {0} ··!!]"
 
@@ -58,11 +58,11 @@ msgstr "[!!, {0} ··!!]"
 msgid "..."
 msgstr "[!!... ·!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:695
+#: src/Omnigit/Views/SettingsView.axaml:777
 msgid "A git client that talks to more than one hosting site. MIT licensed."
 msgstr "[!!Å ğïţ çļïéñţ ţĥåţ ţåļķš ţö ṁöŗé ţĥåñ öñé ĥöšţïñğ šïţé. ṀÏŢ ļïçéñšéđ. ····················!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:297
+#: src/Omnigit/Views/SettingsView.axaml:379
 msgid "A hosting site is described by data, never by code, so a description you got from someone else can never read the tokens held for your other sites. Adding one here writes exactly the same JSON file you could drop in the hosts folder yourself."
 msgstr "[!!Å ĥöšţïñğ šïţé ïš đéšçŗïƀéđ ƀý đåţå, ñéṽéŗ ƀý çöđé, šö å đéšçŗïþţïöñ ýöû ğöţ ƒŗöṁ šöṁéöñé éļšé çåñ ñéṽéŗ ŗéåđ ţĥé ţöķéñš ĥéļđ ƒöŗ ýöûŗ öţĥéŗ šïţéš. Åđđïñğ öñé ĥéŗé ŵŗïţéš éẋåçţļý ţĥé šåṁé ĴŠÖÑ ƒïļé ýöû çöûļđ đŗöþ ïñ ţĥé ĥöšţš ƒöļđéŗ ýöûŗšéļƒ. ·········································································!!]"
 
@@ -70,7 +70,7 @@ msgstr "[!!Å ĥöšţïñğ šïţé ïš đéšçŗïƀéđ ƀý đåţå, ñ�
 msgid "A message makes it an annotated tag, recording who made it and when. The tag stays local until you push."
 msgstr "[!!Å ṁéššåğé ṁåķéš ïţ åñ åññöţåţéđ ţåğ, ŗéçöŗđïñğ ŵĥö ṁåđé ïţ åñđ ŵĥéñ. Ţĥé ţåğ šţåýš ļöçåļ ûñţïļ ýöû þûšĥ. ·······························!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:200
+#: src/Omnigit/Views/SettingsView.axaml:282
 msgid "ADD AN ACCOUNT"
 msgstr "[!!ÅĐĐ ÅÑ ÅÇÇÖÛÑŢ ····!!]"
 
@@ -83,28 +83,28 @@ msgstr "[!!Åƀåñđöñ ïţ ···!!]"
 msgid "Abandon this?"
 msgstr "[!!Åƀåñđöñ ţĥïš? ····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2906
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2947
 msgid "Abandoned the {0} — everything is back as it was"
 msgstr "[!!Åƀåñđöñéđ ţĥé {0} — éṽéŗýţĥïñğ ïš ƀåçķ åš ïţ ŵåš ··············!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:62
+#: src/Omnigit/Views/SettingsView.axaml:70
 msgid "About"
 msgstr "[!!Åƀöûţ ··!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:693
+#: src/Omnigit/Views/SettingsView.axaml:775
 msgid "About Omnigit"
 msgstr "[!!Åƀöûţ Öṁñïğïţ ····!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:448
+#: src/Omnigit/Views/SettingsView.axaml:530
 msgid "Account: login, display name, avatar"
 msgstr "[!!Åççöûñţ: ļöğïñ, đïšþļåý ñåṁé, åṽåţåŗ ···········!!]"
 
 #: src/Omnigit/Views/SettingsView.axaml:36
-#: src/Omnigit/Views/SettingsView.axaml:128
+#: src/Omnigit/Views/SettingsView.axaml:210
 msgid "Accounts"
 msgstr "[!!Åççöûñţš ··!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:357
+#: src/Omnigit/Views/SettingsView.axaml:439
 msgid "Add a GitLab-like site"
 msgstr "[!!Åđđ å ĞïţĻåƀ-ļïķé šïţé ·······!!]"
 
@@ -120,7 +120,7 @@ msgstr "[!!Åđđ å ĥöšţïñğ šïţé… ······!!]"
 msgid "Add a repository"
 msgstr "[!!Åđđ å ŗéþöšïţöŗý ·····!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:355
+#: src/Omnigit/Views/SettingsView.axaml:437
 msgid "Add a site"
 msgstr "[!!Åđđ å šïţé ···!!]"
 
@@ -136,7 +136,7 @@ msgstr "[!!Åđđéđ Öṁñïğïţ ţö ţĥé đéšķţöþ ṁéñû ··�
 msgid "Added by you"
 msgstr "[!!Åđđéđ ƀý ýöû ····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1273
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1281
 msgid "Added {0} to .gitignore"
 msgstr "[!!Åđđéđ {0} ţö .ğïţïğñöŗé ·······!!]"
 
@@ -148,11 +148,11 @@ msgstr "[!!Åļļ ƒïļéš ···!!]"
 msgid "Already added"
 msgstr "[!!Åļŗéåđý åđđéđ ····!!]"
 
-#: src/Omnigit/Services/GitService.cs:1274
+#: src/Omnigit/Services/GitService.cs:1279
 msgid "Already up to date"
 msgstr "[!!Åļŗéåđý ûþ ţö đåţé ·····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1359
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1367
 msgid "Amend last commit"
 msgstr "[!!Åṁéñđ ļåšţ çöṁṁïţ ·····!!]"
 
@@ -160,7 +160,7 @@ msgstr "[!!Åṁéñđ ļåšţ çöṁṁïţ ·····!!]"
 msgid "Amend this commit…"
 msgstr "[!!Åṁéñđ ţĥïš çöṁṁïţ… ·····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1951
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1992
 msgid "Amended the last commit — now {0}"
 msgstr "[!!Åṁéñđéđ ţĥé ļåšţ çöṁṁïţ — ñöŵ {0} ··········!!]"
 
@@ -172,30 +172,30 @@ msgstr "[!!Åšķïñğ éṽéŗý šïğñéđ-ïñ šïţé… ·······
 msgid "Asking which organisations you belong to…"
 msgstr "[!!Åšķïñğ ŵĥïçĥ öŗğåñïšåţïöñš ýöû ƀéļöñğ ţö… ············!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3383
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3424
 msgid "Automatic refresh failed: {0}"
 msgstr "[!!Åûţöṁåţïç ŗéƒŗéšĥ ƒåïļéđ: {0} ·········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1513
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1554
 msgid "Background fetch failed — {0}"
 msgstr "[!!Ƀåçķğŗöûñđ ƒéţçĥ ƒåïļéđ — {0} ·········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1504
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1545
 msgid "Background fetch — {0}"
 msgstr "[!!Ƀåçķğŗöûñđ ƒéţçĥ — {0} ·······!!]"
 
-#: src/Omnigit/Services/GitService.cs:1739
+#: src/Omnigit/Services/GitService.cs:1803
 msgid "Binary file - no preview"
 msgstr "[!!Ƀïñåŗý ƒïļé - ñö þŗéṽïéŵ ·······!!]"
 
-#: src/Omnigit/Services/GitService.cs:524
-#: src/Omnigit/Services/GitService.cs:728
+#: src/Omnigit/Services/GitService.cs:529
+#: src/Omnigit/Services/GitService.cs:733
 msgid "Branch '{0}' already exists."
 msgstr "[!!Ƀŗåñçĥ '{0}' åļŗéåđý éẋïšţš. ········!!]"
 
 #: src/Omnigit/Services/GitService.CommitOperations.cs:181
-#: src/Omnigit/Services/GitService.cs:505
-#: src/Omnigit/Services/GitService.cs:742
+#: src/Omnigit/Services/GitService.cs:510
+#: src/Omnigit/Services/GitService.cs:747
 msgid "Branch '{0}' not found."
 msgstr "[!!Ƀŗåñçĥ '{0}' ñöţ ƒöûñđ. ·······!!]"
 
@@ -220,6 +220,10 @@ msgstr "[!!Ƀŗöŵšéŗ šïğñ-ïñ ïš ñöţ çöñƒïğûŗéđ ƒöŗ 
 msgid "Browser sign-in to {0} needs an OAuth App registered on that server, which identifies Omnigit to it and cannot be shared or invented. Register one at Settings → Developer settings → OAuth Apps (tick 'Enable Device Flow'), then set OMNIGIT_GITHUB_CLIENT_ID. A personal access token works without any of that."
 msgstr "[!!Ƀŗöŵšéŗ šïğñ-ïñ ţö {0} ñééđš åñ ÖÅûţĥ Åþþ ŗéğïšţéŗéđ öñ ţĥåţ šéŗṽéŗ, ŵĥïçĥ ïđéñţïƒïéš Öṁñïğïţ ţö ïţ åñđ çåññöţ ƀé šĥåŗéđ öŗ ïñṽéñţéđ. Ŗéğïšţéŗ öñé åţ Šéţţïñğš → Đéṽéļöþéŗ šéţţïñğš → ÖÅûţĥ Åþþš (ţïçķ 'Éñåƀļé Đéṽïçé Ƒļöŵ'), ţĥéñ šéţ ÖṀÑÏĞÏŢ_ĞÏŢĤÛɃ_ÇĻÏÉÑŢ_ÏĐ. Å þéŗšöñåļ åççéšš ţöķéñ ŵöŗķš ŵïţĥöûţ åñý öƒ ţĥåţ. ····························································································!!]"
 
+#: src/Omnigit/Services/Plugins/PluginLoader.cs:84
+msgid "Built for plugin API {0}; this copy of Omnigit has {1}."
+msgstr "[!!Ƀûïļţ ƒöŗ þļûğïñ ÅÞÏ {0}; ţĥïš çöþý öƒ Öṁñïğïţ ĥåš {1}. ················!!]"
+
 #: src/Omnigit/ViewModels/HostEntryViewModel.cs:22
 msgid "Built in (code)"
 msgstr "[!!Ƀûïļţ ïñ (çöđé) ····!!]"
@@ -236,7 +240,7 @@ msgstr "[!!Ƀûïļţ-ïñ ṁåñïƒéšţ '{0}' ïš ṁïššïñğ åñ ï�
 msgid "Built-in manifest '{0}' is not valid JSON: {1}"
 msgstr "[!!Ƀûïļţ-ïñ ṁåñïƒéšţ '{0}' ïš ñöţ ṽåļïđ ĴŠÖÑ: {1} ··············!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:431
+#: src/Omnigit/Views/SettingsView.axaml:513
 msgid "CREATING A REPOSITORY"
 msgstr "[!!ÇŖÉÅŢÏÑĞ Å ŖÉÞÖŠÏŢÖŖÝ ······!!]"
 
@@ -250,7 +254,7 @@ msgstr "[!!ÇŖÉÅŢÏÑĞ Å ŖÉÞÖŠÏŢÖŖÝ ······!!]"
 #: src/Omnigit/Views/MainWindow.axaml:908
 #: src/Omnigit/Views/MainWindow.axaml:959
 #: src/Omnigit/Views/RepositoryView.axaml:512
-#: src/Omnigit/Views/SettingsView.axaml:673
+#: src/Omnigit/Views/SettingsView.axaml:755
 msgid "Cancel"
 msgstr "[!!Çåñçéļ ··!!]"
 
@@ -258,15 +262,15 @@ msgstr "[!!Çåñçéļ ··!!]"
 msgid "Changes"
 msgstr "[!!Çĥåñğéš ··!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1811
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1852
 msgid "Changes left behind were stashed on the previous branch"
 msgstr "[!!Çĥåñğéš ļéƒţ ƀéĥïñđ ŵéŗé šţåšĥéđ öñ ţĥé þŗéṽïöûš ƀŗåñçĥ ················!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:756
+#: src/Omnigit/Views/SettingsView.axaml:838
 msgid "Check for updates"
 msgstr "[!!Çĥéçķ ƒöŗ ûþđåţéš ·····!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:580
+#: src/Omnigit/Views/SettingsView.axaml:662
 msgid "Checking a pull request out fetches this ref from the remote, so a contributor's fork needs no remote of its own."
 msgstr "[!!Çĥéçķïñğ å þûļļ ŗéǫûéšţ öûţ ƒéţçĥéš ţĥïš ŗéƒ ƒŗöṁ ţĥé ŗéṁöţé, šö å çöñţŗïƀûţöŗ'š ƒöŗķ ñééđš ñö ŗéṁöţé öƒ ïţš öŵñ. ··································!!]"
 
@@ -298,23 +302,23 @@ msgstr "[!!Çļöñé å ŗéþöšïţöŗý ·····!!]"
 msgid "Clone repository…"
 msgstr "[!!Çļöñé ŗéþöšïţöŗý… ·····!!]"
 
-#: src/Omnigit/Services/GitService.cs:1100
+#: src/Omnigit/Services/GitService.cs:1105
 msgid "Cloned into {0}"
 msgstr "[!!Çļöñéđ ïñţö {0} ····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:481
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:487
 msgid "Close settings"
 msgstr "[!!Çļöšé šéţţïñğš ····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:284
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:290
 msgid "Commit graph"
 msgstr "[!!Çöṁṁïţ ğŗåþĥ ····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1361
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1369
 msgid "Commit onto {0}"
 msgstr "[!!Çöṁṁïţ öñţö {0} ····!!]"
 
-#: src/Omnigit/Services/GitService.cs:888
+#: src/Omnigit/Services/GitService.cs:893
 msgid "Commit or revert your current changes before restoring the stash."
 msgstr "[!!Çöṁṁïţ öŗ ŗéṽéŗţ ýöûŗ çûŗŗéñţ çĥåñğéš ƀéƒöŗé ŗéšţöŗïñğ ţĥé šţåšĥ. ····················!!]"
 
@@ -330,12 +334,12 @@ msgstr "[!!Çöṁṁïţ öŗ šţåšĥ ýöûŗ çĥåñğéš ƀéƒöŗé �
 msgid "Commit or stash your changes before you revert a commit — git needs a clean working tree to tell its own conflicts from yours."
 msgstr "[!!Çöṁṁïţ öŗ šţåšĥ ýöûŗ çĥåñğéš ƀéƒöŗé ýöû ŗéṽéŗţ å çöṁṁïţ — ğïţ ñééđš å çļéåñ ŵöŗķïñğ ţŗéé ţö ţéļļ ïţš öŵñ çöñƒļïçţš ƒŗöṁ ýöûŗš. ······································!!]"
 
-#: src/Omnigit/Services/GitService.cs:521
-#: src/Omnigit/Services/GitService.cs:725
+#: src/Omnigit/Services/GitService.cs:526
+#: src/Omnigit/Services/GitService.cs:730
 msgid "Commit something before creating a branch."
 msgstr "[!!Çöṁṁïţ šöṁéţĥïñğ ƀéƒöŗé çŗéåţïñğ å ƀŗåñçĥ. ·············!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1362
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1370
 msgid "Commit to {0}"
 msgstr "[!!Çöṁṁïţ ţö {0} ····!!]"
 
@@ -343,40 +347,40 @@ msgstr "[!!Çöṁṁïţ ţö {0} ····!!]"
 msgid "Commit {0} is not in this repository."
 msgstr "[!!Çöṁṁïţ {0} ïš ñöţ ïñ ţĥïš ŗéþöšïţöŗý. ···········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1957
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1998
 msgid "Committed {1} — {0} file"
 msgid_plural "Committed {1} — {0} files"
 msgstr[0] "[!!Çöṁṁïţţéđ {1} — {0} ƒïļé ·······!!]"
 msgstr[1] "[!!Çöṁṁïţţéđ {1} — {0} ƒïļéš ········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2115
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2156
 msgid "Copied the code {0} to the clipboard"
 msgstr "[!!Çöþïéđ ţĥé çöđé {0} ţö ţĥé çļïþƀöåŗđ ···········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:376
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:382
 msgid "Copied the commit SHA to the clipboard"
 msgstr "[!!Çöþïéđ ţĥé çöṁṁïţ ŠĤÅ ţö ţĥé çļïþƀöåŗđ ···········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:383
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2250
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:389
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2291
 msgid "Copied the commit summary to the clipboard"
 msgstr "[!!Çöþïéđ ţĥé çöṁṁïţ šûṁṁåŗý ţö ţĥé çļïþƀöåŗđ ·············!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1289
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1297
 msgid "Copied the file path to the clipboard"
 msgstr "[!!Çöþïéđ ţĥé ƒïļé þåţĥ ţö ţĥé çļïþƀöåŗđ ···········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1296
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1304
 msgid "Copied the relative file path to the clipboard"
 msgstr "[!!Çöþïéđ ţĥé ŗéļåţïṽé ƒïļé þåţĥ ţö ţĥé çļïþƀöåŗđ ··············!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2263
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2304
 msgid "Copied the tag to the clipboard"
 msgid_plural "Copied the tags to the clipboard"
 msgstr[0] "[!!Çöþïéđ ţĥé ţåğ ţö ţĥé çļïþƀöåŗđ ·········!!]"
 msgstr[1] "[!!Çöþïéđ ţĥé ţåğš ţö ţĥé çļïþƀöåŗđ ··········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1639
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1680
 msgid "Copied {0}"
 msgstr "[!!Çöþïéđ {0} ···!!]"
 
@@ -384,8 +388,8 @@ msgstr "[!!Çöþïéđ {0} ···!!]"
 msgid "Copied {0} onto {1} — {2}"
 msgstr "[!!Çöþïéđ {0} öñţö {1} — {2} ········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2151
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2238
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2192
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2279
 msgid "Copied {0} to the clipboard"
 msgstr "[!!Çöþïéđ {0} ţö ţĥé çļïþƀöåŗđ ········!!]"
 
@@ -398,7 +402,7 @@ msgstr "[!!Çöþý ·!!]"
 msgid "Copy SHA"
 msgstr "[!!Çöþý ŠĤÅ ··!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:273
+#: src/Omnigit/Views/SettingsView.axaml:355
 msgid "Copy code"
 msgstr "[!!Çöþý çöđé ···!!]"
 
@@ -447,11 +451,11 @@ msgstr "[!!Çöûļđ ñöţ çĥéçķ ƒöŗ ûþđåţéš. ········!
 msgid "Could not copy the application."
 msgstr "[!!Çöûļđ ñöţ çöþý ţĥé åþþļïçåţïöñ. ·········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:707
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:713
 msgid "Could not list organisations for {0}: {1}"
 msgstr "[!!Çöûļđ ñöţ ļïšţ öŗğåñïšåţïöñš ƒöŗ {0}: {1} ············!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2975
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3016
 msgid "Could not list repositories for {0}: {1}"
 msgstr "[!!Çöûļđ ñöţ ļïšţ ŗéþöšïţöŗïéš ƒöŗ {0}: {1} ············!!]"
 
@@ -459,11 +463,11 @@ msgstr "[!!Çöûļđ ñöţ ļïšţ ŗéþöšïţöŗïéš ƒöŗ {0}: {1} �
 msgid "Could not move it to the trash ({0}). Install gio, or delete it yourself."
 msgstr "[!!Çöûļđ ñöţ ṁöṽé ïţ ţö ţĥé ţŗåšĥ ({0}). Ïñšţåļļ ğïö, öŗ đéļéţé ïţ ýöûŗšéļƒ. ······················!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3296
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3337
 msgid "Could not open '{0}'"
 msgstr "[!!Çöûļđ ñöţ öþéñ '{0}' ······!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1310
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1318
 msgid "Could not open a file manager"
 msgstr "[!!Çöûļđ ñöţ öþéñ å ƒïļé ṁåñåğéŗ ·········!!]"
 
@@ -471,9 +475,9 @@ msgstr "[!!Çöûļđ ñöţ öþéñ å ƒïļé ṁåñåğéŗ ·······
 msgid "Could not open the disk image."
 msgstr "[!!Çöûļđ ñöţ öþéñ ţĥé đïšķ ïṁåğé. ·········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1352
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2240
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2252
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1360
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2281
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2293
 msgid "Could not reach the clipboard"
 msgstr "[!!Çöûļđ ñöţ ŗéåçĥ ţĥé çļïþƀöåŗđ ·········!!]"
 
@@ -485,11 +489,11 @@ msgstr "[!!Çöûļđ ñöţ ŗéåçĥ ţĥé çļïþƀöåŗđ ·······
 msgid "Could not reach {0}: {1}"
 msgstr "[!!Çöûļđ ñöţ ŗéåçĥ {0}: {1} ·······!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3162
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3203
 msgid "Could not read the description for '{0}'."
 msgstr "[!!Çöûļđ ñöţ ŗéåđ ţĥé đéšçŗïþţïöñ ƒöŗ '{0}'. ············!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:360
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:366
 msgid "Could not read the history: {0}"
 msgstr "[!!Çöûļđ ñöţ ŗéåđ ţĥé ĥïšţöŗý: {0} ·········!!]"
 
@@ -498,11 +502,11 @@ msgstr "[!!Çöûļđ ñöţ ŗéåđ ţĥé ĥïšţöŗý: {0} ·······�
 msgid "Could not read {0}: {1}"
 msgstr "[!!Çöûļđ ñöţ ŗéåđ {0}: {1} ·······!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3248
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3289
 msgid "Could not remove the host: {0}"
 msgstr "[!!Çöûļđ ñöţ ŗéṁöṽé ţĥé ĥöšţ: {0} ·········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3233
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3274
 msgid "Could not save the host: {0}"
 msgstr "[!!Çöûļđ ñöţ šåṽé ţĥé ĥöšţ: {0} ········!!]"
 
@@ -523,7 +527,7 @@ msgstr "[!!Çöûļđ ñöţ šţåŗţ ţĥé ĥéļþéŗ ţĥåţ çöṁþļ
 msgid "Could not start {0}."
 msgstr "[!!Çöûļđ ñöţ šţåŗţ {0}. ······!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3210
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3251
 msgid "Could not test the site: {0}"
 msgstr "[!!Çöûļđ ñöţ ţéšţ ţĥé šïţé: {0} ········!!]"
 
@@ -531,34 +535,42 @@ msgstr "[!!Çöûļđ ñöţ ţéšţ ţĥé šïţé: {0} ········!!]"
 msgid "Couldn't add Omnigit to the desktop menu - it will show a generic icon"
 msgstr "[!!Çöûļđñ'ţ åđđ Öṁñïğïţ ţö ţĥé đéšķţöþ ṁéñû - ïţ ŵïļļ šĥöŵ å ğéñéŗïç ïçöñ ·····················!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:718
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:724
 msgid "Couldn't ask {0} which organisations you belong to — {1} Publishing there will probably fail too."
 msgstr "[!!Çöûļđñ'ţ åšķ {0} ŵĥïçĥ öŗğåñïšåţïöñš ýöû ƀéļöñğ ţö — {1} Þûƀļïšĥïñğ ţĥéŗé ŵïļļ þŗöƀåƀļý ƒåïļ ţöö. ·····························!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2427
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2468
 msgid "Couldn't list pull requests: {0}"
 msgstr "[!!Çöûļđñ'ţ ļïšţ þûļļ ŗéǫûéšţš: {0} ··········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2118
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2141
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2159
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2182
 msgid "Couldn't open a browser. Go to {0} yourself."
 msgstr "[!!Çöûļđñ'ţ öþéñ å ƀŗöŵšéŗ. Ğö ţö {0} ýöûŗšéļƒ. ·············!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2607
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2648
 msgid "Couldn't open a browser. Open a pull request at {0}"
 msgstr "[!!Çöûļđñ'ţ öþéñ å ƀŗöŵšéŗ. Öþéñ å þûļļ ŗéǫûéšţ åţ {0} ···············!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2309
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2350
 msgid "Couldn't open a browser. The commit is at {0}"
 msgstr "[!!Çöûļđñ'ţ öþéñ å ƀŗöŵšéŗ. Ţĥé çöṁṁïţ ïš åţ {0} ··············!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2500
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2541
 msgid "Couldn't open a browser. The pull request is at {0}"
 msgstr "[!!Çöûļđñ'ţ öþéñ å ƀŗöŵšéŗ. Ţĥé þûļļ ŗéǫûéšţ ïš åţ {0} ···············!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2153
+#: src/Omnigit/ViewModels/PluginsViewModel.cs:187
+msgid "Couldn't open {0}"
+msgstr "[!!Çöûļđñ'ţ öþéñ {0} ·····!!]"
+
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2194
 msgid "Couldn't reach the clipboard."
 msgstr "[!!Çöûļđñ'ţ ŗéåçĥ ţĥé çļïþƀöåŗđ. ·········!!]"
+
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:88
+msgid "Couldn't read the image: {0}"
+msgstr "[!!Çöûļđñ'ţ ŗéåđ ţĥé ïṁåğé: {0} ········!!]"
 
 #: src/Omnigit/Views/MainWindow.axaml:420
 msgid "Create"
@@ -576,7 +588,7 @@ msgstr "[!!Çŗéåţé å ñéŵ ŗéþöšïţöŗý ·······!!]"
 msgid "Create a tag…"
 msgstr "[!!Çŗéåţé å ţåğ… ····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:180
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:186
 msgid "Create a token on {0} and paste it here. It is stored in {1}."
 msgstr "[!!Çŗéåţé å ţöķéñ öñ {0} åñđ þåšţé ïţ ĥéŗé. Ïţ ïš šţöŗéđ ïñ {1}. ··················!!]"
 
@@ -604,15 +616,15 @@ msgstr "[!!Çŗéåţé ţåğ ···!!]"
 msgid "Create {0} from {1}"
 msgstr "[!!Çŗéåţé {0} ƒŗöṁ {1} ······!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1806
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1847
 msgid "Created and switched to branch {0}"
 msgstr "[!!Çŗéåţéđ åñđ šŵïţçĥéđ ţö ƀŗåñçĥ {0} ··········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:599
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:605
 msgid "Created {0} at {1}"
 msgstr "[!!Çŗéåţéđ {0} åţ {1} ·····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:749
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:755
 msgid "Created {0} on {1}"
 msgstr "[!!Çŗéåţéđ {0} öñ {1} ·····!!]"
 
@@ -628,7 +640,7 @@ msgstr "[!!Çţŗļ+Þ ţö þûšĥ · Çţŗļ+Šĥïƒţ+Þ ţö þûļļ · 
 msgid "Current"
 msgstr "[!!Çûŗŗéñţ ··!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:925
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:933
 msgid "Current branch"
 msgstr "[!!Çûŗŗéñţ ƀŗåñçĥ ····!!]"
 
@@ -649,46 +661,50 @@ msgstr "[!!Đéļéţé {0}? ···!!]"
 msgid "Description"
 msgstr "[!!Đéšçŗïþţïöñ ···!!]"
 
+#: src/Omnigit/ViewModels/PluginsViewModel.cs:48
+msgid "Didn't load: {0}"
+msgstr "[!!Đïđñ'ţ ļöåđ: {0} ·····!!]"
+
 #: src/Omnigit/Views/RepositoryView.axaml:487
 msgid "Discard"
 msgstr "[!!Đïšçåŗđ ··!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1229
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1237
 #: src/Omnigit/Views/MainWindow.axaml:543
 msgid "Discard changes"
 msgstr "[!!Đïšçåŗđ çĥåñğéš ····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1228
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1236
 msgid "Discard changes to {0} file"
 msgid_plural "Discard changes to {0} files"
 msgstr[0] "[!!Đïšçåŗđ çĥåñğéš ţö {0} ƒïļé ········!!]"
 msgstr[1] "[!!Đïšçåŗđ çĥåñğéš ţö {0} ƒïļéš ········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1183
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1191
 msgid "Discard changes to {0} file?"
 msgid_plural "Discard changes to {0} files?"
 msgstr[0] "[!!Đïšçåŗđ çĥåñğéš ţö {0} ƒïļé? ········!!]"
 msgstr[1] "[!!Đïšçåŗđ çĥåñğéš ţö {0} ƒïļéš? ·········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1182
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1190
 msgid "Discard changes?"
 msgstr "[!!Đïšçåŗđ çĥåñğéš? ·····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1254
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1262
 msgid "Discarded changes to {0}"
 msgstr "[!!Đïšçåŗđéđ çĥåñğéš ţö {0} ·······!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1255
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1263
 msgid "Discarded changes to {0} file"
 msgid_plural "Discarded changes to {0} files"
 msgstr[0] "[!!Đïšçåŗđéđ çĥåñğéš ţö {0} ƒïļé ·········!!]"
 msgstr[1] "[!!Đïšçåŗđéđ çĥåñğéš ţö {0} ƒïļéš ·········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1849
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1890
 msgid "Discarded the stashed changes"
 msgstr "[!!Đïšçåŗđéđ ţĥé šţåšĥéđ çĥåñğéš ·········!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:380
+#: src/Omnigit/Views/SettingsView.axaml:462
 msgid "Display name"
 msgstr "[!!Đïšþļåý ñåṁé ····!!]"
 
@@ -697,11 +713,11 @@ msgstr "[!!Đïšþļåý ñåṁé ····!!]"
 msgid "Downloading Omnigit {0}…"
 msgstr "[!!Đöŵñļöåđïñğ Öṁñïğïţ {0}… ·······!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:415
+#: src/Omnigit/Views/SettingsView.axaml:497
 msgid "ENDPOINTS"
 msgstr "[!!ÉÑĐÞÖÏÑŢŠ ···!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:336
+#: src/Omnigit/Views/SettingsView.axaml:418
 msgid "Edit"
 msgstr "[!!Éđïţ ·!!]"
 
@@ -709,12 +725,12 @@ msgstr "[!!Éđïţ ·!!]"
 msgid "Editing {0}"
 msgstr "[!!Éđïţïñğ {0} ···!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2078
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2100
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2119
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2141
 msgid "Enter a full server URL, including https://"
 msgstr "[!!Éñţéŗ å ƒûļļ šéŗṽéŗ ÛŖĻ, ïñçļûđïñğ ĥţţþš:// ·············!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3185
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3226
 msgid "Enter the address of a server to test against."
 msgstr "[!!Éñţéŗ ţĥé åđđŗéšš öƒ å šéŗṽéŗ ţö ţéšţ åğåïñšţ. ··············!!]"
 
@@ -730,11 +746,11 @@ msgstr "[!!Éṽéŗýţĥïñğ çöṁṁïţţéđ åƒţéŗ {0} çöṁéš
 msgid "Everything committed after {0}, and everything uncommitted, is thrown away. This cannot be undone."
 msgstr "[!!Éṽéŗýţĥïñğ çöṁṁïţţéđ åƒţéŗ {0}, åñđ éṽéŗýţĥïñğ ûñçöṁṁïţţéđ, ïš ţĥŗöŵñ åŵåý. Ţĥïš çåññöţ ƀé ûñđöñé. ·····························!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:621
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:627
 msgid "Everything is committed locally. Press Publish repository on the toolbar to try again.\n\n{0}"
 msgstr "[!!Éṽéŗýţĥïñğ ïš çöṁṁïţţéđ ļöçåļļý. Þŗéšš Þûƀļïšĥ ŗéþöšïţöŗý öñ ţĥé ţööļƀåŗ ţö ţŗý åğåïñ.\n\n{0} ···························!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1161
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1169
 msgid "Everything this {0} changed, including any conflicts you have already sorted out, goes back to the last commit. This cannot be undone."
 msgstr "[!!Éṽéŗýţĥïñğ ţĥïš {0} çĥåñğéđ, ïñçļûđïñğ åñý çöñƒļïçţš ýöû ĥåṽé åļŗéåđý šöŗţéđ öûţ, ğöéš ƀåçķ ţö ţĥé ļåšţ çöṁṁïţ. Ţĥïš çåññöţ ƀé ûñđöñé. ········································!!]"
 
@@ -742,27 +758,27 @@ msgstr "[!!Éṽéŗýţĥïñğ ţĥïš {0} çĥåñğéđ, ïñçļûđïñğ
 msgid "Everything your signed-in accounts can see, from every hosting site at once. Cloning uses that site's own token, so private repositories work without touching a terminal."
 msgstr "[!!Éṽéŗýţĥïñğ ýöûŗ šïğñéđ-ïñ åççöûñţš çåñ šéé, ƒŗöṁ éṽéŗý ĥöšţïñğ šïţé åţ öñçé. Çļöñïñğ ûšéš ţĥåţ šïţé'š öŵñ ţöķéñ, šö þŗïṽåţé ŗéþöšïţöŗïéš ŵöŗķ ŵïţĥöûţ ţöûçĥïñğ å ţéŗṁïñåļ. ···················································!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:979
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:987
 msgid "Fetch origin"
 msgstr "[!!Ƒéţçĥ öŗïğïñ ····!!]"
 
-#: src/Omnigit/Services/GitService.cs:1144
+#: src/Omnigit/Services/GitService.cs:1149
 msgid "Fetched from {0} — already up to date"
 msgstr "[!!Ƒéţçĥéđ ƒŗöṁ {0} — åļŗéåđý ûþ ţö đåţé ···········!!]"
 
-#: src/Omnigit/Services/GitService.cs:1141
+#: src/Omnigit/Services/GitService.cs:1146
 msgid "Fetched from {1} — {0} commit to pull"
 msgid_plural "Fetched from {1} — {0} commits to pull"
 msgstr[0] "[!!Ƒéţçĥéđ ƒŗöṁ {1} — {0} çöṁṁïţ ţö þûļļ ···········!!]"
 msgstr[1] "[!!Ƒéţçĥéđ ƒŗöṁ {1} — {0} çöṁṁïţš ţö þûļļ ···········!!]"
 
-#: src/Omnigit/Services/GitService.cs:1201
-#: src/Omnigit/Services/GitService.cs:1214
-#: src/Omnigit/Services/GitService.cs:1226
+#: src/Omnigit/Services/GitService.cs:1206
+#: src/Omnigit/Services/GitService.cs:1219
+#: src/Omnigit/Services/GitService.cs:1231
 msgid "Fetched pull request #{0}"
 msgstr "[!!Ƒéţçĥéđ þûļļ ŗéǫûéšţ #{0} ········!!]"
 
-#: src/Omnigit/Services/GitService.cs:1740
+#: src/Omnigit/Services/GitService.cs:1804
 msgid "File too large to preview ({0} KB)"
 msgstr "[!!Ƒïļé ţöö ļåŗğé ţö þŗéṽïéŵ ({0} ĶɃ) ··········!!]"
 
@@ -782,7 +798,7 @@ msgstr "[!!Ƒïñïšĥ öŗ åƀåñđöñ ţĥé {0} åļŗéåđý ïñ þŗ�
 msgid "Finish or abandon the {0} already in progress before you revert anything else."
 msgstr "[!!Ƒïñïšĥ öŗ åƀåñđöñ ţĥé {0} åļŗéåđý ïñ þŗöğŗéšš ƀéƒöŗé ýöû ŗéṽéŗţ åñýţĥïñğ éļšé. ·······················!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1360
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1368
 msgid "Finish the {0}"
 msgstr "[!!Ƒïñïšĥ ţĥé {0} ····!!]"
 
@@ -790,7 +806,7 @@ msgstr "[!!Ƒïñïšĥ ţĥé {0} ····!!]"
 msgid "Fixing the last commit instead of adding a new one."
 msgstr "[!!Ƒïẋïñğ ţĥé ļåšţ çöṁṁïţ ïñšţéåđ öƒ åđđïñğ å ñéŵ öñé. ···············!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2994
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3035
 msgid "Found {0} repository you can clone"
 msgid_plural "Found {0} repositories you can clone"
 msgstr[0] "[!!Ƒöûñđ {0} ŗéþöšïţöŗý ýöû çåñ çļöñé ··········!!]"
@@ -807,7 +823,7 @@ msgid "GIT IGNORE"
 msgstr "[!!ĞÏŢ ÏĞÑÖŖÉ ···!!]"
 
 #: src/Omnigit/Views/SettingsView.axaml:28
-#: src/Omnigit/Views/SettingsView.axaml:82
+#: src/Omnigit/Views/SettingsView.axaml:90
 msgid "General"
 msgstr "[!!Ğéñéŗåļ ··!!]"
 
@@ -832,11 +848,11 @@ msgstr "[!!ĞïţĤûƀ ŗéţûŗñéđ {0} {1}. ·······!!]"
 msgid "GitHub sign-in failed: {0}"
 msgstr "[!!ĞïţĤûƀ šïğñ-ïñ ƒåïļéđ: {0} ········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:305
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:311
 msgid "Graph"
 msgstr "[!!Ğŗåþĥ ··!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:284
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:290
 msgid "Hide the commit graph"
 msgstr "[!!Ĥïđé ţĥé çöṁṁïţ ğŗåþĥ ······!!]"
 
@@ -844,20 +860,24 @@ msgstr "[!!Ĥïđé ţĥé çöṁṁïţ ğŗåþĥ ······!!]"
 msgid "History"
 msgstr "[!!Ĥïšţöŗý ··!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:306
+#: src/Omnigit/Views/SettingsView.axaml:388
 msgid "Host description problems"
 msgstr "[!!Ĥöšţ đéšçŗïþţïöñ þŗöƀļéṁš ········!!]"
 
 #: src/Omnigit/Views/SettingsView.axaml:44
-#: src/Omnigit/Views/SettingsView.axaml:295
+#: src/Omnigit/Views/SettingsView.axaml:377
 msgid "Hosting sites"
 msgstr "[!!Ĥöšţïñğ šïţéš ····!!]"
+
+#: src/Omnigit/Views/DiffView.axaml:52
+msgid "How to show this file"
+msgstr "[!!Ĥöŵ ţö šĥöŵ ţĥïš ƒïļé ······!!]"
 
 #: src/Omnigit/Views/RepositoryView.axaml:242
 msgid "I fixed it"
 msgstr "[!!Ï ƒïẋéđ ïţ ···!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:372
+#: src/Omnigit/Views/SettingsView.axaml:454
 msgid "Id"
 msgstr "[!!Ïđ ·!!]"
 
@@ -873,6 +893,10 @@ msgstr "[!!Ïğñöŗé ƒïļé (åđđ ţö .ğïţïğñöŗé) ······�
 msgid "Ignore folder ({0}/)"
 msgstr "[!!Ïğñöŗé ƒöļđéŗ ({0}/) ······!!]"
 
+#: src/Omnigit/Views/Viewers/ImageViewer.cs:16
+msgid "Image"
+msgstr "[!!Ïṁåğé ··!!]"
+
 #: src/Omnigit/Services/InstallMedium.cs:107
 msgid "Installed as a Flatpak. Run flatpak update, or let your software centre do it."
 msgstr "[!!Ïñšţåļļéđ åš å Ƒļåţþåķ. Ŗûñ ƒļåţþåķ ûþđåţé, öŗ ļéţ ýöûŗ šöƒţŵåŗé çéñţŗé đö ïţ. ·······················!!]"
@@ -881,11 +905,15 @@ msgstr "[!!Ïñšţåļļéđ åš å Ƒļåţþåķ. Ŗûñ ƒļåţþåķ ûþ
 msgid "Installing Omnigit {0}…"
 msgstr "[!!Ïñšţåļļïñğ Öṁñïğïţ {0}… ·······!!]"
 
+#: src/Omnigit/Services/Plugins/PluginLoader.cs:142
+msgid "It loaded, but has nothing in it Omnigit can use."
+msgstr "[!!Ïţ ļöåđéđ, ƀûţ ĥåš ñöţĥïñğ ïñ ïţ Öṁñïğïţ çåñ ûšé. ···············!!]"
+
 #: src/Omnigit/ViewModels/NewRepositoryViewModel.cs:107
 msgid "It will be created at {0}"
 msgstr "[!!Ïţ ŵïļļ ƀé çŗéåţéđ åţ {0} ········!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:313
+#: src/Omnigit/Views/SettingsView.axaml:395
 msgid "KNOWN SITES"
 msgstr "[!!ĶÑÖŴÑ ŠÏŢÉŠ ···!!]"
 
@@ -897,7 +925,7 @@ msgstr "[!!Ķééþ ğöïñğ ···!!]"
 msgid "Keep mine"
 msgstr "[!!Ķééþ ṁïñé ···!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:961
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:969
 msgid "Keep one side whole, or edit the file yourself and mark it resolved. Committing finishes the operation; abandoning puts everything back."
 msgstr "[!!Ķééþ öñé šïđé ŵĥöļé, öŗ éđïţ ţĥé ƒïļé ýöûŗšéļƒ åñđ ṁåŗķ ïţ ŗéšöļṽéđ. Çöṁṁïţţïñğ ƒïñïšĥéš ţĥé öþéŗåţïöñ; åƀåñđöñïñğ þûţš éṽéŗýţĥïñğ ƀåçķ. ·········································!!]"
 
@@ -913,7 +941,7 @@ msgstr "[!!Ķééþ ţĥé çĥåñğéš, ŗéåđý ţö çöṁṁïţ ···
 msgid "Keep this code private"
 msgstr "[!!Ķééþ ţĥïš çöđé þŗïṽåţé ·······!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2862
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2903
 msgid "Kept your version of {0}"
 msgstr "[!!Ķéþţ ýöûŗ ṽéŗšïöñ öƒ {0} ·······!!]"
 
@@ -925,12 +953,12 @@ msgstr "[!!ĻÏÇÉÑÇÉ ··!!]"
 msgid "LOCAL PATH"
 msgstr "[!!ĻÖÇÅĻ ÞÅŢĤ ···!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:98
+#: src/Omnigit/Views/SettingsView.axaml:106
 msgid "Language"
 msgstr "[!!Ļåñğûåğé ··!!]"
 
 #: src/Omnigit/Models/Repo.cs:130
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:983
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:991
 msgid "Last fetched {0}"
 msgstr "[!!Ļåšţ ƒéţçĥéđ {0} ·····!!]"
 
@@ -946,7 +974,18 @@ msgstr "[!!Ļïñķéđ ŵöŗķţŗéé öƒ {0}\n{1} ········!!]"
 msgid "Listing repositories"
 msgstr "[!!Ļïšţïñğ ŗéþöšïţöŗïéš ······!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2343
+#: src/Omnigit/ViewModels/PluginsViewModel.cs:164
+msgid "Loaded plugin {0}"
+msgstr "[!!Ļöåđéđ þļûğïñ {0} ·····!!]"
+
+#: src/Omnigit/ViewModels/PluginsViewModel.cs:45
+msgid "Loaded, {0} viewer"
+msgid_plural "Loaded, {0} viewers"
+msgstr[0] "[!!Ļöåđéđ, {0} ṽïéŵéŗ ·····!!]"
+msgstr[1] "[!!Ļöåđéđ, {0} ṽïéŵéŗš ······!!]"
+
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2384
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:54
 msgid "Loading…"
 msgstr "[!!Ļöåđïñğ… ··!!]"
 
@@ -958,7 +997,7 @@ msgstr "[!!Ļöçåļ öñļý ···!!]"
 msgid "Logging to {0}"
 msgstr "[!!Ļöğğïñğ ţö {0} ····!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:377
+#: src/Omnigit/Views/SettingsView.axaml:459
 msgid "Lower case, no spaces. Names the file, and replaces a built-in site if it matches one."
 msgstr "[!!Ļöŵéŗ çåšé, ñö šþåçéš. Ñåṁéš ţĥé ƒïļé, åñđ ŗéþļåçéš å ƀûïļţ-ïñ šïţé ïƒ ïţ ṁåţçĥéš öñé. ··························!!]"
 
@@ -966,11 +1005,11 @@ msgstr "[!!Ļöŵéŗ çåšé, ñö šþåçéš. Ñåṁéš ţĥé ƒïļé, 
 msgid "Make a branch here"
 msgstr "[!!Ṁåķé å ƀŗåñçĥ ĥéŗé ·····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2880
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2921
 msgid "Marked {0} as resolved"
 msgstr "[!!Ṁåŗķéđ {0} åš ŗéšöļṽéđ ·······!!]"
 
-#: src/Omnigit/Services/GitService.cs:1276
+#: src/Omnigit/Services/GitService.cs:1281
 msgid "Merged to {0}"
 msgstr "[!!Ṁéŗğéđ ţö {0} ····!!]"
 
@@ -982,15 +1021,15 @@ msgstr "[!!Ṁöṽé ţĥé ƀŗåñçĥ ƀåçķ ţö ţĥïš çöṁṁïţ 
 msgid "Move to trash"
 msgstr "[!!Ṁöṽé ţö ţŗåšĥ ····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2816
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2857
 msgid "Moved the branch back to {0} — the changes are in your working tree"
 msgstr "[!!Ṁöṽéđ ţĥé ƀŗåñçĥ ƀåçķ ţö {0} — ţĥé çĥåñğéš åŗé ïñ ýöûŗ ŵöŗķïñğ ţŗéé ····················!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2812
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2853
 msgid "Moved the branch back to {0} — the changes are staged"
 msgstr "[!!Ṁöṽéđ ţĥé ƀŗåñçĥ ƀåçķ ţö {0} — ţĥé çĥåñğéš åŗé šţåğéđ ················!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1673
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1714
 msgid "Moved {0} to the trash."
 msgstr "[!!Ṁöṽéđ {0} ţö ţĥé ţŗåšĥ. ·······!!]"
 
@@ -1003,12 +1042,16 @@ msgstr "[!!ÑÅṀÉ ·!!]"
 msgid "Needs a working sign-in first."
 msgstr "[!!Ñééđš å ŵöŗķïñğ šïğñ-ïñ ƒïŗšţ. ·········!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:626
+#: src/Omnigit/Views/SettingsView.axaml:708
 msgid "Neither the address nor the token is saved. Without a token only the recognise check can run."
 msgstr "[!!Ñéïţĥéŗ ţĥé åđđŗéšš ñöŗ ţĥé ţöķéñ ïš šåṽéđ. Ŵïţĥöûţ å ţöķéñ öñļý ţĥé ŗéçöğñïšé çĥéçķ çåñ ŗûñ. ····························!!]"
 
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:127
+msgid "Neither version of this file could be found."
+msgstr "[!!Ñéïţĥéŗ ṽéŗšïöñ öƒ ţĥïš ƒïļé çöûļđ ƀé ƒöûñđ. ·············!!]"
+
 #: src/Omnigit/Models/Repo.cs:131
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:984
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:992
 msgid "Never fetched"
 msgstr "[!!Ñéṽéŗ ƒéţçĥéđ ····!!]"
 
@@ -1020,15 +1063,15 @@ msgstr "[!!Ñéŵ ƀŗåñçĥ ƒŗöṁ ţĥïš çöṁṁïţ ·······�
 msgid "New branch name"
 msgstr "[!!Ñéŵ ƀŗåñçĥ ñåṁé ····!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:522
+#: src/Omnigit/Views/SettingsView.axaml:604
 msgid "New repository: the body key for privacy, and — only if the site wants a word rather than true/false — the words for private and public."
 msgstr "[!!Ñéŵ ŗéþöšïţöŗý: ţĥé ƀöđý ķéý ƒöŗ þŗïṽåçý, åñđ — öñļý ïƒ ţĥé šïţé ŵåñţš å ŵöŗđ ŗåţĥéŗ ţĥåñ ţŗûé/ƒåļšé — ţĥé ŵöŗđš ƒöŗ þŗïṽåţé åñđ þûƀļïç. ·········································!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:538
+#: src/Omnigit/Views/SettingsView.axaml:620
 msgid "New repository: the body key naming the owner, and whether to send its id or its name. Only for a site that POSTs to one address for everything."
 msgstr "[!!Ñéŵ ŗéþöšïţöŗý: ţĥé ƀöđý ķéý ñåṁïñğ ţĥé öŵñéŗ, åñđ ŵĥéţĥéŗ ţö šéñđ ïţš ïđ öŗ ïţš ñåṁé. Öñļý ƒöŗ å šïţé ţĥåţ ÞÖŠŢš ţö öñé åđđŗéšš ƒöŗ éṽéŗýţĥïñğ. ···········································!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:509
+#: src/Omnigit/Views/SettingsView.axaml:591
 msgid "New repository: the body keys for its name and description"
 msgstr "[!!Ñéŵ ŗéþöšïţöŗý: ţĥé ƀöđý ķéýš ƒöŗ ïţš ñåṁé åñđ đéšçŗïþţïöñ ·················!!]"
 
@@ -1036,19 +1079,19 @@ msgstr "[!!Ñéŵ ŗéþöšïţöŗý: ţĥé ƀöđý ķéýš ƒöŗ ïţš �
 msgid "New repository…"
 msgstr "[!!Ñéŵ ŗéþöšïţöŗý… ····!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:162
+#: src/Omnigit/Views/SettingsView.axaml:244
 msgid "No accounts yet. Sign in below to fetch and push."
 msgstr "[!!Ñö åççöûñţš ýéţ. Šïğñ ïñ ƀéļöŵ ţö ƒéţçĥ åñđ þûšĥ. ···············!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1083
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1091
 msgid "No branch here or on the remote matches u201c{0}u201d."
 msgstr "[!!Ñö ƀŗåñçĥ ĥéŗé öŗ öñ ţĥé ŗéṁöţé ṁåţçĥéš û201ç{0}û201đ. ················!!]"
 
-#: src/Omnigit/Services/GitService.cs:1289
+#: src/Omnigit/Services/GitService.cs:1294
 msgid "No branch is checked out."
 msgstr "[!!Ñö ƀŗåñçĥ ïš çĥéçķéđ öûţ. ········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1082
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1090
 msgid "No branches yet - the first commit makes one."
 msgstr "[!!Ñö ƀŗåñçĥéš ýéţ - ţĥé ƒïŗšţ çöṁṁïţ ṁåķéš öñé. ··············!!]"
 
@@ -1060,7 +1103,7 @@ msgstr "[!!Ñö çûŗŗéñţ-ûšéŗ éñđþöïñţ, šö šïğñ-ïñ ç�
 msgid "No description"
 msgstr "[!!Ñö đéšçŗïþţïöñ ····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1017
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1025
 msgid "No local changes"
 msgstr "[!!Ñö ļöçåļ çĥåñğéš ·····!!]"
 
@@ -1068,9 +1111,13 @@ msgstr "[!!Ñö ļöçåļ çĥåñğéš ·····!!]"
 msgid "No local changes."
 msgstr "[!!Ñö ļöçåļ çĥåñğéš. ·····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2347
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2388
 msgid "No open pull requests."
 msgstr "[!!Ñö öþéñ þûļļ ŗéǫûéšţš. ·······!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:166
+msgid "No plugins installed. Put a plugin folder in the plugins folder and restart Omnigit."
+msgstr "[!!Ñö þļûğïñš ïñšţåļļéđ. Þûţ å þļûğïñ ƒöļđéŗ ïñ ţĥé þļûğïñš ƒöļđéŗ åñđ ŗéšţåŗţ Öṁñïğïţ. ·························!!]"
 
 #: src/Omnigit/HostProviders/HostConnectionTester.cs:110
 msgid "No recognise path, so Omnigit can't tell this site apart from any other. Repositories cloned from it won't be grouped under it."
@@ -1084,7 +1131,7 @@ msgstr "[!!Ñö ŗéþöšïţöŗïéš éñđþöïñţ. Šïğñ-ïñ ŵïļ�
 msgid "No repositories yet. Use + in the header to add or clone one."
 msgstr "[!!Ñö ŗéþöšïţöŗïéš ýéţ. Ûšé + ïñ ţĥé ĥéåđéŗ ţö åđđ öŗ çļöñé öñé. ··················!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2344
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2385
 msgid "No repository open."
 msgstr "[!!Ñö ŗéþöšïţöŗý öþéñ. ······!!]"
 
@@ -1092,35 +1139,35 @@ msgstr "[!!Ñö ŗéþöšïţöŗý öþéñ. ······!!]"
 msgid "No supported package manager was found to install it with."
 msgstr "[!!Ñö šûþþöŗţéđ þåçķåğé ṁåñåğéŗ ŵåš ƒöûñđ ţö ïñšţåļļ ïţ ŵïţĥ. ·················!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:154
+#: src/Omnigit/Views/SettingsView.axaml:236
 msgid "No system keyring was found, so tokens are written to a file readable by anything running as you. Install libsecret (secret-tool) for encrypted storage."
 msgstr "[!!Ñö šýšţéṁ ķéýŗïñğ ŵåš ƒöûñđ, šö ţöķéñš åŗé ŵŗïţţéñ ţö å ƒïļé ŗéåđåƀļé ƀý åñýţĥïñğ ŗûññïñğ åš ýöû. Ïñšţåļļ ļïƀšéçŗéţ (šéçŗéţ-ţööļ) ƒöŗ éñçŗýþţéđ šţöŗåğé. ··············································!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:662
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:668
 msgid "None of the sites you are signed in to can be asked to create a repository."
 msgstr "[!!Ñöñé öƒ ţĥé šïţéš ýöû åŗé šïğñéđ ïñ ţö çåñ ƀé åšķéđ ţö çŗéåţé å ŗéþöšïţöŗý. ······················!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:925
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:933
 msgid "Not on a branch"
 msgstr "[!!Ñöţ öñ å ƀŗåñçĥ ····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1632
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1673
 msgid "Nothing here opens folders. It is at {0}"
 msgstr "[!!Ñöţĥïñğ ĥéŗé öþéñš ƒöļđéŗš. Ïţ ïš åţ {0} ············!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1338
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1346
 msgid "Nothing is set up to open {0}"
 msgstr "[!!Ñöţĥïñğ ïš šéţ ûþ ţö öþéñ {0} ·········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:813
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:819
 msgid "Nothing matches that filter."
 msgstr "[!!Ñöţĥïñğ ṁåţçĥéš ţĥåţ ƒïļţéŗ. ········!!]"
 
-#: src/Omnigit/Services/GitService.cs:478
+#: src/Omnigit/Services/GitService.cs:483
 msgid "Nothing selected to commit."
 msgstr "[!!Ñöţĥïñğ šéļéçţéđ ţö çöṁṁïţ. ········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:309
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:315
 msgid "Nothing to draw"
 msgstr "[!!Ñöţĥïñğ ţö đŗåŵ ····!!]"
 
@@ -1132,7 +1179,11 @@ msgstr "[!!Ñöŵĥéŗé ýéţ — ĵûšţ öñ ţĥïš ṁåçĥïñé ··
 msgid "OWNER"
 msgstr "[!!ÖŴÑÉŖ ··!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:772
+#: src/Omnigit/ViewModels/PluginsViewModel.cs:49
+msgid "Off"
+msgstr "[!!Öƒƒ ·!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:854
 msgid "Omnigit checks for a new release once a day. Nothing is downloaded until you press Update now."
 msgstr "[!!Öṁñïğïţ çĥéçķš ƒöŗ å ñéŵ ŗéļéåšé öñçé å đåý. Ñöţĥïñğ ïš đöŵñļöåđéđ ûñţïļ ýöû þŗéšš Ûþđåţé ñöŵ. ····························!!]"
 
@@ -1148,7 +1199,7 @@ msgstr "[!!Öṁñïğïţ çŗéåţéš ïţ ĥéŗé åñđ çöṁṁïţš 
 msgid "Omnigit creates it here, then on {0}, and pushes what it committed."
 msgstr "[!!Öṁñïğïţ çŗéåţéš ïţ ĥéŗé, ţĥéñ öñ {0}, åñđ þûšĥéš ŵĥåţ ïţ çöṁṁïţţéđ. ····················!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:114
+#: src/Omnigit/Views/SettingsView.axaml:122
 msgid "Omnigit is translated by the people who use it. To add or fix a language, see the link in the README."
 msgstr "[!!Öṁñïğïţ ïš ţŗåñšļåţéđ ƀý ţĥé þéöþļé ŵĥö ûšé ïţ. Ţö åđđ öŗ ƒïẋ å ļåñğûåğé, šéé ţĥé ļïñķ ïñ ţĥé ŖÉÅĐṀÉ. ······························!!]"
 
@@ -1156,11 +1207,11 @@ msgstr "[!!Öṁñïğïţ ïš ţŗåñšļåţéđ ƀý ţĥé þéöþļé ŵ
 msgid "Omnigit is up to date."
 msgstr "[!!Öṁñïğïţ ïš ûþ ţö đåţé. ·······!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:389
+#: src/Omnigit/Views/SettingsView.axaml:471
 msgid "Omnigit probes this path and checks the field exists, rather than guessing from the domain name."
 msgstr "[!!Öṁñïğïţ þŗöƀéš ţĥïš þåţĥ åñđ çĥéçķš ţĥé ƒïéļđ éẋïšţš, ŗåţĥéŗ ţĥåñ ğûéššïñğ ƒŗöṁ ţĥé đöṁåïñ ñåṁé. ·····························!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1411
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1452
 msgid "Omnigit ready — {0} hosting site: {1}"
 msgid_plural "Omnigit ready — {0} hosting sites: {1}"
 msgstr[0] "[!!Öṁñïğïţ ŗéåđý — {0} ĥöšţïñğ šïţé: {1} ···········!!]"
@@ -1170,7 +1221,7 @@ msgstr[1] "[!!Öṁñïğïţ ŗéåđý — {0} ĥöšţïñğ šïţéš: {1} 
 msgid "Omnigit switches to that branch and applies the same change there as a new commit. If it clashes with what is already there, you finish it on the Changes tab."
 msgstr "[!!Öṁñïğïţ šŵïţçĥéš ţö ţĥåţ ƀŗåñçĥ åñđ åþþļïéš ţĥé šåṁé çĥåñğé ţĥéŗé åš å ñéŵ çöṁṁïţ. Ïƒ ïţ çļåšĥéš ŵïţĥ ŵĥåţ ïš åļŗéåđý ţĥéŗé, ýöû ƒïñïšĥ ïţ öñ ţĥé Çĥåñğéš ţåƀ. ···············································!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:130
+#: src/Omnigit/Views/SettingsView.axaml:212
 msgid "Omnigit talks to any number of hosting sites at once. Each keeps its own credentials, so a self-hosted Gitea behind your own domain works exactly like GitHub.com."
 msgstr "[!!Öṁñïğïţ ţåļķš ţö åñý ñûṁƀéŗ öƒ ĥöšţïñğ šïţéš åţ öñçé. Éåçĥ ķééþš ïţš öŵñ çŗéđéñţïåļš, šö å šéļƒ-ĥöšţéđ Ğïţéå ƀéĥïñđ ýöûŗ öŵñ đöṁåïñ ŵöŗķš éẋåçţļý ļïķé ĞïţĤûƀ.çöṁ. ·················································!!]"
 
@@ -1191,7 +1242,11 @@ msgstr "[!!Öṁñïğïţ {0} ïš ûþ ţö đåţé. ········!!]"
 msgid "On the remote only"
 msgstr "[!!Öñ ţĥé ŗéṁöţé öñļý ·····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2521
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml:16
+msgid "Onion skin"
+msgstr "[!!Öñïöñ šķïñ ···!!]"
+
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2562
 msgid "Open a repository first."
 msgstr "[!!Öþéñ å ŗéþöšïţöŗý ƒïŗšţ. ·······!!]"
 
@@ -1199,11 +1254,15 @@ msgstr "[!!Öþéñ å ŗéþöšïţöŗý ƒïŗšţ. ·······!!]"
 msgid "Open in your default app"
 msgstr "[!!Öþéñ ïñ ýöûŗ đéƒåûļţ åþþ ·······!!]"
 
+#: src/Omnigit/Views/SettingsView.axaml:159
+msgid "Open plugins folder"
+msgstr "[!!Öþéñ þļûğïñš ƒöļđéŗ ······!!]"
+
 #: src/Omnigit/Views/RepositoryView.axaml:388
 msgid "Open this commit"
 msgstr "[!!Öþéñ ţĥïš çöṁṁïţ ·····!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:263
+#: src/Omnigit/Views/SettingsView.axaml:345
 msgid "Open this page in your browser"
 msgstr "[!!Öþéñ ţĥïš þåğé ïñ ýöûŗ ƀŗöŵšéŗ ·········!!]"
 
@@ -1211,23 +1270,23 @@ msgstr "[!!Öþéñ ţĥïš þåğé ïñ ýöûŗ ƀŗöŵšéŗ ······�
 msgid "Open {0}"
 msgstr "[!!Öþéñ {0} ··!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1921
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1962
 msgid "Opened the worktree holding {0}"
 msgstr "[!!Öþéñéđ ţĥé ŵöŗķţŗéé ĥöļđïñğ {0} ·········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3501
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3542
 msgid "Opened {0} on {1}"
 msgstr "[!!Öþéñéđ {0} öñ {1} ·····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2726
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2767
 msgid "Opened {0}. You are not on a branch — make one here, or pick a branch to go back."
 msgstr "[!!Öþéñéđ {0}. Ýöû åŗé ñöţ öñ å ƀŗåñçĥ — ṁåķé öñé ĥéŗé, öŗ þïçķ å ƀŗåñçĥ ţö ğö ƀåçķ. ························!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:497
+#: src/Omnigit/Views/SettingsView.axaml:579
 msgid "Organisation: name, id — the id only for a site that addresses one by number"
 msgstr "[!!Öŗğåñïšåţïöñ: ñåṁé, ïđ — ţĥé ïđ öñļý ƒöŗ å šïţé ţĥåţ åđđŗéššéš öñé ƀý ñûṁƀéŗ ·······················!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:427
+#: src/Omnigit/Views/SettingsView.axaml:509
 msgid "Organisations — leave empty if the site has none"
 msgstr "[!!Öŗğåñïšåţïöñš — ļéåṽé éṁþţý ïƒ ţĥé šïţé ĥåš ñöñé ··············!!]"
 
@@ -1243,24 +1302,45 @@ msgstr "[!!ÞÛɃĻÏŠĤ ŢÖ ···!!]"
 msgid "Paste a token above to check the sign-in endpoint and the field names."
 msgstr "[!!Þåšţé å ţöķéñ åƀöṽé ţö çĥéçķ ţĥé šïğñ-ïñ éñđþöïñţ åñđ ţĥé ƒïéļđ ñåṁéš. ·····················!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:231
+#: src/Omnigit/Views/SettingsView.axaml:313
 msgid "Paste your token"
 msgstr "[!!Þåšţé ýöûŗ ţöķéñ ·····!!]"
 
-#: src/Omnigit/Services/GitService.cs:1750
+#: src/Omnigit/Services/GitService.cs:1814
 msgid "Permission denied"
 msgstr "[!!Þéŗṁïššïöñ đéñïéđ ·····!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:227
+#: src/Omnigit/Views/SettingsView.axaml:309
 msgid "Personal access token"
 msgstr "[!!Þéŗšöñåļ åççéšš ţöķéñ ······!!]"
+
+#: src/Omnigit/ViewModels/PluginsViewModel.cs:169
+msgid "Plugin {0} didn't load"
+msgstr "[!!Þļûğïñ {0} đïđñ'ţ ļöåđ ·······!!]"
+
+#: src/Omnigit/Services/Plugins/ChangeViewerRegistry.cs:104
+msgid "Plugin {0}: {1}"
+msgstr "[!!Þļûğïñ {0}: {1} ····!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:52
+#: src/Omnigit/Views/SettingsView.axaml:140
+msgid "Plugins"
+msgstr "[!!Þļûğïñš ··!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:142
+msgid "Plugins add new ways to show a changed file - a picture as a picture, a spreadsheet as a grid. Each one is a folder in the plugins folder, and nothing in it runs until you switch it on here."
+msgstr "[!!Þļûğïñš åđđ ñéŵ ŵåýš ţö šĥöŵ å çĥåñğéđ ƒïļé - å þïçţûŗé åš å þïçţûŗé, å šþŗéåđšĥééţ åš å ğŗïđ. Éåçĥ öñé ïš å ƒöļđéŗ ïñ ţĥé þļûğïñš ƒöļđéŗ, åñđ ñöţĥïñğ ïñ ïţ ŗûñš ûñţïļ ýöû šŵïţçĥ ïţ öñ ĥéŗé. ·························································!!]"
+
+#: src/Omnigit/Views/SettingsView.axaml:153
+msgid "Plugins run with the same access as Omnigit. Install ones you trust."
+msgstr "[!!Þļûğïñš ŗûñ ŵïţĥ ţĥé šåṁé åççéšš åš Öṁñïğïţ. Ïñšţåļļ öñéš ýöû ţŗûšţ. ····················!!]"
 
 #: src/Omnigit/Models/Repo.cs:122
 #: src/Omnigit/ViewModels/RemoteRepositoryViewModel.cs:24
 msgid "Private"
 msgstr "[!!Þŗïṽåţé ··!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:485
+#: src/Omnigit/Views/SettingsView.axaml:567
 msgid "Private repositories: the field, and — only if the site sends a word rather than true/false — the word that means private."
 msgstr "[!!Þŗïṽåţé ŗéþöšïţöŗïéš: ţĥé ƒïéļđ, åñđ — öñļý ïƒ ţĥé šïţé šéñđš å ŵöŗđ ŗåţĥéŗ ţĥåñ ţŗûé/ƒåļšé — ţĥé ŵöŗđ ţĥåţ ṁéåñš þŗïṽåţé. ·····································!!]"
 
@@ -1269,29 +1349,29 @@ msgstr "[!!Þŗïṽåţé ŗéþöšïţöŗïéš: ţĥé ƒïéļđ, åñđ �
 msgid "Public"
 msgstr "[!!Þûƀļïç ··!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:976
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:984
 msgid "Publish branch"
 msgstr "[!!Þûƀļïšĥ ƀŗåñçĥ ····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:975
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:983
 #: src/Omnigit/Views/MainWindow.axaml:776
 #: src/Omnigit/Views/MainWindow.axaml:801
 msgid "Publish repository"
 msgstr "[!!Þûƀļïšĥ ŗéþöšïţöŗý ·····!!]"
 
-#: src/Omnigit/Services/GitService.cs:1279
+#: src/Omnigit/Services/GitService.cs:1284
 msgid "Pull finished"
 msgstr "[!!Þûļļ ƒïñïšĥéđ ····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:977
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:985
 msgid "Pull origin"
 msgstr "[!!Þûļļ öŗïğïñ ···!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:550
+#: src/Omnigit/Views/SettingsView.axaml:632
 msgid "Pull request: number, title, author, draft"
 msgstr "[!!Þûļļ ŗéǫûéšţ: ñûṁƀéŗ, ţïţļé, åûţĥöŗ, đŗåƒţ ·············!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:564
+#: src/Omnigit/Views/SettingsView.axaml:646
 msgid "Pull request: source branch, target branch, updated at, page URL"
 msgstr "[!!Þûļļ ŗéǫûéšţ: šöûŗçé ƀŗåñçĥ, ţåŗğéţ ƀŗåñçĥ, ûþđåţéđ åţ, þåğé ÛŖĻ ···················!!]"
 
@@ -1299,23 +1379,23 @@ msgstr "[!!Þûļļ ŗéǫûéšţ: šöûŗçé ƀŗåñçĥ, ţåŗğéţ ƀŗ
 msgid "Pull requests"
 msgstr "[!!Þûļļ ŗéǫûéšţš ····!!]"
 
-#: src/Omnigit/Services/GitService.cs:1278
+#: src/Omnigit/Services/GitService.cs:1283
 msgid "Pulled with conflicts — resolve them before committing"
 msgstr "[!!Þûļļéđ ŵïţĥ çöñƒļïçţš — ŗéšöļṽé ţĥéṁ ƀéƒöŗé çöṁṁïţţïñğ ················!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:978
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:986
 msgid "Push origin"
 msgstr "[!!Þûšĥ öŗïğïñ ···!!]"
 
-#: src/Omnigit/Services/GitService.cs:1327
+#: src/Omnigit/Services/GitService.cs:1332
 msgid "Pushed {0} to {1}"
 msgstr "[!!Þûšĥéđ {0} ţö {1} ·····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2567
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2608
 msgid "Pushing {0} before opening the pull request form"
 msgstr "[!!Þûšĥïñğ {0} ƀéƒöŗé öþéñïñğ ţĥé þûļļ ŗéǫûéšţ ƒöŗṁ ··············!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:387
+#: src/Omnigit/Views/SettingsView.axaml:469
 msgid "RECOGNISING THE SITE"
 msgstr "[!!ŖÉÇÖĞÑÏŠÏÑĞ ŢĤÉ ŠÏŢÉ ······!!]"
 
@@ -1323,7 +1403,7 @@ msgstr "[!!ŖÉÇÖĞÑÏŠÏÑĞ ŢĤÉ ŠÏŢÉ ······!!]"
 msgid "Reading the history…"
 msgstr "[!!Ŗéåđïñğ ţĥé ĥïšţöŗý… ······!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:244
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:250
 msgid "Ready"
 msgstr "[!!Ŗéåđý ··!!]"
 
@@ -1340,11 +1420,11 @@ msgstr "[!!Ŗéçöğñïšïñğ ţĥé šïţé ······!!]"
 msgid "Refresh"
 msgstr "[!!Ŗéƒŗéšĥ ··!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:760
+#: src/Omnigit/Views/SettingsView.axaml:842
 msgid "Release notes on GitHub"
 msgstr "[!!Ŗéļéåšé ñöţéš öñ ĞïţĤûƀ ·······!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:342
+#: src/Omnigit/Views/SettingsView.axaml:424
 msgid "Remove"
 msgstr "[!!Ŗéṁöṽé ··!!]"
 
@@ -1356,23 +1436,23 @@ msgstr "[!!Ŗéṁöṽé ƒŗöṁ Öṁñïğïţ ······!!]"
 msgid "Remove from this computer…"
 msgstr "[!!Ŗéṁöṽé ƒŗöṁ ţĥïš çöṁþûţéŗ… ········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3243
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3284
 msgid "Removed the '{0}' hosting site"
 msgstr "[!!Ŗéṁöṽéđ ţĥé '{0}' ĥöšţïñğ šïţé ·········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1683
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1724
 msgid "Removed {0} from Omnigit, but its folder is still on disk."
 msgstr "[!!Ŗéṁöṽéđ {0} ƒŗöṁ Öṁñïğïţ, ƀûţ ïţš ƒöļđéŗ ïš šţïļļ öñ đïšķ. ·················!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1678
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1719
 msgid "Removed {0}; its folder was already gone."
 msgstr "[!!Ŗéṁöṽéđ {0}; ïţš ƒöļđéŗ ŵåš åļŗéåđý ğöñé. ············!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:474
+#: src/Omnigit/Views/SettingsView.axaml:556
 msgid "Repository: description, updated at"
 msgstr "[!!Ŗéþöšïţöŗý: đéšçŗïþţïöñ, ûþđåţéđ åţ ··········!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:460
+#: src/Omnigit/Views/SettingsView.axaml:542
 msgid "Repository: name, owner, clone URL, default branch"
 msgstr "[!!Ŗéþöšïţöŗý: ñåṁé, öŵñéŗ, çļöñé ÛŖĻ, đéƒåûļţ ƀŗåñçĥ ···············!!]"
 
@@ -1388,7 +1468,7 @@ msgstr "[!!Ŗéšéţ åñđ đïšçåŗđ ·····!!]"
 msgid "Reset the branch to here…"
 msgstr "[!!Ŗéšéţ ţĥé ƀŗåñçĥ ţö ĥéŗé… ········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2814
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2855
 msgid "Reset to {0} — everything after it was discarded"
 msgstr "[!!Ŗéšéţ ţö {0} — éṽéŗýţĥïñğ åƒţéŗ ïţ ŵåš đïšçåŗđéđ ··············!!]"
 
@@ -1396,11 +1476,11 @@ msgstr "[!!Ŗéšéţ ţö {0} — éṽéŗýţĥïñğ åƒţéŗ ïţ ŵåš 
 msgid "Restore"
 msgstr "[!!Ŗéšţöŗé ··!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1831
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1872
 msgid "Restored your stashed changes"
 msgstr "[!!Ŗéšţöŗéđ ýöûŗ šţåšĥéđ çĥåñğéš ·········!!]"
 
-#: src/Omnigit/Services/GitService.cs:884
+#: src/Omnigit/Services/GitService.cs:889
 msgid "Restoring the stash caused conflicts — resolve them before continuing."
 msgstr "[!!Ŗéšţöŗïñğ ţĥé šţåšĥ çåûšéđ çöñƒļïçţš — ŗéšöļṽé ţĥéṁ ƀéƒöŗé çöñţïñûïñğ. ·····················!!]"
 
@@ -1416,19 +1496,19 @@ msgstr "[!!Ŗéṽéŗţïñğ ŵŗïţéš å ñéŵ çöṁṁïţ, šö çĥ�
 msgid "SETTINGS"
 msgstr "[!!ŠÉŢŢÏÑĞŠ ··!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:159
+#: src/Omnigit/Views/SettingsView.axaml:241
 msgid "SIGNED IN"
 msgstr "[!!ŠÏĞÑÉĐ ÏÑ ···!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:670
+#: src/Omnigit/Views/SettingsView.axaml:752
 msgid "Save site"
 msgstr "[!!Šåṽé šïţé ···!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3227
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3268
 msgid "Saved the '{0}' hosting site"
 msgstr "[!!Šåṽéđ ţĥé '{0}' ĥöšţïñğ šïţé ········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1526
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1567
 msgid "Select a git repository"
 msgstr "[!!Šéļéçţ å ğïţ ŗéþöšïţöŗý ·······!!]"
 
@@ -1436,15 +1516,15 @@ msgstr "[!!Šéļéçţ å ğïţ ŗéþöšïţöŗý ·······!!]"
 msgid "Select all"
 msgstr "[!!Šéļéçţ åļļ ···!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:219
+#: src/Omnigit/Views/SettingsView.axaml:301
 msgid "Server URL"
 msgstr "[!!Šéŗṽéŗ ÛŖĻ ···!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:481
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:487
 msgid "Settings"
 msgstr "[!!Šéţţïñğš ··!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:84
+#: src/Omnigit/Views/SettingsView.axaml:92
 msgid "Settings that apply to Omnigit itself rather than to one repository."
 msgstr "[!!Šéţţïñğš ţĥåţ åþþļý ţö Öṁñïğïţ ïţšéļƒ ŗåţĥéŗ ţĥåñ ţö öñé ŗéþöšïţöŗý. ····················!!]"
 
@@ -1456,27 +1536,27 @@ msgstr "[!!Šĥöŵ ïñ ƒïļé ṁåñåğéŗ ······!!]"
 msgid "Show in your file manager"
 msgstr "[!!Šĥöŵ ïñ ýöûŗ ƒïļé ṁåñåğéŗ ········!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:237
+#: src/Omnigit/Views/SettingsView.axaml:319
 msgid "Sign in"
 msgstr "[!!Šïğñ ïñ ··!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:661
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:667
 msgid "Sign in to a hosting site first — there is nowhere to publish this yet."
 msgstr "[!!Šïğñ ïñ ţö å ĥöšţïñğ šïţé ƒïŗšţ — ţĥéŗé ïš ñöŵĥéŗé ţö þûƀļïšĥ ţĥïš ýéţ. ·····················!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:812
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:818
 msgid "Sign in to a hosting site to browse what you can clone."
 msgstr "[!!Šïğñ ïñ ţö å ĥöšţïñğ šïţé ţö ƀŗöŵšé ŵĥåţ ýöû çåñ çļöñé. ················!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2346
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2387
 msgid "Sign in to this site to see its pull requests."
 msgstr "[!!Šïğñ ïñ ţö ţĥïš šïţé ţö šéé ïţš þûļļ ŗéǫûéšţš. ··············!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:239
+#: src/Omnigit/Views/SettingsView.axaml:321
 msgid "Sign in with browser"
 msgstr "[!!Šïğñ ïñ ŵïţĥ ƀŗöŵšéŗ ······!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:187
+#: src/Omnigit/Views/SettingsView.axaml:269
 msgid "Sign out"
 msgstr "[!!Šïğñ öûţ ··!!]"
 
@@ -1488,13 +1568,13 @@ msgstr "[!!Šïğñ-ïñ ŵåš đéçļïñéđ ïñ ţĥé ƀŗöŵšéŗ. ·�
 msgid "Signed in as {0} ({1})."
 msgstr "[!!Šïğñéđ ïñ åš {0} ({1}). ·······!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1430
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2088
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2124
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1471
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2129
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2165
 msgid "Signed in to {0} as {1}"
 msgstr "[!!Šïğñéđ ïñ ţö {0} åš {1} ·······!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2169
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2210
 msgid "Signed out {0}"
 msgstr "[!!Šïğñéđ öûţ {0} ····!!]"
 
@@ -1502,11 +1582,11 @@ msgstr "[!!Šïğñéđ öûţ {0} ····!!]"
 msgid "Signing in"
 msgstr "[!!Šïğñïñğ ïñ ···!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:206
+#: src/Omnigit/Views/SettingsView.axaml:288
 msgid "Site"
 msgstr "[!!Šïţé ·!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:683
+#: src/Omnigit/Views/SettingsView.axaml:765
 msgid "Sites added here are written to the hosts folder as JSON. You can still edit those files by hand — see docs/host-manifests.md."
 msgstr "[!!Šïţéš åđđéđ ĥéŗé åŗé ŵŗïţţéñ ţö ţĥé ĥöšţš ƒöļđéŗ åš ĴŠÖÑ. Ýöû çåñ šţïļļ éđïţ ţĥöšé ƒïļéš ƀý ĥåñđ — šéé đöçš/ĥöšţ-ṁåñïƒéšţš.ṁđ. ······································!!]"
 
@@ -1522,9 +1602,13 @@ msgstr "[!!Šţåŗţ ïţ ŵïţĥ å ŖÉÅĐṀÉ ·······!!]"
 msgid "Stash and switch"
 msgstr "[!!Šţåšĥ åñđ šŵïţçĥ ·····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1371
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1379
 msgid "Summary (required)"
 msgstr "[!!Šûṁṁåŗý (ŗéǫûïŗéđ) ·····!!]"
+
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml:14
+msgid "Swipe"
+msgstr "[!!Šŵïþé ··!!]"
 
 #: src/Omnigit/ViewModels/BranchSwitchViewModel.cs:102
 msgid "Switch"
@@ -1534,15 +1618,19 @@ msgstr "[!!Šŵïţçĥ ··!!]"
 msgid "Switch to {0}"
 msgstr "[!!Šŵïţçĥ ţö {0} ····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1807
+#: src/Omnigit/ViewModels/PluginsViewModel.cs:46
+msgid "Switched off - Omnigit keeps it loaded until it restarts."
+msgstr "[!!Šŵïţçĥéđ öƒƒ - Öṁñïğïţ ķééþš ïţ ļöåđéđ ûñţïļ ïţ ŗéšţåŗţš. ·················!!]"
+
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1848
 msgid "Switched to branch {0}"
 msgstr "[!!Šŵïţçĥéđ ţö ƀŗåñçĥ {0} ·······!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:624
+#: src/Omnigit/Views/SettingsView.axaml:706
 msgid "TEST IT AGAINST A SERVER"
 msgstr "[!!ŢÉŠŢ ÏŢ ÅĞÅÏÑŠŢ Å ŠÉŖṼÉŖ ·······!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:401
+#: src/Omnigit/Views/SettingsView.axaml:483
 msgid "TOKEN HEADER"
 msgstr "[!!ŢÖĶÉÑ ĤÉÅĐÉŖ ····!!]"
 
@@ -1558,11 +1646,11 @@ msgstr "[!!Ţåğ ñåṁé, é.ğ. ṽ1.2.0 ······!!]"
 msgid "Tag this commit"
 msgstr "[!!Ţåğ ţĥïš çöṁṁïţ ····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2697
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2738
 msgid "Tagged {0} as {1}"
 msgstr "[!!Ţåğğéđ {0} åš {1} ·····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2698
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2739
 msgid "Tagged {0} as {1} (annotated)"
 msgstr "[!!Ţåğğéđ {0} åš {1} (åññöţåţéđ) ·········!!]"
 
@@ -1570,23 +1658,27 @@ msgstr "[!!Ţåğğéđ {0} åš {1} (åññöţåţéđ) ·········!!]"
 msgid "Take theirs"
 msgstr "[!!Ţåķé ţĥéïŗš ···!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:100
+#: src/Omnigit/Views/SettingsView.axaml:108
 msgid "Takes effect straight away. Anything not yet translated stays in English."
 msgstr "[!!Ţåķéš éƒƒéçţ šţŗåïğĥţ åŵåý. Åñýţĥïñğ ñöţ ýéţ ţŗåñšļåţéđ šţåýš ïñ Éñğļïšĥ. ······················!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:635
+#: src/Omnigit/Views/SettingsView.axaml:717
 msgid "Test connection"
 msgstr "[!!Ţéšţ çöññéçţïöñ ····!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:640
+#: src/Omnigit/Views/SettingsView.axaml:722
 msgid "Testing…"
 msgstr "[!!Ţéšţïñğ… ··!!]"
+
+#: src/Omnigit/Views/Viewers/TextViewer.cs:19
+msgid "Text"
+msgstr "[!!Ţéẋţ ·!!]"
 
 #: src/Omnigit/ViewModels/NewRepositoryViewModel.cs:124
 msgid "That name has characters a folder can't have in it."
 msgstr "[!!Ţĥåţ ñåṁé ĥåš çĥåŗåçţéŗš å ƒöļđéŗ çåñ'ţ ĥåṽé ïñ ïţ. ···············!!]"
 
-#: src/Omnigit/Services/GitService.cs:891
+#: src/Omnigit/Services/GitService.cs:896
 msgid "That stash no longer exists."
 msgstr "[!!Ţĥåţ šţåšĥ ñö ļöñğéŗ éẋïšţš. ········!!]"
 
@@ -1598,7 +1690,11 @@ msgstr "[!!Ţĥé Ƒïñđéŗ ŗéƒûšéđ ïţ. ·······!!]"
 msgid "The Recycle Bin refused it (code {0})."
 msgstr "[!!Ţĥé Ŗéçýçļé Ƀïñ ŗéƒûšéđ ïţ (çöđé {0}). ···········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2600
+#: src/Omnigit/Services/Plugins/PluginLoader.cs:130
+msgid "The assembly must be inside the plugin's own folder."
+msgstr "[!!Ţĥé åššéṁƀļý ṁûšţ ƀé ïñšïđé ţĥé þļûğïñ'š öŵñ ƒöļđéŗ. ················!!]"
+
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2641
 msgid "The branch"
 msgstr "[!!Ţĥé ƀŗåñçĥ ···!!]"
 
@@ -1618,7 +1714,7 @@ msgstr "[!!Ţĥé éñđþöïñţ åñšŵéŗéđ, ƀûţ ļïšţéđ ñö ŗ
 msgid "The folder to create it inside"
 msgstr "[!!Ţĥé ƒöļđéŗ ţö çŗéåţé ïţ ïñšïđé ·········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:314
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:320
 msgid "The most recent {0} commits across every branch"
 msgstr "[!!Ţĥé ṁöšţ ŗéçéñţ {0} çöṁṁïţš åçŗöšš éṽéŗý ƀŗåñçĥ ··············!!]"
 
@@ -1634,7 +1730,7 @@ msgstr "[!!Ţĥé ñéŵéšţ ŗéļéåšé ĥåš ñö ṽéŗšïöñ ïñ �
 msgid "The password prompt was dismissed."
 msgstr "[!!Ţĥé þåššŵöŗđ þŗöṁþţ ŵåš đïšṁïššéđ. ··········!!]"
 
-#: src/Omnigit/Services/GitService.cs:1193
+#: src/Omnigit/Services/GitService.cs:1198
 msgid "The remote has no {0} — the pull request may have been merged or closed."
 msgstr "[!!Ţĥé ŗéṁöţé ĥåš ñö {0} — ţĥé þûļļ ŗéǫûéšţ ṁåý ĥåṽé ƀééñ ṁéŗğéđ öŗ çļöšéđ. ······················!!]"
 
@@ -1660,6 +1756,10 @@ msgstr "[!!Ţĥé ţöķéñ ŵåš ŗéĵéçţéđ. Çĥéçķ ïţ ĥåš ñ�
 msgid "The update could not be installed."
 msgstr "[!!Ţĥé ûþđåţé çöûļđ ñöţ ƀé ïñšţåļļéđ. ··········!!]"
 
+#: src/Omnigit/Services/Plugins/ChangeViewerRegistry.cs:76
+msgid "The viewer \"{0}\" failed while deciding whether it could show a file, and has been skipped."
+msgstr "[!!Ţĥé ṽïéŵéŗ \"{0}\" ƒåïļéđ ŵĥïļé đéçïđïñğ ŵĥéţĥéŗ ïţ çöûļđ šĥöŵ å ƒïļé, åñđ ĥåš ƀééñ šķïþþéđ. ···························!!]"
+
 #: src/Omnigit/ViewModels/RepositoryRemovalViewModel.cs:89
 msgid "The whole folder goes to the trash, where you can put it back from."
 msgstr "[!!Ţĥé ŵĥöļé ƒöļđéŗ ğöéš ţö ţĥé ţŗåšĥ, ŵĥéŗé ýöû çåñ þûţ ïţ ƀåçķ ƒŗöṁ. ····················!!]"
@@ -1668,11 +1768,15 @@ msgstr "[!!Ţĥé ŵĥöļé ƒöļđéŗ ğöéš ţö ţĥé ţŗåšĥ, ŵĥ�
 msgid "The whole folder goes to the trash. Everything in it has been pushed, so the remote still has it either way."
 msgstr "[!!Ţĥé ŵĥöļé ƒöļđéŗ ğöéš ţö ţĥé ţŗåšĥ. Éṽéŗýţĥïñğ ïñ ïţ ĥåš ƀééñ þûšĥéđ, šö ţĥé ŗéṁöţé šţïļļ ĥåš ïţ éïţĥéŗ ŵåý. ································!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:953
+#: src/Omnigit/ViewModels/ChangeViewerViewModel.cs:180
+msgid "The {0} viewer couldn't show this file: {1}"
+msgstr "[!!Ţĥé {0} ṽïéŵéŗ çöûļđñ'ţ šĥöŵ ţĥïš ƒïļé: {1} ·············!!]"
+
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:961
 msgid "The {0} went through — commit it to finish."
 msgstr "[!!Ţĥé {0} ŵéñţ ţĥŗöûğĥ — çöṁṁïţ ïţ ţö ƒïñïšĥ. ·············!!]"
 
-#: src/Omnigit/Services/GitService.cs:908
+#: src/Omnigit/Services/GitService.cs:913
 msgid "There is no commit to amend."
 msgstr "[!!Ţĥéŗé ïš ñö çöṁṁïţ ţö åṁéñđ. ········!!]"
 
@@ -1680,7 +1784,11 @@ msgstr "[!!Ţĥéŗé ïš ñö çöṁṁïţ ţö åṁéñđ. ·······�
 msgid "There is no other branch to copy this onto. Make one first."
 msgstr "[!!Ţĥéŗé ïš ñö öţĥéŗ ƀŗåñçĥ ţö çöþý ţĥïš öñţö. Ṁåķé öñé ƒïŗšţ. ··················!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2524
+#: src/Omnigit/Services/Plugins/PluginLoader.cs:62
+msgid "There is no {0} in this folder."
+msgstr "[!!Ţĥéŗé ïš ñö {0} ïñ ţĥïš ƒöļđéŗ. ·········!!]"
+
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2565
 msgid "This clone has no remote, so there is nowhere to open a pull request."
 msgstr "[!!Ţĥïš çļöñé ĥåš ñö ŗéṁöţé, šö ţĥéŗé ïš ñöŵĥéŗé ţö öþéñ å þûļļ ŗéǫûéšţ. ·····················!!]"
 
@@ -1688,27 +1796,35 @@ msgstr "[!!Ţĥïš çļöñé ĥåš ñö ŗéṁöţé, šö ţĥéŗé ïš �
 msgid "This clone holds {0} — none of which are on the remote."
 msgstr "[!!Ţĥïš çļöñé ĥöļđš {0} — ñöñé öƒ ŵĥïçĥ åŗé öñ ţĥé ŗéṁöţé. ················!!]"
 
-#: src/Omnigit/Services/GitService.cs:1170
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:118
+msgid "This file couldn't be decoded as an image. Switch to Text to see what changed."
+msgstr "[!!Ţĥïš ƒïļé çöûļđñ'ţ ƀé đéçöđéđ åš åñ ïṁåğé. Šŵïţçĥ ţö Ţéẋţ ţö šéé ŵĥåţ çĥåñğéđ. ·······················!!]"
+
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:84
+msgid "This image is too large to preview ({0})."
+msgstr "[!!Ţĥïš ïṁåğé ïš ţöö ļåŗğé ţö þŗéṽïéŵ ({0}). ············!!]"
+
+#: src/Omnigit/Services/GitService.cs:1175
 msgid "This repository has no remote to fetch a pull request from."
 msgstr "[!!Ţĥïš ŗéþöšïţöŗý ĥåš ñö ŗéṁöţé ţö ƒéţçĥ å þûļļ ŗéǫûéšţ ƒŗöṁ. ··················!!]"
 
-#: src/Omnigit/Services/GitService.cs:1122
+#: src/Omnigit/Services/GitService.cs:1127
 msgid "This repository has no remote to fetch from."
 msgstr "[!!Ţĥïš ŗéþöšïţöŗý ĥåš ñö ŗéṁöţé ţö ƒéţçĥ ƒŗöṁ. ·············!!]"
 
-#: src/Omnigit/Services/GitService.cs:1252
+#: src/Omnigit/Services/GitService.cs:1257
 msgid "This repository has no remote to pull from."
 msgstr "[!!Ţĥïš ŗéþöšïţöŗý ĥåš ñö ŗéṁöţé ţö þûļļ ƒŗöṁ. ·············!!]"
 
-#: src/Omnigit/Services/GitService.cs:1292
+#: src/Omnigit/Services/GitService.cs:1297
 msgid "This repository has no remote to push to."
 msgstr "[!!Ţĥïš ŗéþöšïţöŗý ĥåš ñö ŗéṁöţé ţö þûšĥ ţö. ············!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:982
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:990
 msgid "This repository is only on this machine"
 msgstr "[!!Ţĥïš ŗéþöšïţöŗý ïš öñļý öñ ţĥïš ṁåçĥïñé ············!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:954
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:962
 msgid "This {1} stopped on {0} file git could not merge on its own."
 msgid_plural "This {1} stopped on {0} files git could not merge on its own."
 msgstr[0] "[!!Ţĥïš {1} šţöþþéđ öñ {0} ƒïļé ğïţ çöûļđ ñöţ ṁéŗğé öñ ïţš öŵñ. ··················!!]"
@@ -1730,19 +1846,19 @@ msgstr "[!!Ţöķéñ ··!!]"
 msgid "Token or browser"
 msgstr "[!!Ţöķéñ öŗ ƀŗöŵšéŗ ·····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:184
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:190
 msgid "Tokens are stored in {0}."
 msgstr "[!!Ţöķéñš åŗé šţöŗéđ ïñ {0}. ········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1418
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1459
 msgid "Tokens stored in {0}"
 msgstr "[!!Ţöķéñš šţöŗéđ ïñ {0} ······!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2863
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2904
 msgid "Took the incoming version of {0}"
 msgstr "[!!Ţööķ ţĥé ïñçöṁïñğ ṽéŗšïöñ öƒ {0} ··········!!]"
 
-#: src/Omnigit/Services/GitService.cs:1746
+#: src/Omnigit/Services/GitService.cs:1810
 msgid "Unable to read file"
 msgstr "[!!Ûñåƀļé ţö ŗéåđ ƒïļé ······!!]"
 
@@ -1758,11 +1874,11 @@ msgstr "[!!Ûñđöïñğ {0} çļåšĥéš ŵïţĥ ŵĥåţ ĥåš çĥåñğ
 msgid "Update check failed."
 msgstr "[!!Ûþđåţé çĥéçķ ƒåïļéđ. ······!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:752
+#: src/Omnigit/Views/SettingsView.axaml:834
 msgid "Update now"
 msgstr "[!!Ûþđåţé ñöŵ ···!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1370
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1378
 msgid "Update {0}"
 msgstr "[!!Ûþđåţé {0} ···!!]"
 
@@ -1774,15 +1890,15 @@ msgstr "[!!Ûþđåţéđ ţö Öṁñïğïţ {0}. Ŗéšţåŗţïñğ. ···
 msgid "Updated to {0}. Restarting…"
 msgstr "[!!Ûþđåţéđ ţö {0}. Ŗéšţåŗţïñğ… ········!!]"
 
-#: src/Omnigit/Services/GitService.cs:1239
+#: src/Omnigit/Services/GitService.cs:1244
 msgid "Updated {0} to the latest on pull request #{1}"
 msgstr "[!!Ûþđåţéđ {0} ţö ţĥé ļåţéšţ öñ þûļļ ŗéǫûéšţ #{1} ··············!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2273
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2314
 msgid "View on {0}"
 msgstr "[!!Ṽïéŵ öñ {0} ···!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:277
+#: src/Omnigit/Views/SettingsView.axaml:359
 msgid "Waiting for approval…"
 msgstr "[!!Ŵåïţïñğ ƒöŗ åþþŗöṽåļ… ······!!]"
 
@@ -1790,7 +1906,7 @@ msgstr "[!!Ŵåïţïñğ ƒöŗ åþþŗöṽåļ… ······!!]"
 msgid "Waiting for permission — check for a password prompt, it may be behind this window."
 msgstr "[!!Ŵåïţïñğ ƒöŗ þéŗṁïššïöñ — çĥéçķ ƒöŗ å þåššŵöŗđ þŗöṁþţ, ïţ ṁåý ƀé ƀéĥïñđ ţĥïš ŵïñđöŵ. ·························!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:589
+#: src/Omnigit/Views/SettingsView.axaml:671
 msgid "What git gets for HTTPS: username, password"
 msgstr "[!!Ŵĥåţ ğïţ ğéţš ƒöŗ ĤŢŢÞŠ: ûšéŗñåṁé, þåššŵöŗđ ·············!!]"
 
@@ -1803,27 +1919,27 @@ msgstr "[!!Ŵĥåţ ïţ ïš (öþţïöñåļ) ······!!]"
 msgid "What it marks (optional)"
 msgstr "[!!Ŵĥåţ ïţ ṁåŗķš (öþţïöñåļ) ·······!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:612
+#: src/Omnigit/Views/SettingsView.axaml:694
 msgid "Where \"Create pull request\" sends a browser. Opening one is left to the site's own form, which asks for reviewers and templates this app knows nothing about."
 msgstr "[!!Ŵĥéŗé \"Çŗéåţé þûļļ ŗéǫûéšţ\" šéñđš å ƀŗöŵšéŗ. Öþéñïñğ öñé ïš ļéƒţ ţö ţĥé šïţé'š öŵñ ƒöŗṁ, ŵĥïçĥ åšķš ƒöŗ ŗéṽïéŵéŗš åñđ ţéṁþļåţéš ţĥïš åþþ ķñöŵš ñöţĥïñğ åƀöûţ. ···············································!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:601
+#: src/Omnigit/Views/SettingsView.axaml:683
 msgid "Where \"View on this site\" sends a browser. Leave it alone unless the site puts its commits somewhere unusual."
 msgstr "[!!Ŵĥéŗé \"Ṽïéŵ öñ ţĥïš šïţé\" šéñđš å ƀŗöŵšéŗ. Ļéåṽé ïţ åļöñé ûñļéšš ţĥé šïţé þûţš ïţš çöṁṁïţš šöṁéŵĥéŗé ûñûšûåļ. ·································!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:434
+#: src/Omnigit/Views/SettingsView.axaml:516
 msgid "Where Omnigit POSTs a new repository, and the address for one an organisation owns. Leave the first empty and Omnigit won't offer to publish to this site."
 msgstr "[!!Ŵĥéŗé Öṁñïğïţ ÞÖŠŢš å ñéŵ ŗéþöšïţöŗý, åñđ ţĥé åđđŗéšš ƒöŗ öñé åñ öŗğåñïšåţïöñ öŵñš. Ļéåṽé ţĥé ƒïŗšţ éṁþţý åñđ Öṁñïğïţ ŵöñ'ţ öƒƒéŗ ţö þûƀļïšĥ ţö ţĥïš šïţé. ··············································!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:547
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:553
 msgid "Where should the repository go?"
 msgstr "[!!Ŵĥéŗé šĥöûļđ ţĥé ŗéþöšïţöŗý ğö? ·········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3037
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3078
 msgid "Where should {0} go?"
 msgstr "[!!Ŵĥéŗé šĥöûļđ {0} ğö? ······!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:445
+#: src/Omnigit/Views/SettingsView.axaml:527
 msgid "Where the values sit in the responses"
 msgstr "[!!Ŵĥéŗé ţĥé ṽåļûéš šïţ ïñ ţĥé ŗéšþöñšéš ···········!!]"
 
@@ -1845,15 +1961,15 @@ msgstr "[!!Ŵöŗķţŗéé ··!!]"
 msgid "You are looking at one commit rather than a branch. Anything committed here belongs to no branch, and is easy to lose track of."
 msgstr "[!!Ýöû åŗé ļööķïñğ åţ öñé çöṁṁïţ ŗåţĥéŗ ţĥåñ å ƀŗåñçĥ. Åñýţĥïñğ çöṁṁïţţéđ ĥéŗé ƀéļöñğš ţö ñö ƀŗåñçĥ, åñđ ïš éåšý ţö ļöšé ţŗåçķ öƒ. ······································!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2527
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2568
 msgid "You are not on a branch. Check one out to propose it."
 msgstr "[!!Ýöû åŗé ñöţ öñ å ƀŗåñçĥ. Çĥéçķ öñé öûţ ţö þŗöþöšé ïţ. ················!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2531
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2572
 msgid "You are on {0}, which is what pull requests merge into. Switch to another branch to propose changes."
 msgstr "[!!Ýöû åŗé öñ {0}, ŵĥïçĥ ïš ŵĥåţ þûļļ ŗéǫûéšţš ṁéŗğé ïñţö. Šŵïţçĥ ţö åñöţĥéŗ ƀŗåñçĥ ţö þŗöþöšé çĥåñğéš. ······························!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1113
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1121
 msgid "You have stashed changes on this branch"
 msgid_plural "You have {0} sets of stashed changes on this branch"
 msgstr[0] "[!!Ýöû ĥåṽé šţåšĥéđ çĥåñğéš öñ ţĥïš ƀŗåñçĥ ············!!]"
@@ -1863,7 +1979,7 @@ msgstr[1] "[!!Ýöû ĥåṽé {0} šéţš öƒ šţåšĥéđ çĥåñğéš �
 msgid "You will be asked for your password to install it."
 msgstr "[!!Ýöû ŵïļļ ƀé åšķéđ ƒöŗ ýöûŗ þåššŵöŗđ ţö ïñšţåļļ ïţ. ···············!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:255
+#: src/Omnigit/Views/SettingsView.axaml:337
 msgid "Your browser should have opened with the code already copied. If not:"
 msgstr "[!!Ýöûŗ ƀŗöŵšéŗ šĥöûļđ ĥåṽé öþéñéđ ŵïţĥ ţĥé çöđé åļŗéåđý çöþïéđ. Ïƒ ñöţ: ·····················!!]"
 
@@ -1879,7 +1995,7 @@ msgstr "[!!å ļöçåļ ƒïļé (ñö šýšţéṁ ķéýŗïñğ ƒöûñđ)
 msgid "app bundle"
 msgstr "[!!åþþ ƀûñđļé ···!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1362
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1370
 msgid "branch"
 msgstr "[!!ƀŗåñçĥ ··!!]"
 
@@ -1892,7 +2008,7 @@ msgid "cannot tell what {0} sits inside"
 msgstr "[!!çåññöţ ţéļļ ŵĥåţ {0} šïţš ïñšïđé ··········!!]"
 
 #: src/Omnigit/Services/GitService.CommitOperations.cs:429
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:946
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:954
 msgid "cherry-pick"
 msgstr "[!!çĥéŗŗý-þïçķ ···!!]"
 
@@ -1913,7 +2029,7 @@ msgid "local build"
 msgstr "[!!ļöçåļ ƀûïļđ ···!!]"
 
 #: src/Omnigit/Services/GitService.CommitOperations.cs:427
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:944
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:952
 msgid "merge"
 msgstr "[!!ṁéŗğé ··!!]"
 
@@ -1922,7 +2038,7 @@ msgid "no desktop entry at {0}"
 msgstr "[!!ñö đéšķţöþ éñţŗý åţ {0} ·······!!]"
 
 #: src/Omnigit/Services/GitService.CommitOperations.cs:431
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:948
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:956
 msgid "operation"
 msgstr "[!!öþéŗåţïöñ ···!!]"
 
@@ -1932,12 +2048,12 @@ msgid "portable build"
 msgstr "[!!þöŗţåƀļé ƀûïļđ ····!!]"
 
 #: src/Omnigit/Services/GitService.CommitOperations.cs:430
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:947
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:955
 msgid "rebase"
 msgstr "[!!ŗéƀåšé ··!!]"
 
 #: src/Omnigit/Services/GitService.CommitOperations.cs:428
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:945
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:953
 msgid "revert"
 msgstr "[!!ŗéṽéŗţ ··!!]"
 
@@ -1945,19 +2061,19 @@ msgstr "[!!ŗéṽéŗţ ··!!]"
 msgid "system keyring (libsecret)"
 msgstr "[!!šýšţéṁ ķéýŗïñğ (ļïƀšéçŗéţ) ········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2568
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2609
 msgid "the branch"
 msgstr "[!!ţĥé ƀŗåñçĥ ···!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2276
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2317
 msgid "the hosting site"
 msgstr "[!!ţĥé ĥöšţïñğ šïţé ·····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1747
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1788
 msgid "this branch"
 msgstr "[!!ţĥïš ƀŗåñçĥ ···!!]"
 
-#: src/Omnigit/Views/SettingsView.axaml:634
+#: src/Omnigit/Views/SettingsView.axaml:716
 msgid "token (optional)"
 msgstr "[!!ţöķéñ (öþţïöñåļ) ·····!!]"
 
@@ -1965,7 +2081,7 @@ msgstr "[!!ţöķéñ (öþţïöñåļ) ·····!!]"
 msgid "unknown error"
 msgstr "[!!ûñķñöŵñ éŗŗöŗ ····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3511
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3552
 msgid "{0} ahead"
 msgid_plural "{0} ahead"
 msgstr[0] "[!!{0} åĥéåđ ···!!]"
@@ -1980,39 +2096,43 @@ msgstr "[!!{0} åñđ {1} ···!!]"
 msgid "{0} answered with {1} rather than the git protocol — is that the repository's clone URL?"
 msgstr "[!!{0} åñšŵéŗéđ ŵïţĥ {1} ŗåţĥéŗ ţĥåñ ţĥé ğïţ þŗöţöçöļ — ïš ţĥåţ ţĥé ŗéþöšïţöŗý'š çļöñé ÛŖĻ? ··························!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3514
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3555
 msgid "{0} behind"
 msgid_plural "{0} behind"
 msgstr[0] "[!!{0} ƀéĥïñđ ···!!]"
 msgstr[1] "[!!{0} ƀéĥïñđ ···!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3508
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3549
 msgid "{0} branch"
 msgid_plural "{0} branches"
 msgstr[0] "[!!{0} ƀŗåñçĥ ···!!]"
 msgstr[1] "[!!{0} ƀŗåñçĥéš ····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2494
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2535
 msgid "{0} came with no link to open."
 msgstr "[!!{0} çåṁé ŵïţĥ ñö ļïñķ ţö öþéñ. ·········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3505
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3546
 msgid "{0} change"
 msgid_plural "{0} changes"
 msgstr[0] "[!!{0} çĥåñğé ···!!]"
 msgstr[1] "[!!{0} çĥåñğéš ···!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1018
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1026
 msgid "{0} changed file"
 msgid_plural "{0} changed files"
 msgstr[0] "[!!{0} çĥåñğéđ ƒïļé ·····!!]"
 msgstr[1] "[!!{0} çĥåñğéđ ƒïļéš ·····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:316
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:322
 msgid "{0} commit across every branch"
 msgid_plural "{0} commits across every branch"
 msgstr[0] "[!!{0} çöṁṁïţ åçŗöšš éṽéŗý ƀŗåñçĥ ·········!!]"
 msgstr[1] "[!!{0} çöṁṁïţš åçŗöšš éṽéŗý ƀŗåñçĥ ·········!!]"
+
+#: src/Omnigit/Services/Plugins/PluginLoader.cs:71
+msgid "{0} could not be read: {1}"
+msgstr "[!!{0} çöûļđ ñöţ ƀé ŗéåđ: {1} ········!!]"
 
 #: src/Omnigit/Models/TimeFormat.cs:31
 msgid "{0} day ago"
@@ -2020,28 +2140,28 @@ msgid_plural "{0} days ago"
 msgstr[0] "[!!{0} đåý åğö ···!!]"
 msgstr[1] "[!!{0} đåýš åğö ····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2537
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2578
 msgid "{0} didn't give a usable address for its pull request form."
 msgstr "[!!{0} đïđñ'ţ ğïṽé å ûšåƀļé åđđŗéšš ƒöŗ ïţš þûļļ ŗéǫûéšţ ƒöŗṁ. ··················!!]"
 
 #: src/Omnigit/Models/Repo.cs:266
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1386
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1394
 msgid "{0} file changed"
 msgid_plural "{0} files changed"
 msgstr[0] "[!!{0} ƒïļé çĥåñğéđ ·····!!]"
 msgstr[1] "[!!{0} ƒïļéš çĥåñğéđ ·····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1198
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1206
 msgid "{0} file goes back to its last committed state. This cannot be undone."
 msgid_plural "{0} files go back to their last committed state. This cannot be undone."
 msgstr[0] "[!!{0} ƒïļé ğöéš ƀåçķ ţö ïţš ļåšţ çöṁṁïţţéđ šţåţé. Ţĥïš çåññöţ ƀé ûñđöñé. ·····················!!]"
 msgstr[1] "[!!{0} ƒïļéš ğö ƀåçķ ţö ţĥéïŗ ļåšţ çöṁṁïţţéđ šţåţé. Ţĥïš çåññöţ ƀé ûñđöñé. ·····················!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1194
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1202
 msgid "{0} go back to their last committed state. This cannot be undone."
 msgstr "[!!{0} ğö ƀåçķ ţö ţĥéïŗ ļåšţ çöṁṁïţţéđ šţåţé. Ţĥïš çåññöţ ƀé ûñđöñé. ····················!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1189
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1197
 msgid "{0} goes back to its last committed state. This cannot be undone."
 msgstr "[!!{0} ğöéš ƀåçķ ţö ïţš ļåšţ çöṁṁïţţéđ šţåţé. Ţĥïš çåññöţ ƀé ûñđöñé. ····················!!]"
 
@@ -2060,15 +2180,15 @@ msgstr[0] "[!!{0} ĥöûŗ åğö ····!!]"
 msgstr[1] "[!!{0} ĥöûŗš åğö ····!!]"
 
 #: src/Omnigit/Services/GitService.CommitOperations.cs:171
-#: src/Omnigit/Services/GitService.cs:555
+#: src/Omnigit/Services/GitService.cs:560
 msgid "{0} is already checked out in {1}. Switch that copy to another branch first, or remove it."
 msgstr "[!!{0} ïš åļŗéåđý çĥéçķéđ öûţ ïñ {1}. Šŵïţçĥ ţĥåţ çöþý ţö åñöţĥéŗ ƀŗåñçĥ ƒïŗšţ, öŗ ŗéṁöṽé ïţ. ···························!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2477
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2518
 msgid "{0} is already here and differs from the pull request — it was left as it is. Delete it, or move it yourself, to take the new version."
 msgstr "[!!{0} ïš åļŗéåđý ĥéŗé åñđ đïƒƒéŗš ƒŗöṁ ţĥé þûļļ ŗéǫûéšţ — ïţ ŵåš ļéƒţ åš ïţ ïš. Đéļéţé ïţ, öŗ ṁöṽé ïţ ýöûŗšéļƒ, ţö ţåķé ţĥé ñéŵ ṽéŗšïöñ. ········································!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1913
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1954
 msgid "{0} is checked out in {1}, which could not be opened."
 msgstr "[!!{0} ïš çĥéçķéđ öûţ ïñ {1}, ŵĥïçĥ çöûļđ ñöţ ƀé öþéñéđ. ················!!]"
 
@@ -2080,7 +2200,11 @@ msgstr "[!!{0} ïš đéƒïñéđ ƀý å ṁåñïƒéšţ, ŵĥïçĥ çåñ 
 msgid "{0} is missing an \"id\"."
 msgstr "[!!{0} ïš ṁïššïñğ åñ \"ïđ\". ·······!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1332
+#: src/Omnigit/Services/Plugins/PluginLoader.cs:133
+msgid "{0} is not in the plugin's folder."
+msgstr "[!!{0} ïš ñöţ ïñ ţĥé þļûğïñ'š ƒöļđéŗ. ··········!!]"
+
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1340
 msgid "{0} is not on disk to open"
 msgstr "[!!{0} ïš ñöţ öñ đïšķ ţö öþéñ ········!!]"
 
@@ -2088,7 +2212,7 @@ msgstr "[!!{0} ïš ñöţ öñ đïšķ ţö öþéñ ········!!]"
 msgid "{0} is not valid JSON: {1}"
 msgstr "[!!{0} ïš ñöţ ṽåļïđ ĴŠÖÑ: {1} ········!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2598
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2639
 msgid "{0} isn't on {1} yet, so there is nothing to open a pull request from. The push above says why it didn't get there."
 msgstr "[!!{0} ïšñ'ţ öñ {1} ýéţ, šö ţĥéŗé ïš ñöţĥïñğ ţö öþéñ å þûļļ ŗéǫûéšţ ƒŗöṁ. Ţĥé þûšĥ åƀöṽé šåýš ŵĥý ïţ đïđñ'ţ ğéţ ţĥéŗé. ··································!!]"
 
@@ -2104,11 +2228,19 @@ msgid_plural "{0} months ago"
 msgstr[0] "[!!{0} ṁöñţĥ åğö ····!!]"
 msgstr[1] "[!!{0} ṁöñţĥš åğö ····!!]"
 
-#: src/Omnigit/Services/GitService.cs:1504
+#: src/Omnigit/Services/Plugins/PluginLoader.cs:75
+msgid "{0} must give at least an id and an assembly."
+msgstr "[!!{0} ṁûšţ ğïṽé åţ ļéåšţ åñ ïđ åñđ åñ åššéṁƀļý. ··············!!]"
+
+#: src/Omnigit/Services/GitService.cs:1509
 msgid "{0} needs you to be signed in. Open the Accounts screen and add an account for {0}, then try again."
 msgstr "[!!{0} ñééđš ýöû ţö ƀé šïğñéđ ïñ. Öþéñ ţĥé Åççöûñţš šçŗééñ åñđ åđđ åñ åççöûñţ ƒöŗ {0}, ţĥéñ ţŗý åğåïñ. ······························!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2418
+#: src/Omnigit/Services/Plugins/ChangeViewerRegistry.cs:43
+msgid "{0} offers a viewer with the id \"{1}\", which is already taken - it was skipped."
+msgstr "[!!{0} öƒƒéŗš å ṽïéŵéŗ ŵïţĥ ţĥé ïđ \"{1}\", ŵĥïçĥ ïš åļŗéåđý ţåķéñ - ïţ ŵåš šķïþþéđ. ························!!]"
+
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:2459
 msgid "{0} open pull request"
 msgid_plural "{0} open pull requests"
 msgstr[0] "[!!{0} öþéñ þûļļ ŗéǫûéšţ ······!!]"
@@ -2118,7 +2250,7 @@ msgstr[1] "[!!{0} öþéñ þûļļ ŗéǫûéšţš ·······!!]"
 msgid "{0} overrides the built-in '{1}' provider."
 msgstr "[!!{0} öṽéŗŗïđéš ţĥé ƀûïļţ-ïñ '{1}' þŗöṽïđéŗ. ·············!!]"
 
-#: src/Omnigit/Services/GitService.cs:1495
+#: src/Omnigit/Services/GitService.cs:1500
 msgid "{0} rejected the saved credentials. The token may have expired or lost its scopes — sign in again on the Accounts screen."
 msgstr "[!!{0} ŗéĵéçţéđ ţĥé šåṽéđ çŗéđéñţïåļš. Ţĥé ţöķéñ ṁåý ĥåṽé éẋþïŗéđ öŗ ļöšţ ïţš šçöþéš — šïğñ ïñ åğåïñ öñ ţĥé Åççöûñţš šçŗééñ. ····································!!]"
 
@@ -2157,7 +2289,7 @@ msgid_plural "{0} unpushed commits"
 msgstr[0] "[!!{0} ûñþûšĥéđ çöṁṁïţ ······!!]"
 msgstr[1] "[!!{0} ûñþûšĥéđ çöṁṁïţš ······!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:619
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:625
 msgid "{0} was created here, but not on {1} — {2}"
 msgstr "[!!{0} ŵåš çŗéåţéđ ĥéŗé, ƀûţ ñöţ öñ {1} — {2} ·············!!]"
 
@@ -2167,7 +2299,7 @@ msgid_plural "{0} years ago"
 msgstr[0] "[!!{0} ýéåŗ åğö ····!!]"
 msgstr[1] "[!!{0} ýéåŗš åğö ····!!]"
 
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3204
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:3245
 msgid "{0} — {1}: {2}"
 msgstr "[!!{0} — {1}: {2} ····!!]"
 
@@ -2179,7 +2311,7 @@ msgstr "[!!{0}'š ṁåñïƒéšţ ĥåš ñö çŗéåţéŖéþöšïţöŗý
 msgid "{0}: {1}. Choose a version for each, then commit — or abandon it."
 msgstr "[!!{0}: {1}. Çĥööšé å ṽéŗšïöñ ƒöŗ éåçĥ, ţĥéñ çöṁṁïţ — öŗ åƀåñđöñ ïţ. ····················!!]"
 
-#: src/Omnigit/Services/GitService.cs:582
+#: src/Omnigit/Services/GitService.cs:587
 msgid "{1} changed on both branches, so bringing it across would overwrite work on {2}. Leave it behind to stash it instead."
 msgid_plural "{1} changed on both branches, so bringing them across would overwrite work on {2}. Leave them behind to stash them instead."
 msgstr[0] "[!!{1} çĥåñğéđ öñ ƀöţĥ ƀŗåñçĥéš, šö ƀŗïñğïñğ ïţ åçŗöšš ŵöûļđ öṽéŗŵŗïţé ŵöŗķ öñ {2}. Ļéåṽé ïţ ƀéĥïñđ ţö šţåšĥ ïţ ïñšţéåđ. ···································!!]"
@@ -2198,9 +2330,9 @@ msgid "← Back to repository"
 msgstr "[!!← Ƀåçķ ţö ŗéþöšïţöŗý ······!!]"
 
 #: src/Omnigit/Services/GitService.CommitOperations.cs:375
-#: src/Omnigit/Services/GitService.cs:571
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1196
-#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1414
+#: src/Omnigit/Services/GitService.cs:576
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1204
+#: src/Omnigit/ViewModels/MainWindowViewModel.cs:1455
 #: src/Omnigit/ViewModels/RepositoryRemovalViewModel.cs:105
 msgctxt "between items of a list"
 msgid ", "
