@@ -108,6 +108,11 @@
                  accent, which the whole UI already uses for things that are merely
                  selected, and not the error red - a release is good news. -->
             <SolidColorBrush x:Key="NotificationDot" Color="#DB8B2A" />
+
+            <!-- The squares behind an image in the image viewer, so transparency reads
+                 as transparency rather than as whatever colour the pane happens to be. -->
+            <SolidColorBrush x:Key="CheckerLight" Color="#2A2E36" />
+            <SolidColorBrush x:Key="CheckerDark" Color="#1F2229" />
         </ResourceDictionary>
 
         <ResourceDictionary x:Key="Light">
@@ -181,6 +186,8 @@
             <SolidColorBrush x:Key="BannerWarningBackground" Color="#FFF8C5" />
             <SolidColorBrush x:Key="BannerWarningBorder" Color="#9A6700" />
             <SolidColorBrush x:Key="NotificationDot" Color="#BC5A05" />
+            <SolidColorBrush x:Key="CheckerLight" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="CheckerDark" Color="#E8EAED" />
         </ResourceDictionary>
 
     </ResourceDictionary.ThemeDictionaries>

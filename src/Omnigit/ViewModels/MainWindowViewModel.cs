@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.Input;
 using Omnigit.HostProviders;
 using Omnigit.Models;
 using Omnigit.Services;
+using Omnigit.Services.Plugins;
 
 namespace Omnigit.ViewModels;
 
@@ -92,6 +93,11 @@ public partial class MainWindowViewModel : ViewModelBase
 
         Update = new UpdateViewModel(update, log, shell, designTime);
         Language = new LanguageViewModel(settings);
+
+        // Our own viewers go in through the same door a plugin's do; see the registry.
+        _viewers = new ChangeViewerRegistry(
+            [new Views.Viewers.TextViewer(), new Views.Viewers.ImageViewer()], log);
+        Plugins = new PluginsViewModel(settings, _viewers, log, shell, PluginLoader.DefaultRoot, designTime);
 
         // The dot on the settings button is the only part of the update state the rest
         // of the app shows, and it lives in a view model the header does not bind to.
@@ -823,6 +829,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [NotifyPropertyChangedFor(nameof(IsHostsSection))]
     [NotifyPropertyChangedFor(nameof(IsAboutSection))]
     [NotifyPropertyChangedFor(nameof(IsGeneralSection))]
+    [NotifyPropertyChangedFor(nameof(IsPluginsSection))]
     public partial int SettingsSection { get; set; }
 
     public bool IsAccountsSection => SettingsSection == 0;
@@ -832,6 +839,7 @@ public partial class MainWindowViewModel : ViewModelBase
     // Numbered after the three that shipped first, and drawn above them: the numbers are
     // a rail's CommandParameter, not an order.
     public bool IsGeneralSection => SettingsSection == 3;
+    public bool IsPluginsSection => SettingsSection == 4;
 
     /// <summary>The version, and the one button that changes it.</summary>
     public UpdateViewModel Update { get; }
@@ -1388,6 +1396,39 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>Which of the commit's files the diff pane is showing.</summary>
     [ObservableProperty]
     public partial FileChange? SelectedCommitFile { get; set; }
+
+    // ---- Diff viewers ------------------------------------------------------
+    // One per pane, rebuilt whenever that pane's file changes. Disposing the old one is
+    // what tells a viewer still loading the previous file to stop.
+
+    private readonly ChangeViewerRegistry _viewers;
+    private readonly ViewerChoices _viewerChoices = new();
+
+    public PluginsViewModel Plugins { get; }
+
+    /// <summary>What the Changes tab's diff pane shows.</summary>
+    [ObservableProperty]
+    public partial ChangeViewerViewModel? ChangeViewer { get; set; }
+
+    /// <summary>What the History tab's diff pane shows.</summary>
+    [ObservableProperty]
+    public partial ChangeViewerViewModel? CommitFileViewer { get; set; }
+
+    partial void OnSelectedChangeChanged(FileChangeViewModel? value)
+        => ChangeViewer = ViewerFor(ChangeViewer, value?.Model);
+
+    partial void OnSelectedCommitFileChanged(FileChange? value)
+        => CommitFileViewer = ViewerFor(CommitFileViewer, value);
+
+    private ChangeViewerViewModel? ViewerFor(ChangeViewerViewModel? previous, FileChange? change)
+    {
+        previous?.Dispose();
+
+        return change is null
+            ? null
+            : new ChangeViewerViewModel(
+                change, SelectedRepository?.LocalPath ?? string.Empty, _git, _viewers, _viewerChoices);
+    }
 
     // ---- Pane widths -------------------------------------------------------
     // Bound two-way so the GridSplitters write back here. The toolbar wordmark
