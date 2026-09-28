@@ -132,6 +132,7 @@ msgid "Add local repository…"
 msgstr ""
 
 #: src/Omnigit/Views/Viewers/LockfileViewer.cs:109
+#: src/Omnigit/Views/Viewers/MarkdownViewer.cs:110
 msgid "Added"
 msgstr ""
 
@@ -994,6 +995,7 @@ msgstr[1] ""
 #: src/Omnigit/ViewModels/MainWindowViewModel.cs:2385
 #: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:57
 #: src/Omnigit/Views/Viewers/LockfileViewer.cs:43
+#: src/Omnigit/Views/Viewers/MarkdownViewer.cs:59
 #: src/Omnigit/Views/Viewers/TableViewer.cs:44
 msgid "Loading…"
 msgstr ""
@@ -1458,6 +1460,7 @@ msgid "Remove from this computer…"
 msgstr ""
 
 #: src/Omnigit/Views/Viewers/LockfileViewer.cs:110
+#: src/Omnigit/Views/Viewers/MarkdownViewer.cs:114
 msgid "Removed"
 msgstr ""
 
@@ -1471,6 +1474,10 @@ msgstr ""
 
 #: src/Omnigit/ViewModels/MainWindowViewModel.cs:1720
 msgid "Removed {0}; its folder was already gone."
+msgstr ""
+
+#: src/Omnigit/Views/Viewers/MarkdownViewer.cs:28
+msgid "Rendered"
 msgstr ""
 
 #: src/Omnigit/Views/SettingsView.axaml:556
@@ -1833,8 +1840,16 @@ msgstr ""
 msgid "This clone holds {0} — none of which are on the remote."
 msgstr ""
 
+#: src/Omnigit/Views/Viewers/MarkdownViewer.cs:92
+msgid "This document is empty."
+msgstr ""
+
 #: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:122
 msgid "This file couldn't be decoded as an image. Switch to Text to see what changed."
+msgstr ""
+
+#: src/Omnigit/Views/Viewers/MarkdownViewer.cs:79
+msgid "This file is too large to render. Switch to Text to see the diff."
 msgstr ""
 
 #: src/Omnigit/Views/Viewers/TableViewer.cs:71
@@ -2067,6 +2082,10 @@ msgstr ""
 
 #: src/Omnigit/Views/RepositoryView.axaml:595
 msgid "committed"
+msgstr ""
+
+#: src/Omnigit/Views/Viewers/MarkdownViewer.cs:307
+msgid "image"
 msgstr ""
 
 #: src/Omnigit/ViewModels/UpdateViewModel.cs:117

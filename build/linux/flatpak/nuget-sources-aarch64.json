@@ -201,6 +201,16 @@
     },
     {
         "type": "file",
+        "url": "https://api.nuget.org/v3-flatcontainer/excss/4.3.1/excss.4.3.1.nupkg",
+        "sha512": "654361946ede919a16c18e9ae70bb4ecbc17c03143102bcf82b9396923074c58c139d3ebb875358658d59cdc2e94c7348ef739b00addcaff9049f51956f20723",
+        "dest": "nuget-sources",
+        "dest-filename": "excss.4.3.1.nupkg",
+        "only-arches": [
+            "aarch64"
+        ]
+    },
+    {
+        "type": "file",
         "url": "https://api.nuget.org/v3-flatcontainer/fluentavaloniaui/3.1.0/fluentavaloniaui.3.1.0.nupkg",
         "sha512": "f0314eab31fa875ea3816c876606cf1d54082956df79af540b611b17e1bd7eb7996d53344266e08fffd4a09563e9862e8f02b6c28b5592da9d63d81e35886314",
         "dest": "nuget-sources",
@@ -275,6 +285,16 @@
         "sha512": "12d41802ea5cd506baf7a0f1e44365bdffab3e664e3d6866c66c0578a5afe33507b581b899e2ffcc94c6928439dfc42b88d66fda162998134d470fe8e2cda01e",
         "dest": "nuget-sources",
         "dest-filename": "libgit2sharp.nativebinaries.2.0.324.nupkg",
+        "only-arches": [
+            "aarch64"
+        ]
+    },
+    {
+        "type": "file",
+        "url": "https://api.nuget.org/v3-flatcontainer/markdig/1.4.0/markdig.1.4.0.nupkg",
+        "sha512": "f0490114594ba100914be2ca2c674450de8be7b046910376b62476ff3ceb77e376915140349ceadb84ca49e1fb944fae707700f8ec6194d366b09019149793aa",
+        "dest": "nuget-sources",
+        "dest-filename": "markdig.1.4.0.nupkg",
         "only-arches": [
             "aarch64"
         ]
@@ -371,6 +391,26 @@
     },
     {
         "type": "file",
+        "url": "https://api.nuget.org/v3-flatcontainer/shimskiasharp/4.9.1/shimskiasharp.4.9.1.nupkg",
+        "sha512": "fd583d22b904ebe87e54e020506b9469d27287c5b4b7d139d6b64a469a0cf2caea9c33712b02086a07deb12bf152349e9123bf8271da601f9a1b9e82d6ed4da9",
+        "dest": "nuget-sources",
+        "dest-filename": "shimskiasharp.4.9.1.nupkg",
+        "only-arches": [
+            "aarch64"
+        ]
+    },
+    {
+        "type": "file",
+        "url": "https://api.nuget.org/v3-flatcontainer/skiasharp/3.119.2/skiasharp.3.119.2.nupkg",
+        "sha512": "5655084b43b5cb7442ac8108210eccf810108e7de412e11dd387fbafe04eeb7a90c22f8787c2ac6069963e36099ed630a210284fb0545a98294ebf32b756217d",
+        "dest": "nuget-sources",
+        "dest-filename": "skiasharp.3.119.2.nupkg",
+        "only-arches": [
+            "aarch64"
+        ]
+    },
+    {
+        "type": "file",
         "url": "https://api.nuget.org/v3-flatcontainer/skiasharp/3.119.4/skiasharp.3.119.4.nupkg",
         "sha512": "712925fbacdfbd34c5d7c06bce5b2ae19c5062dcf4000aa57ec2c446b4b6cd6827c58153027e1c6090ec264f0997b347f4459995c88c21db094c4d9240ca95a5",
         "dest": "nuget-sources",
@@ -385,6 +425,16 @@
         "sha512": "f839cc35826b865ad45180427a16e2d7797be838192335aafcf3dcfda8b110ca04d7cf1aebf5f300c4adbf875454638d476fe8c44e9b32b388562bde0d558f72",
         "dest": "nuget-sources",
         "dest-filename": "skiasharp.nativeassets.linux.3.119.4.nupkg",
+        "only-arches": [
+            "aarch64"
+        ]
+    },
+    {
+        "type": "file",
+        "url": "https://api.nuget.org/v3-flatcontainer/skiasharp.nativeassets.macos/3.119.2/skiasharp.nativeassets.macos.3.119.2.nupkg",
+        "sha512": "8573881ad34053595a638b10e0e894d21363ff13ec8a32e0b50ebbd66632d1e058a5994ab133e7ce75e06c4779596b869facab9e41d45bb296f26dd97540a5a3",
+        "dest": "nuget-sources",
+        "dest-filename": "skiasharp.nativeassets.macos.3.119.2.nupkg",
         "only-arches": [
             "aarch64"
         ]
@@ -411,10 +461,70 @@
     },
     {
         "type": "file",
+        "url": "https://api.nuget.org/v3-flatcontainer/skiasharp.nativeassets.win32/3.119.2/skiasharp.nativeassets.win32.3.119.2.nupkg",
+        "sha512": "dd60dbc4d812d4c7d85fa47a4c2ead0c00c5b96ec0224a97db9842ee1e813c5de49f2b2c643c2d6463c294d4808e541da4cff40080bc3d847acb975088c4e359",
+        "dest": "nuget-sources",
+        "dest-filename": "skiasharp.nativeassets.win32.3.119.2.nupkg",
+        "only-arches": [
+            "aarch64"
+        ]
+    },
+    {
+        "type": "file",
         "url": "https://api.nuget.org/v3-flatcontainer/skiasharp.nativeassets.win32/3.119.4/skiasharp.nativeassets.win32.3.119.4.nupkg",
         "sha512": "445bfd7c9305522e385110a672a43f15acbfb36b5c985c5af540db534f99ceb3a7ddf933a20587ee0527b14edf1b19cb9b167e781bea275ca2b3b77d9a0259cf",
         "dest": "nuget-sources",
         "dest-filename": "skiasharp.nativeassets.win32.3.119.4.nupkg",
+        "only-arches": [
+            "aarch64"
+        ]
+    },
+    {
+        "type": "file",
+        "url": "https://api.nuget.org/v3-flatcontainer/svg.animation/4.9.1/svg.animation.4.9.1.nupkg",
+        "sha512": "1c1c39b9918bafd4c2ff2f0db898527cf5e3bf6bb2ae24f3de6574a49ec301ecec4fa0af381fa32f242d4998a3c0a93708fd08f6c42c5ad83f7da8514aed09bf",
+        "dest": "nuget-sources",
+        "dest-filename": "svg.animation.4.9.1.nupkg",
+        "only-arches": [
+            "aarch64"
+        ]
+    },
+    {
+        "type": "file",
+        "url": "https://api.nuget.org/v3-flatcontainer/svg.custom/4.9.1/svg.custom.4.9.1.nupkg",
+        "sha512": "cc9857d081a64995a9afe6c1b15c5f5f83bf2770b177e84b6e55ee8cfebd0c0cfba635161398ce994acfe8586948eb18535d94b20bf99fa3ee9b2a8076f02ec3",
+        "dest": "nuget-sources",
+        "dest-filename": "svg.custom.4.9.1.nupkg",
+        "only-arches": [
+            "aarch64"
+        ]
+    },
+    {
+        "type": "file",
+        "url": "https://api.nuget.org/v3-flatcontainer/svg.model/4.9.1/svg.model.4.9.1.nupkg",
+        "sha512": "e07108e3fc2fe60089701dd88908ad46743104e514639ffa7f10681452287916e293cdf172390c93766c8f65825b870c2033795ac4f84b53db5c18c9abcf5843",
+        "dest": "nuget-sources",
+        "dest-filename": "svg.model.4.9.1.nupkg",
+        "only-arches": [
+            "aarch64"
+        ]
+    },
+    {
+        "type": "file",
+        "url": "https://api.nuget.org/v3-flatcontainer/svg.scenegraph/4.9.1/svg.scenegraph.4.9.1.nupkg",
+        "sha512": "e59e9ace25433c521e9d0894d11ee685961aba9650d50acd66eea6c6572162513a119823cb0358cfc14b1214cf482006e847bffb58a760a1b1069cd5b3c4f8ee",
+        "dest": "nuget-sources",
+        "dest-filename": "svg.scenegraph.4.9.1.nupkg",
+        "only-arches": [
+            "aarch64"
+        ]
+    },
+    {
+        "type": "file",
+        "url": "https://api.nuget.org/v3-flatcontainer/svg.skia/4.9.1/svg.skia.4.9.1.nupkg",
+        "sha512": "75567d366d732e163a59f92ce27f05086bb0e48d7b5021a2dbc920ccac0e7919ea7d63e3e34b108bd1382646f7f7148a030528ff50b057668f6a96222101bcef",
+        "dest": "nuget-sources",
+        "dest-filename": "svg.skia.4.9.1.nupkg",
         "only-arches": [
             "aarch64"
         ]

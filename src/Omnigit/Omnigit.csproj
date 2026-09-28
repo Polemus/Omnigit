@@ -70,6 +70,10 @@
          Dependabot bump to 5.x is a Skia major upgrade underneath the whole UI, not a
          library update; take it only together with an Avalonia that moved first. -->
     <PackageReference Include="Svg.Skia" Version="4.9.1" />
+
+    <!-- Parses Markdown for the rendered viewer. Parsing only - the drawing is ours, so
+         nothing in it can load an image or follow a link on its own. -->
+    <PackageReference Include="Markdig" Version="1.4.0" />
   </ItemGroup>
 
   <ItemGroup>

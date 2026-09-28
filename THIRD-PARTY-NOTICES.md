@@ -92,6 +92,13 @@ Bundled inside HarfBuzzSharp's native assets. Text shaping.
 
 © Behdad Esfahbod and others. <https://github.com/harfbuzz/harfbuzz/blob/main/COPYING>
 
+### Markdig — BSD 2-Clause
+
+Parses Markdown for the rendered view of a changed `.md` file. Parsing only; the drawing
+is Omnigit's own.
+
+© Alexandre Mutel. <https://github.com/xoofx/markdig/blob/master/license.txt>
+
 ### SVG rendering library (`Svg.Custom`) — Microsoft Public License (MS-PL)
 
 Shipped as `Svg.Custom`, Svg.Skia's build of the [svg-net](https://github.com/svg-net/SVG)

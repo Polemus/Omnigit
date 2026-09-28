@@ -133,6 +133,7 @@ msgid "Add local repository…"
 msgstr "[!!Åđđ ļöçåļ ŗéþöšïţöŗý… ······!!]"
 
 #: src/Omnigit/Views/Viewers/LockfileViewer.cs:109
+#: src/Omnigit/Views/Viewers/MarkdownViewer.cs:110
 msgid "Added"
 msgstr "[!!Åđđéđ ··!!]"
 
@@ -995,6 +996,7 @@ msgstr[1] "[!!Ļöåđéđ, {0} ṽïéŵéŗš ······!!]"
 #: src/Omnigit/ViewModels/MainWindowViewModel.cs:2385
 #: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:57
 #: src/Omnigit/Views/Viewers/LockfileViewer.cs:43
+#: src/Omnigit/Views/Viewers/MarkdownViewer.cs:59
 #: src/Omnigit/Views/Viewers/TableViewer.cs:44
 msgid "Loading…"
 msgstr "[!!Ļöåđïñğ… ··!!]"
@@ -1459,6 +1461,7 @@ msgid "Remove from this computer…"
 msgstr "[!!Ŗéṁöṽé ƒŗöṁ ţĥïš çöṁþûţéŗ… ········!!]"
 
 #: src/Omnigit/Views/Viewers/LockfileViewer.cs:110
+#: src/Omnigit/Views/Viewers/MarkdownViewer.cs:114
 msgid "Removed"
 msgstr "[!!Ŗéṁöṽéđ ··!!]"
 
@@ -1473,6 +1476,10 @@ msgstr "[!!Ŗéṁöṽéđ {0} ƒŗöṁ Öṁñïğïţ, ƀûţ ïţš ƒöļ�
 #: src/Omnigit/ViewModels/MainWindowViewModel.cs:1720
 msgid "Removed {0}; its folder was already gone."
 msgstr "[!!Ŗéṁöṽéđ {0}; ïţš ƒöļđéŗ ŵåš åļŗéåđý ğöñé. ············!!]"
+
+#: src/Omnigit/Views/Viewers/MarkdownViewer.cs:28
+msgid "Rendered"
+msgstr "[!!Ŗéñđéŗéđ ··!!]"
 
 #: src/Omnigit/Views/SettingsView.axaml:556
 msgid "Repository: description, updated at"
@@ -1834,9 +1841,17 @@ msgstr "[!!Ţĥïš çļöñé ĥåš ñö ŗéṁöţé, šö ţĥéŗé ïš �
 msgid "This clone holds {0} — none of which are on the remote."
 msgstr "[!!Ţĥïš çļöñé ĥöļđš {0} — ñöñé öƒ ŵĥïçĥ åŗé öñ ţĥé ŗéṁöţé. ················!!]"
 
+#: src/Omnigit/Views/Viewers/MarkdownViewer.cs:92
+msgid "This document is empty."
+msgstr "[!!Ţĥïš đöçûṁéñţ ïš éṁþţý. ·······!!]"
+
 #: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:122
 msgid "This file couldn't be decoded as an image. Switch to Text to see what changed."
 msgstr "[!!Ţĥïš ƒïļé çöûļđñ'ţ ƀé đéçöđéđ åš åñ ïṁåğé. Šŵïţçĥ ţö Ţéẋţ ţö šéé ŵĥåţ çĥåñğéđ. ·······················!!]"
+
+#: src/Omnigit/Views/Viewers/MarkdownViewer.cs:79
+msgid "This file is too large to render. Switch to Text to see the diff."
+msgstr "[!!Ţĥïš ƒïļé ïš ţöö ļåŗğé ţö ŗéñđéŗ. Šŵïţçĥ ţö Ţéẋţ ţö šéé ţĥé đïƒƒ. ····················!!]"
 
 #: src/Omnigit/Views/Viewers/TableViewer.cs:71
 msgid "This file is too large to show as a table. Switch to Text to see the diff."
@@ -2069,6 +2084,10 @@ msgstr "[!!çĥéŗŗý-þïçķ ···!!]"
 #: src/Omnigit/Views/RepositoryView.axaml:595
 msgid "committed"
 msgstr "[!!çöṁṁïţţéđ ···!!]"
+
+#: src/Omnigit/Views/Viewers/MarkdownViewer.cs:307
+msgid "image"
+msgstr "[!!ïṁåğé ··!!]"
 
 #: src/Omnigit/ViewModels/UpdateViewModel.cs:117
 msgid "installed build"
