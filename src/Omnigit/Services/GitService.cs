@@ -304,10 +304,12 @@ public sealed partial class GitService : IGitService
                 changes.Add(new FileChange
                 {
                     Path = pec.Path,
+                    OldPath = pec.OldPath != pec.Path ? pec.OldPath : null,
                     Status = ToChangeStatus(pec.Status, entry.State),
                     Additions = pec.LinesAdded,
                     Deletions = pec.LinesDeleted,
                     Diff = UnifiedDiffParser.Parse(pec.Patch, pec.Path),
+                    Patch = pec.Patch,
                 });
             }
             else
@@ -463,10 +465,13 @@ public sealed partial class GitService : IGitService
             .Select(pec => new FileChange
             {
                 Path = pec.Path,
+                OldPath = pec.OldPath != pec.Path ? pec.OldPath : null,
+                Commit = commit.Sha,
                 Status = ToChangeStatus(pec.Status, null),
                 Additions = pec.LinesAdded,
                 Deletions = pec.LinesDeleted,
                 Diff = UnifiedDiffParser.Parse(pec.Patch, pec.Path),
+                Patch = pec.Patch,
             })
             .ToList();
     }
@@ -1676,6 +1681,65 @@ public sealed partial class GitService : IGitService
 
     private static string Short(Commit? commit)
         => commit?.Sha is { Length: >= 7 } sha ? sha[..7] : "HEAD";
+
+    public byte[]? ReadSide(string path, FileChange change, FileSide side, long maxBytes)
+    {
+        using var repo = new Repository(Discover(path));
+
+        Tree? tree;
+        var file = change.Path;
+
+        if (side == FileSide.Old)
+        {
+            // Nothing came before an added file. Asking the tree anyway would find a
+            // file of the same name that was deleted and re-added in one commit, which
+            // is a different file as far as the change list is concerned.
+            if (change.IsAdded)
+                return null;
+
+            file = change.OldPath ?? change.Path;
+            tree = change.Commit is { } sha
+                ? repo.Lookup<Commit>(sha)?.Parents.FirstOrDefault()?.Tree
+                : repo.Head?.Tip?.Tree;
+        }
+        else
+        {
+            if (change.IsDeleted)
+                return null;
+
+            if (change.Commit is not { } sha)
+                return ReadFromDisk(repo, change.Path, maxBytes);
+
+            tree = repo.Lookup<Commit>(sha)?.Tree;
+        }
+
+        if (tree?[file]?.Target is not Blob blob)
+            return null;
+
+        if (blob.Size > maxBytes)
+            throw new Omnigit.Plugins.FileTooLargeException(blob.Size, maxBytes);
+
+        // Raw, not filtered: a viewer wants the bytes that were committed, and the same
+        // bytes whether or not this machine happens to convert line endings.
+        using var stream = blob.GetContentStream();
+        using var buffer = new MemoryStream((int)blob.Size);
+        stream.CopyTo(buffer);
+        return buffer.ToArray();
+    }
+
+    private static byte[]? ReadFromDisk(Repository repo, string file, long maxBytes)
+    {
+        var full = Path.Combine(repo.Info.WorkingDirectory, file);
+        var info = new FileInfo(full);
+
+        if (!info.Exists)
+            return null;
+
+        if (info.Length > maxBytes)
+            throw new Omnigit.Plugins.FileTooLargeException(info.Length, maxBytes);
+
+        return File.ReadAllBytes(full);
+    }
 
     // ---------------------------------------------------------------- helpers
 

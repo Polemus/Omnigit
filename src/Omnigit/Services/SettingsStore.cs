@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -71,6 +72,12 @@ public sealed class AppSettings
     /// same answer and needs no migration.
     /// </summary>
     public string? Language { get; set; }
+
+    /// <summary>
+    /// Ids of the plugins the user switched on. Nothing else is loaded: a plugin found in
+    /// the folder is listed and left alone until someone says otherwise.
+    /// </summary>
+    public List<string> EnabledPlugins { get; set; } = [];
 }
 
 // Source-generated, like the other stores, so this keeps working under trimming.

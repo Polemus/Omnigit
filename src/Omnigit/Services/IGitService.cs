@@ -27,6 +27,14 @@ public interface IGitService
     /// <summary>Diffs for one commit against its first parent. Loaded on demand.</summary>
     IReadOnlyList<FileChange> GetCommitFiles(string path, string sha);
 
+    /// <summary>
+    /// One side of a changed file, as bytes: the old side at HEAD or in the commit's
+    /// first parent, the new side on disk or in the commit. Null when that side does not
+    /// exist - before an addition, after a deletion.
+    /// </summary>
+    /// <exception cref="Omnigit.Plugins.FileTooLargeException">Over <paramref name="maxBytes"/>.</exception>
+    byte[]? ReadSide(string path, FileChange change, FileSide side, long maxBytes);
+
     /// <summary>Stages the given paths and commits them. Returns the new commit's sha.</summary>
     string Commit(string path, IEnumerable<string> paths, string summary, string description);
 
@@ -200,4 +208,11 @@ public interface IGitService
     /// doesn't have to run git themselves for a freshly created branch.
     /// </summary>
     SyncResult Push(string path, GitCredentials? credentials, Action<string>? trace = null);
+}
+
+/// <summary>Which version of a changed file to read.</summary>
+public enum FileSide
+{
+    Old,
+    New,
 }

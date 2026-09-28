@@ -168,6 +168,8 @@ modules:
           - build/.appdir-linux-arm64
           - src/Omnigit/bin
           - src/Omnigit/obj
+          - src/Omnigit.Plugins/bin
+          - src/Omnigit.Plugins/obj
           - tests/Omnigit.Tests/bin
           - tests/Omnigit.Tests/obj
 

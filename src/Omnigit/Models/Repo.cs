@@ -275,6 +275,23 @@ public sealed class FileChange
     public int Deletions { get; init; }
     public IReadOnlyList<DiffLine> Diff { get; init; } = [];
 
+    /// <summary>The path before a rename, or null when the file kept its name.</summary>
+    public string? OldPath { get; init; }
+
+    /// <summary>
+    /// The commit this change belongs to, or null for a change in the working tree.
+    /// Together with the paths, this is how a viewer's read of either side of the file
+    /// knows where to look.
+    /// </summary>
+    public string? Commit { get; init; }
+
+    /// <summary>
+    /// git's patch text, as <see cref="Diff"/> was parsed from. Kept because a viewer
+    /// plugin is handed the patch rather than our parsed rows, which are an internal
+    /// type it cannot reference. Empty for an untracked file, which has no patch.
+    /// </summary>
+    public string Patch { get; init; } = string.Empty;
+
     public string FileName
     {
         get

@@ -55,7 +55,11 @@ public sealed partial class LanguageViewModel : ObservableObject
         if (_loading || value is null)
             return;
 
-        _settings.Save(new AppSettings { Language = value.Code });
+        // Read, change, write: a fresh AppSettings here would quietly reset every other
+        // preference in the file - the plugins the user switched on, for one.
+        var settings = _settings.Load();
+        settings.Language = value.Code;
+        _settings.Save(settings);
 
         // Null means follow the machine, which is a question only SystemLanguage can
         // answer - the stored null is not itself a language.
