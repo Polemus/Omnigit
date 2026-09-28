@@ -63,6 +63,13 @@
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.12" />
     <PackageReference Include="TextMateSharp" Version="2.0.4" />
     <PackageReference Include="TextMateSharp.Grammars" Version="2.0.4" />
+
+    <!-- Draws an SVG so the image viewer can compare it as a picture. Pinned to 4.x on
+         purpose: 5.x needs SkiaSharp 4 and HarfBuzzSharp 14, and Avalonia 12 ships
+         SkiaSharp 3.119 and HarfBuzzSharp 8.3.1.3 - the exact pair 4.9.1 asks for. A
+         Dependabot bump to 5.x is a Skia major upgrade underneath the whole UI, not a
+         library update; take it only together with an Avalonia that moved first. -->
+    <PackageReference Include="Svg.Skia" Version="4.9.1" />
   </ItemGroup>
 
   <ItemGroup>

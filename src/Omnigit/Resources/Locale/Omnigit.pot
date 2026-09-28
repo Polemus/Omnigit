@@ -575,7 +575,7 @@ msgstr ""
 msgid "Couldn't reach the clipboard."
 msgstr ""
 
-#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:91
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:92
 msgid "Couldn't read the image: {0}"
 msgstr ""
 
@@ -900,7 +900,7 @@ msgstr ""
 msgid "Ignore folder ({0}/)"
 msgstr ""
 
-#: src/Omnigit/Views/Viewers/ImageViewer.cs:16
+#: src/Omnigit/Views/Viewers/ImageViewer.cs:20
 msgid "Image"
 msgstr ""
 
@@ -1055,7 +1055,7 @@ msgstr ""
 msgid "Neither the address nor the token is saved. Without a token only the recognise check can run."
 msgstr ""
 
-#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:130
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:131
 msgid "Neither version of this file could be found."
 msgstr ""
 
@@ -1833,7 +1833,7 @@ msgstr ""
 msgid "This clone holds {0} — none of which are on the remote."
 msgstr ""
 
-#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:121
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:122
 msgid "This file couldn't be decoded as an image. Switch to Text to see what changed."
 msgstr ""
 
@@ -1841,7 +1841,7 @@ msgstr ""
 msgid "This file is too large to show as a table. Switch to Text to see the diff."
 msgstr ""
 
-#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:87
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:88
 msgid "This image is too large to preview ({0})."
 msgstr ""
 

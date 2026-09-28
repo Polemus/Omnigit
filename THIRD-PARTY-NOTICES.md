@@ -61,6 +61,8 @@ notice travel with the software — which is what this file does.
 | [Microsoft.Extensions.Logging.Abstractions](https://github.com/dotnet/runtime) | 8.0.0 | © .NET Foundation and Contributors |
 | [Microsoft.IO.RecyclableMemoryStream](https://github.com/microsoft/Microsoft.IO.RecyclableMemoryStream) | 3.0.1 | © Microsoft Corporation |
 | [System.Security.Cryptography.ProtectedData](https://github.com/dotnet/runtime) | 10.0.11 | © .NET Foundation and Contributors |
+| [Svg.Skia](https://github.com/wieslawsoltes/Svg.Skia) — and `Svg.Model`, `Svg.Animation`, `Svg.SceneGraph` | 4.9.1 | © Wiesław Šoltés |
+| [ExCSS](https://github.com/TylerBrinks/ExCSS) | 4.3.1 | © Tyler Brinks |
 | [.NET runtime and libraries](https://github.com/dotnet/runtime) | 10.0 | © .NET Foundation and Contributors |
 
 The MIT License text is the same as [Omnigit's own](LICENSE), with the respective
@@ -89,6 +91,17 @@ Windows.
 Bundled inside HarfBuzzSharp's native assets. Text shaping.
 
 © Behdad Esfahbod and others. <https://github.com/harfbuzz/harfbuzz/blob/main/COPYING>
+
+### SVG rendering library (`Svg.Custom`) — Microsoft Public License (MS-PL)
+
+Shipped as `Svg.Custom`, Svg.Skia's build of the [svg-net](https://github.com/svg-net/SVG)
+library, which reads an SVG document for the image viewer. MS-PL is permissive: it allows
+redistribution in compiled form inside an application under any licence that complies with
+it, which MIT does. Its conditions apply to the library itself — distributing *its* source
+means doing so under MS-PL, and the copyright and attribution notices must be kept, which
+this entry does. Omnigit ships it unmodified.
+
+© svg-net contributors. <https://github.com/svg-net/SVG/blob/master/license.txt>
 
 ### Inter — SIL Open Font License 1.1
 

@@ -13,6 +13,11 @@ updates:
     commit-message:
       # Matches this repository's style: a sentence, no conventional-commit prefix.
       prefix: "Update"
+    ignore:
+      # Svg.Skia 5 needs SkiaSharp 4 and HarfBuzzSharp 14, a major upgrade underneath
+      # Avalonia's own renderer. It moves when Avalonia does - see the csproj.
+      - dependency-name: "Svg.Skia"
+        update-types: ["version-update:semver-major"]
     groups:
       avalonia:
         patterns:

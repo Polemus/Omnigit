@@ -66,7 +66,8 @@ public partial class ImageCompareView : UserControl
             {
                 var oldBytes = await context.ReadOldAsync();
                 var newBytes = await context.ReadNewAsync();
-                return (Decode(oldBytes), Decode(newBytes));
+                var vector = context.Change.Extension == "svg";
+                return (Decode(oldBytes, vector), Decode(newBytes, vector));
             }, context.Closed);
 
             if (context.Closed.IsCancellationRequested)
@@ -94,14 +95,14 @@ public partial class ImageCompareView : UserControl
 
     private readonly record struct Decoded(Bitmap? Bitmap, long Bytes, bool Failed);
 
-    private static Decoded Decode(byte[]? bytes)
+    private static Decoded Decode(byte[]? bytes, bool vector)
     {
         if (bytes is null)
             return new Decoded(null, 0, false);
 
         try
         {
-            using var stream = new MemoryStream(bytes);
+            using var stream = new MemoryStream(vector ? SvgRaster.ToPng(bytes) : bytes);
             return new Decoded(new Bitmap(stream), bytes.Length, false);
         }
         catch (Exception)

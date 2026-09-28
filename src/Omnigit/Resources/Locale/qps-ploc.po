@@ -576,7 +576,7 @@ msgstr "[!!Çöûļđñ'ţ öþéñ {0} ·····!!]"
 msgid "Couldn't reach the clipboard."
 msgstr "[!!Çöûļđñ'ţ ŗéåçĥ ţĥé çļïþƀöåŗđ. ·········!!]"
 
-#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:91
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:92
 msgid "Couldn't read the image: {0}"
 msgstr "[!!Çöûļđñ'ţ ŗéåđ ţĥé ïṁåğé: {0} ········!!]"
 
@@ -901,7 +901,7 @@ msgstr "[!!Ïğñöŗé ƒïļé (åđđ ţö .ğïţïğñöŗé) ······�
 msgid "Ignore folder ({0}/)"
 msgstr "[!!Ïğñöŗé ƒöļđéŗ ({0}/) ······!!]"
 
-#: src/Omnigit/Views/Viewers/ImageViewer.cs:16
+#: src/Omnigit/Views/Viewers/ImageViewer.cs:20
 msgid "Image"
 msgstr "[!!Ïṁåğé ··!!]"
 
@@ -1056,7 +1056,7 @@ msgstr "[!!Ñééđš å ŵöŗķïñğ šïğñ-ïñ ƒïŗšţ. ·······
 msgid "Neither the address nor the token is saved. Without a token only the recognise check can run."
 msgstr "[!!Ñéïţĥéŗ ţĥé åđđŗéšš ñöŗ ţĥé ţöķéñ ïš šåṽéđ. Ŵïţĥöûţ å ţöķéñ öñļý ţĥé ŗéçöğñïšé çĥéçķ çåñ ŗûñ. ····························!!]"
 
-#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:130
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:131
 msgid "Neither version of this file could be found."
 msgstr "[!!Ñéïţĥéŗ ṽéŗšïöñ öƒ ţĥïš ƒïļé çöûļđ ƀé ƒöûñđ. ·············!!]"
 
@@ -1834,7 +1834,7 @@ msgstr "[!!Ţĥïš çļöñé ĥåš ñö ŗéṁöţé, šö ţĥéŗé ïš �
 msgid "This clone holds {0} — none of which are on the remote."
 msgstr "[!!Ţĥïš çļöñé ĥöļđš {0} — ñöñé öƒ ŵĥïçĥ åŗé öñ ţĥé ŗéṁöţé. ················!!]"
 
-#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:121
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:122
 msgid "This file couldn't be decoded as an image. Switch to Text to see what changed."
 msgstr "[!!Ţĥïš ƒïļé çöûļđñ'ţ ƀé đéçöđéđ åš åñ ïṁåğé. Šŵïţçĥ ţö Ţéẋţ ţö šéé ŵĥåţ çĥåñğéđ. ·······················!!]"
 
@@ -1842,7 +1842,7 @@ msgstr "[!!Ţĥïš ƒïļé çöûļđñ'ţ ƀé đéçöđéđ åš åñ ïṁ
 msgid "This file is too large to show as a table. Switch to Text to see the diff."
 msgstr "[!!Ţĥïš ƒïļé ïš ţöö ļåŗğé ţö šĥöŵ åš å ţåƀļé. Šŵïţçĥ ţö Ţéẋţ ţö šéé ţĥé đïƒƒ. ······················!!]"
 
-#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:87
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:88
 msgid "This image is too large to preview ({0})."
 msgstr "[!!Ţĥïš ïṁåğé ïš ţöö ļåŗğé ţö þŗéṽïéŵ ({0}). ············!!]"
 
