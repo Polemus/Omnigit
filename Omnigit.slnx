@@ -6,6 +6,9 @@
   <Folder Name="/samples/">
     <Project Path="samples/SizeViewer/SizeViewer.csproj" />
   </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/Screenshots/Screenshots.csproj" />
+  </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Omnigit.Tests/Omnigit.Tests.csproj" />
   </Folder>
