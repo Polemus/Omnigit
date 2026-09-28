@@ -126,6 +126,12 @@ ln -s /Applications "$DMG_ROOT/Applications"
 # to avoid it.
 VOLUME="Omnigit $VERSION"
 
+# Sized by hand. -srcfolder estimates the image from the folder and undersized it
+# once the single-file app grew past the SVG and Markdown libraries: 0.6.0 failed
+# with "No space left on device" inside the image, three times over (#23). The
+# folder's size plus a quarter and 20 MB is ample, and UDZO compresses the slack away.
+DMG_MB=$(( $(du -sm "$DMG_ROOT" | cut -f1) * 5 / 4 + 20 ))
+
 for attempt in 1 2 3; do
     if [ -d "/Volumes/$VOLUME" ]; then
         echo "==> /Volumes/$VOLUME is still mounted - detaching it"
@@ -135,6 +141,7 @@ for attempt in 1 2 3; do
     if hdiutil create \
         -volname "$VOLUME" \
         -srcfolder "$DMG_ROOT" \
+        -size "${DMG_MB}m" \
         -ov -format UDZO \
         "$DIST/Omnigit-$VERSION-$RID.dmg"
     then
