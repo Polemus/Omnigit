@@ -567,7 +567,7 @@ msgstr ""
 msgid "Couldn't reach the clipboard."
 msgstr ""
 
-#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:88
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:91
 msgid "Couldn't read the image: {0}"
 msgstr ""
 
@@ -984,7 +984,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/Omnigit/ViewModels/MainWindowViewModel.cs:2384
-#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:54
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:57
 msgid "Loading…"
 msgstr ""
 
@@ -1045,7 +1045,7 @@ msgstr ""
 msgid "Neither the address nor the token is saved. Without a token only the recognise check can run."
 msgstr ""
 
-#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:127
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:130
 msgid "Neither version of this file could be found."
 msgstr ""
 
@@ -1535,6 +1535,10 @@ msgstr ""
 msgid "Show in your file manager"
 msgstr ""
 
+#: src/Omnigit/Views/Viewers/SideBySideViewer.cs:16
+msgid "Side by side"
+msgstr ""
+
 #: src/Omnigit/Views/SettingsView.axaml:319
 msgid "Sign in"
 msgstr ""
@@ -1795,11 +1799,11 @@ msgstr ""
 msgid "This clone holds {0} — none of which are on the remote."
 msgstr ""
 
-#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:118
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:121
 msgid "This file couldn't be decoded as an image. Switch to Text to see what changed."
 msgstr ""
 
-#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:84
+#: src/Omnigit/Views/Viewers/ImageCompareView.axaml.cs:87
 msgid "This image is too large to preview ({0})."
 msgstr ""
 

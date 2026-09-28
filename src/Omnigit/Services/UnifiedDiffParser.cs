@@ -147,6 +147,7 @@ public static class UnifiedDiffParser
             }
         }
 
+        WordDiff.Apply(lines);
         return lines;
     }
 

@@ -96,7 +96,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         // Our own viewers go in through the same door a plugin's do; see the registry.
         _viewers = new ChangeViewerRegistry(
-            [new Views.Viewers.TextViewer(), new Views.Viewers.ImageViewer()], log);
+            [new Views.Viewers.TextViewer(), new Views.Viewers.SideBySideViewer(), new Views.Viewers.ImageViewer()], log);
         Plugins = new PluginsViewModel(settings, _viewers, log, shell, PluginLoader.DefaultRoot, designTime);
 
         // The dot on the settings button is the only part of the update state the rest

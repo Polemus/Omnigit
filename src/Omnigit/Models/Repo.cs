@@ -348,6 +348,13 @@ public sealed class DiffLine
     /// </summary>
     public IReadOnlyList<Services.SyntaxSpan> Spans { get; init; } = [];
 
+    /// <summary>
+    /// The words on this line that differ from the line it replaced or was replaced by,
+    /// or empty when it has no such partner. Set after parsing by
+    /// <see cref="Services.WordDiff"/>, which is the only thing that sees both lines.
+    /// </summary>
+    public IReadOnlyList<Services.TextRange> Emphasis { get; set; } = [];
+
     /// <summary>Line number in the pre-image, or empty for added lines.</summary>
     public string OldNumber { get; init; } = string.Empty;
 

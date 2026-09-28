@@ -430,6 +430,10 @@
     <Style Selector="Border.diffRow.hunk">
         <Setter Property="Background" Value="{DynamicResource DiffHunkBackground}" />
     </Style>
+    <!-- The half of a side-by-side row with no line in it. -->
+    <Style Selector="Border.diffRow.empty">
+        <Setter Property="Background" Value="{DynamicResource DiffEmptyBackground}" />
+    </Style>
 
     <Style Selector="Border.diffGutter">
         <Setter Property="Background" Value="Transparent" />

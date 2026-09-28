@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
@@ -53,7 +54,7 @@ public static class SyntaxText
             return;
         }
 
-        if (line.Spans.Count == 0)
+        if (line.Spans.Count == 0 && line.Emphasis.Count == 0)
         {
             // No grammar, or nothing worth colouring. Plain Text is cheaper than a
             // single Run and is what the great majority of lines get.
@@ -64,35 +65,76 @@ public static class SyntaxText
         target.Text = null;
         target.Inlines ??= [];
 
-        var at = 0;
-
+        // The line is cut wherever a colour starts or stops *or* a changed word does,
+        // since the two are worked out separately and overlap freely: a changed word can
+        // be half of a string literal, and a keyword can straddle an edit.
+        var cuts = new SortedSet<int> { 0, line.Text.Length };
         foreach (var span in line.Spans)
         {
-            if (span.Start > at)
-                target.Inlines.Add(new Run(line.Text[at..span.Start]));
-
-            Add(target, line.Text.Substring(span.Start, span.Length), span.Category);
-            at = span.Start + span.Length;
+            cuts.Add(Math.Clamp(span.Start, 0, line.Text.Length));
+            cuts.Add(Math.Clamp(span.Start + span.Length, 0, line.Text.Length));
+        }
+        foreach (var range in line.Emphasis)
+        {
+            cuts.Add(Math.Clamp(range.Start, 0, line.Text.Length));
+            cuts.Add(Math.Clamp(range.End, 0, line.Text.Length));
         }
 
-        if (at < line.Text.Length)
-            target.Inlines.Add(new Run(line.Text[at..]));
+        var emphasisKey = line.IsAdded ? "DiffAddEmphasis" : "DiffRemoveEmphasis";
+        int? from = null;
+
+        foreach (var cut in cuts)
+        {
+            if (from is { } start && cut > start)
+            {
+                Add(target, line.Text[start..cut],
+                    CategoryAt(line.Spans, start),
+                    Covers(line.Emphasis, start) ? emphasisKey : null);
+            }
+
+            from = cut;
+        }
+    }
+
+    private static SyntaxCategory? CategoryAt(IReadOnlyList<SyntaxSpan> spans, int at)
+    {
+        foreach (var span in spans)
+        {
+            if (at >= span.Start && at < span.Start + span.Length)
+                return span.Category;
+        }
+
+        return null;
+    }
+
+    private static bool Covers(IReadOnlyList<TextRange> ranges, int at)
+    {
+        foreach (var range in ranges)
+        {
+            if (at >= range.Start && at < range.End)
+                return true;
+        }
+
+        return false;
     }
 
     /// <summary>
-    /// Adds the run, <em>then</em> binds its colour. That order is load-bearing: a
+    /// Adds the run, <em>then</em> binds its colours. That order is load-bearing: a
     /// dynamic resource is resolved by searching up from the element that wants it, and
     /// a run that has not been added to the block yet has no parent to search from. Bound
     /// first, it silently resolves to nothing and the run falls back to inheriting the
     /// row's colour - which is why every line of an added file came out flat green.
     /// </summary>
-    private static void Add(TextBlock target, string text, SyntaxCategory category)
+    private static void Add(TextBlock target, string text, SyntaxCategory? category, string? backgroundKey)
     {
         var run = new Run(text);
         target.Inlines!.Add(run);
 
-        if (ResourceKeyFor(category) is { } key)
+        if (category is { } c && ResourceKeyFor(c) is { } key)
             run.Bind(TextElement.ForegroundProperty, new DynamicResourceExtension(key));
+
+        if (backgroundKey is not null)
+            run.Bind(TextElement.BackgroundProperty, new DynamicResourceExtension(backgroundKey));
     }
 
     private static string? ResourceKeyFor(SyntaxCategory category) => category switch

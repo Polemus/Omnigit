@@ -1,0 +1,66 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:s="using:Omnigit.Services"
+             xmlns:v="using:Omnigit.Views"
+             x:Class="Omnigit.Views.Viewers.SideBySideView">
+
+    <!--  The old file on the left and the new on the right. Lines wrap rather than
+         scroll sideways: two columns cannot share one horizontal scrollbar without one
+         side scrolling out of view of the other, and a wrapped line stays beside its
+         partner. -->
+    <ScrollViewer x:Name="Scroller"
+                  HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto">
+        <ItemsControl x:Name="Rows">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="s:SideBySideRow">
+                    <Panel>
+                        <Border Classes="diffRow hunk" IsVisible="{Binding IsHunk}">
+                            <TextBlock Classes="diffText hunk" Padding="9,2"
+                                       Text="{Binding Hunk.Text, FallbackValue=''}" />
+                        </Border>
+
+                        <Grid ColumnDefinitions="*,1,*" IsVisible="{Binding IsLines}">
+
+                            <!-- Old -->
+                            <Border Grid.Column="0" Classes="diffRow"
+                                    Classes.remove="{Binding LeftIsRemoved}"
+                                    Classes.empty="{Binding LeftIsEmpty}">
+                                <Grid ColumnDefinitions="Auto,*">
+                                    <Border Classes="diffGutter" Padding="9,2"
+                                            Classes.remove="{Binding LeftIsRemoved}">
+                                        <TextBlock Classes="diffNumber"
+                                                   Text="{Binding Left.OldNumber, FallbackValue=''}" />
+                                    </Border>
+                                    <TextBlock Grid.Column="1" Classes="diffText" TextWrapping="Wrap"
+                                               Classes.remove="{Binding LeftIsRemoved}"
+                                               v:SyntaxText.Line="{Binding Left}"
+                                               Padding="9,2,12,2" />
+                                </Grid>
+                            </Border>
+
+                            <Border Grid.Column="1" Background="{DynamicResource BorderSubtle}" />
+
+                            <!-- New -->
+                            <Border Grid.Column="2" Classes="diffRow"
+                                    Classes.add="{Binding RightIsAdded}"
+                                    Classes.empty="{Binding RightIsEmpty}">
+                                <Grid ColumnDefinitions="Auto,*">
+                                    <Border Classes="diffGutter" Padding="9,2"
+                                            Classes.add="{Binding RightIsAdded}">
+                                        <TextBlock Classes="diffNumber"
+                                                   Text="{Binding Right.NewNumber, FallbackValue=''}" />
+                                    </Border>
+                                    <TextBlock Grid.Column="1" Classes="diffText" TextWrapping="Wrap"
+                                               Classes.add="{Binding RightIsAdded}"
+                                               v:SyntaxText.Line="{Binding Right}"
+                                               Padding="9,2,12,2" />
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Panel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
+</UserControl>

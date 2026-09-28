@@ -20,11 +20,15 @@ public sealed class TextViewer : IChangeViewer
 
     public int Match(ChangeInfo change) => 1;
 
-    public Control Create(ChangeContext context)
-    {
-        // A change from our own list arrives with its rows already parsed and
-        // highlighted; parsing the patch again would give the same rows, slower.
-        var change = context is RepositoryChangeContext ours
+    public Control Create(ChangeContext context) => new LineDiffView { DataContext = ChangeOf(context) };
+
+    /// <summary>
+    /// The parsed rows for a context. A change from our own list arrives with them
+    /// already parsed and highlighted; parsing the patch again would give the same rows,
+    /// slower.
+    /// </summary>
+    internal static FileChange ChangeOf(ChangeContext context)
+        => context is RepositoryChangeContext ours
             ? ours.FileChange
             : new FileChange
             {
@@ -33,6 +37,6 @@ public sealed class TextViewer : IChangeViewer
                 Diff = UnifiedDiffParser.Parse(context.UnifiedPatch, context.Change.Path),
             };
 
-        return new LineDiffView { DataContext = change };
-    }
+    internal static System.Collections.Generic.IReadOnlyList<DiffLine> LinesOf(ChangeContext context)
+        => ChangeOf(context).Diff;
 }

@@ -62,6 +62,11 @@
             <SolidColorBrush x:Key="DiffHunkText" Color="#79A6E8" />
             <SolidColorBrush x:Key="DiffCodeText" Color="#C9D1D9" />
             <SolidColorBrush x:Key="DiffGutterText" Color="#5A6272" />
+            <!-- The words that changed within a changed line, and the blank half of a
+                 side-by-side row where one side has no line to show. -->
+            <SolidColorBrush x:Key="DiffAddEmphasis" Color="#23633A" />
+            <SolidColorBrush x:Key="DiffRemoveEmphasis" Color="#7A2A30" />
+            <SolidColorBrush x:Key="DiffEmptyBackground" Color="#181B20" />
 
             <!-- Syntax. Picked against three backgrounds, not one: a run sits on a plain
                  row, an added row (#12261A) or a removed row (#2A1416), and a colour that
@@ -153,6 +158,9 @@
             <SolidColorBrush x:Key="DiffHunkText" Color="#0550AE" />
             <SolidColorBrush x:Key="DiffCodeText" Color="#24292F" />
             <SolidColorBrush x:Key="DiffGutterText" Color="#8C959F" />
+            <SolidColorBrush x:Key="DiffAddEmphasis" Color="#ABF2BC" />
+            <SolidColorBrush x:Key="DiffRemoveEmphasis" Color="#FFC1BA" />
+            <SolidColorBrush x:Key="DiffEmptyBackground" Color="#F6F8FA" />
 
             <!-- Deepened for a white ground; same three-background rule as dark. -->
             <SolidColorBrush x:Key="SyntaxKeyword" Color="#8250DF" />
