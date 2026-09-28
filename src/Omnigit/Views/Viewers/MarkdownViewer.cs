@@ -145,6 +145,10 @@ public sealed class MarkdownView : UserControl
         var text = Paragraph(heading.Inline);
         text.FontSize = HeadingSizes[Math.Clamp(heading.Level, 1, 6) - 1];
         text.FontWeight = FontWeight.SemiBold;
+
+        // The paragraph's fixed line height is shorter than a heading's glyphs and cut
+        // the top off them; a heading takes its height from its own font.
+        text.LineHeight = double.NaN;
         text.Margin = new Thickness(0, heading.Level <= 2 ? 8 : 4, 0, 0);
         return text;
     }
