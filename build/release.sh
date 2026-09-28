@@ -2,10 +2,16 @@
 #
 # Prepares a release: the two edits a tag cannot carry, then the tag.
 #
-# Usage: build/release.sh <version> <notes> [--push]
+# Usage: build/release.sh <version> <notes> [--preview | --push]
 #   version: 1.2.3, without the leading v
-#   notes:   one or two sentences, in the past tense, aimed at someone reading a
-#            software centre rather than a commit log
+#   notes:   a notes file, kept outside the repository (the tree must be clean,
+#            and the metainfo is where the notes live once written) - a summary
+#            paragraph, then "### New" / "### Fixed" / "### Changes" sections of
+#            bullets; see build/notes.py for the exact format. A bare sentence still
+#            works, for a release with one thing to say.
+#   --preview  change nothing: print the metainfo entry and the GitHub notes that
+#              these notes would produce, then stop. Run it before the real thing.
+#   --push     push the commit and the tag afterwards, which starts release.yml.
 #
 # A tag names a commit; it cannot put anything inside one. Two things have to be
 # inside the commit because Flathub builds it without ever running our workflows:
@@ -24,10 +30,16 @@
 # release build, and that should be a decision rather than a side effect.
 set -euo pipefail
 
-VERSION="${1:?usage: release.sh <version> <notes> [--push]}"
-NOTES="${2:?usage: release.sh <version> <notes> [--push]}"
+VERSION="${1:?usage: release.sh <version> <notes-file|sentence> [--preview|--push]}"
+NOTES_ARG="${2:?usage: release.sh <version> <notes-file|sentence> [--preview|--push]}"
 PUSH=no
-[ "${3:-}" = "--push" ] && PUSH=yes
+PREVIEW=no
+case "${3:-}" in
+    --push) PUSH=yes ;;
+    --preview) PREVIEW=yes ;;
+    "") ;;
+    *) echo "!! unknown option ${3}" >&2 ; exit 1 ;;
+esac
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 APP_ID=io.github.polemus.Omnigit
@@ -41,6 +53,38 @@ case "$VERSION" in
     [0-9]*.[0-9]*.[0-9]*) ;;
     *) echo "!! $VERSION is not a x.y.z version" >&2 ; exit 1 ;;
 esac
+
+# A file is the normal case. A sentence is written to one, so there is one path below.
+WORK="$(mktemp -d)"
+trap 'rm -rf "$WORK"' EXIT
+if [ -f "$NOTES_ARG" ]; then
+    NOTES_FILE="$NOTES_ARG"
+else
+    NOTES_FILE="$WORK/notes.md"
+    printf '%s\n' "$NOTES_ARG" > "$NOTES_FILE"
+fi
+
+# Parsed now, so a malformed file fails before anything has been changed.
+ENTRY="$(python3 "$ROOT/build/notes.py" entry "$VERSION" "$NOTES_FILE")"
+
+if [ "$PREVIEW" = yes ]; then
+    cp "$METAINFO" "$WORK/metainfo.xml"
+    python3 - "$WORK/metainfo.xml" "$ENTRY" <<'PY'
+import sys
+path, entry = sys.argv[1], sys.argv[2] + "\n"
+xml = open(path).read()
+open(path, "w").write(xml.replace("  <releases>\n", "  <releases>\n" + entry, 1))
+PY
+    echo "==================== metainfo entry (software centres, Flathub)"
+    printf '%s\n' "$ENTRY"
+    echo
+    echo "==================== GitHub release notes (above the standing install sections)"
+    python3 "$ROOT/build/notes.py" markdown "$WORK/metainfo.xml" "$VERSION"
+    echo
+    echo "The About page shows the same notes as plain text, headings as lines and"
+    echo "bullets as •. Nothing was changed."
+    exit 0
+fi
 
 # A release is built from the tagged commit, so anything not committed is not in
 # it - and finding that out afterwards means retagging.
@@ -76,25 +120,10 @@ fi
 # ------------------------------------------------------------------ the notes
 # Newest first, which is the order AppStream readers show them in and the order
 # flathub-manifest.sh reads to check the newest is the one being built.
-python3 - "$METAINFO" "$VERSION" "$NOTES" <<'PY'
-import sys, textwrap
+python3 - "$METAINFO" "$ENTRY" <<'PY'
+import sys
 
-path, version, notes = sys.argv[1], sys.argv[2], sys.argv[3]
-from datetime import date
-
-body = textwrap.fill(" ".join(notes.split()), width=72,
-                     initial_indent=" " * 10, subsequent_indent=" " * 10)
-
-entry = (
-    f'    <release version="{version}" date="{date.today().isoformat()}">\n'
-    f'      <url type="details">'
-    f'https://github.com/Polemus/Omnigit/releases/tag/v{version}</url>\n'
-    f'      <description>\n'
-    f'        <p>\n{body}\n        </p>\n'
-    f'      </description>\n'
-    f'    </release>\n'
-)
-
+path, entry = sys.argv[1], sys.argv[2] + "\n"
 xml = open(path).read()
 marker = "  <releases>\n"
 if marker not in xml:
@@ -113,7 +142,9 @@ fi
 
 # ------------------------------------------------------------- commit and tag
 git -C "$ROOT" add "$CSPROJ" "$METAINFO"
-git -C "$ROOT" commit -q -m "Omnigit $VERSION" -m "$NOTES"
+# The commit carries the summary paragraph; the full notes are in the metainfo it changes.
+SUMMARY="$(awk 'BEGIN{RS=""} NR==1{gsub(/\n/," "); print; exit}' "$NOTES_FILE")"
+git -C "$ROOT" commit -q -m "Omnigit $VERSION" -m "$SUMMARY"
 git -C "$ROOT" tag -a "$TAG" -m "Omnigit $VERSION"
 
 echo "==> Committed and tagged $TAG"

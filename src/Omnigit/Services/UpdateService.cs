@@ -614,6 +614,13 @@ public sealed partial class UpdateService : IUpdateService
     /// heading. Only the first part is news; the rest describes how to download a file
     /// the reader already has, inside an app that is about to replace it for them.
     /// </remarks>
+    /// <para>
+    /// The notes themselves are markdown too - <c>### New</c> headings over bullet lists,
+    /// from build/notes.py - and the About page shows plain text, so they are turned into
+    /// what the markup meant: a heading becomes its words, a bullet becomes •, and
+    /// backticks go. Only a level-2 heading ends the news: <c>## Install</c> is
+    /// boilerplate, <c>### Fixed</c> is part of it.
+    /// </para>
     internal static string Summarise(string? body)
     {
         if (string.IsNullOrWhiteSpace(body))
@@ -623,10 +630,15 @@ public sealed partial class UpdateService : IUpdateService
 
         foreach (var line in body.ReplaceLineEndings("\n").Split('\n'))
         {
-            if (line.StartsWith("##", StringComparison.Ordinal))
+            if (line.StartsWith("## ", StringComparison.Ordinal) || line == "##")
                 break;
 
-            kept.Add(line);
+            var plain = line.StartsWith('#') ? line.TrimStart('#').Trim()
+                : line.StartsWith("- ", StringComparison.Ordinal) || line.StartsWith("* ", StringComparison.Ordinal)
+                    ? "• " + line[2..]
+                    : line;
+
+            kept.Add(plain.Replace("`", string.Empty));
         }
 
         return string.Join("\n", kept).Trim();

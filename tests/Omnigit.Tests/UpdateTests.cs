@@ -347,6 +347,45 @@ public class UpdateTests
         Assert.Equal("The branch picker gained a filter box.", summary);
     }
 
+    /// <summary>
+    /// What build/notes.py produces for a release with sections. The About page is plain
+    /// text, so the markup becomes what it meant - and a level-3 heading is part of the
+    /// news, where the level-2 Install heading after it is not.
+    /// </summary>
+    [Fact]
+    public void Grouped_notes_become_plain_text_and_stop_at_the_install_section()
+    {
+        var summary = UpdateService.Summarise("""
+            Diffs got viewers.
+
+            ### New
+
+            - Images as pictures.
+            - Lockfiles as `packages`.
+
+            ### Fixed
+
+            - Conflicts show both sides.
+
+            ## Install
+
+            Run the setup.
+            """);
+
+        Assert.Equal("""
+            Diffs got viewers.
+
+            New
+
+            • Images as pictures.
+            • Lockfiles as packages.
+
+            Fixed
+
+            • Conflicts show both sides.
+            """, summary);
+    }
+
     [Fact]
     public void A_body_that_is_all_boilerplate_summarises_to_nothing()
     {
