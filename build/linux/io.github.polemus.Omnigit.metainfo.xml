@@ -130,6 +130,29 @@
   <content_rating type="oars-1.1" />
 
   <releases>
+    <release version="0.6.2" date="2026-10-06">
+      <url type="details">https://github.com/Polemus/Omnigit/releases/tag/v0.6.2</url>
+      <description>
+        <p>
+          A fix for repositories with a linked worktree whose folder has
+          been deleted: these failed to load their branches and showed
+          an error every time they were opened.
+        </p>
+        <p>
+          Fixed:
+        </p>
+        <ul>
+          <li>
+            A repository with a linked worktree whose folder had been
+            deleted, without running <code>git worktree remove</code>,
+            failed to load its branches and reported "Object reference
+            not set to an instance of an object" every time it was
+            opened or refreshed. It now opens normally, and the
+            missing worktree is ignored.
+          </li>
+        </ul>
+      </description>
+    </release>
     <release version="0.6.1" date="2026-09-28">
       <url type="details">https://github.com/Polemus/Omnigit/releases/tag/v0.6.1</url>
       <description>
