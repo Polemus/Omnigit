@@ -710,7 +710,11 @@ public sealed partial class GitService : IGitService
         foreach (var worktree in repo.Worktrees)
         {
             // A worktree whose directory was deleted by hand is still listed until someone
-            // prunes it, and opening that one throws rather than coming back empty.
+            // prunes it. LibGit2Sharp's enumerator yields null for that one, and opening a
+            // worktree that is listed but broken some other way throws instead.
+            if (worktree is null)
+                continue;
+
             try
             {
                 using var linked = worktree.WorktreeRepository;

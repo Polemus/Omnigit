@@ -18,11 +18,11 @@ msgid_plural " and {0} more"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Omnigit/Services/GitService.cs:1562
+#: src/Omnigit/Services/GitService.cs:1566
 msgid " — a bug in libgit2's TLS 1.3 support on Windows, not a problem with your sign-in or this repository. Trying again often gets through, and git on the command line is unaffected; the server side fix is to stop offering TLS 1.3 on that host."
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1573
+#: src/Omnigit/Services/GitService.cs:1577
 msgid " — a path in this repository is longer than Windows allows by default. Run \"git config --global core.longpaths true\", enable Win32 long paths in Windows, and clone somewhere with a shorter path."
 msgstr ""
 
@@ -156,7 +156,7 @@ msgstr ""
 msgid "Already added"
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1291
+#: src/Omnigit/Services/GitService.cs:1295
 msgid "Already up to date"
 msgstr ""
 
@@ -192,19 +192,19 @@ msgstr ""
 msgid "Background fetch — {0}"
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1815
-#: src/Omnigit/Services/GitService.cs:1863
+#: src/Omnigit/Services/GitService.cs:1819
+#: src/Omnigit/Services/GitService.cs:1867
 msgid "Binary file - no preview"
 msgstr ""
 
 #: src/Omnigit/Services/GitService.cs:541
-#: src/Omnigit/Services/GitService.cs:745
+#: src/Omnigit/Services/GitService.cs:749
 msgid "Branch '{0}' already exists."
 msgstr ""
 
 #: src/Omnigit/Services/GitService.CommitOperations.cs:181
 #: src/Omnigit/Services/GitService.cs:522
-#: src/Omnigit/Services/GitService.cs:759
+#: src/Omnigit/Services/GitService.cs:763
 msgid "Branch '{0}' not found."
 msgstr ""
 
@@ -311,7 +311,7 @@ msgstr ""
 msgid "Clone repository…"
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1117
+#: src/Omnigit/Services/GitService.cs:1121
 msgid "Cloned into {0}"
 msgstr ""
 
@@ -327,7 +327,7 @@ msgstr ""
 msgid "Commit onto {0}"
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:905
+#: src/Omnigit/Services/GitService.cs:909
 msgid "Commit or revert your current changes before restoring the stash."
 msgstr ""
 
@@ -344,7 +344,7 @@ msgid "Commit or stash your changes before you revert a commit — git needs a c
 msgstr ""
 
 #: src/Omnigit/Services/GitService.cs:538
-#: src/Omnigit/Services/GitService.cs:742
+#: src/Omnigit/Services/GitService.cs:746
 msgid "Commit something before creating a branch."
 msgstr ""
 
@@ -666,7 +666,7 @@ msgstr ""
 msgid "Delete {0}?"
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1861
+#: src/Omnigit/Services/GitService.cs:1865
 msgid "Deleted on one side of the conflict"
 msgstr ""
 
@@ -775,23 +775,23 @@ msgstr ""
 msgid "Fetch origin"
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1161
+#: src/Omnigit/Services/GitService.cs:1165
 msgid "Fetched from {0} — already up to date"
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1158
+#: src/Omnigit/Services/GitService.cs:1162
 msgid "Fetched from {1} — {0} commit to pull"
 msgid_plural "Fetched from {1} — {0} commits to pull"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Omnigit/Services/GitService.cs:1218
-#: src/Omnigit/Services/GitService.cs:1231
-#: src/Omnigit/Services/GitService.cs:1243
+#: src/Omnigit/Services/GitService.cs:1222
+#: src/Omnigit/Services/GitService.cs:1235
+#: src/Omnigit/Services/GitService.cs:1247
 msgid "Fetched pull request #{0}"
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1816
+#: src/Omnigit/Services/GitService.cs:1820
 msgid "File too large to preview ({0} KB)"
 msgstr ""
 
@@ -1025,7 +1025,7 @@ msgstr ""
 msgid "Marked {0} as resolved"
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1293
+#: src/Omnigit/Services/GitService.cs:1297
 msgid "Merged to {0}"
 msgstr ""
 
@@ -1103,7 +1103,7 @@ msgstr ""
 msgid "No branch here or on the remote matches u201c{0}u201d."
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1306
+#: src/Omnigit/Services/GitService.cs:1310
 msgid "No branch is checked out."
 msgstr ""
 
@@ -1334,7 +1334,7 @@ msgstr ""
 msgid "Paste your token"
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1826
+#: src/Omnigit/Services/GitService.cs:1830
 msgid "Permission denied"
 msgstr ""
 
@@ -1387,7 +1387,7 @@ msgstr ""
 msgid "Publish repository"
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1296
+#: src/Omnigit/Services/GitService.cs:1300
 msgid "Pull finished"
 msgstr ""
 
@@ -1407,7 +1407,7 @@ msgstr ""
 msgid "Pull requests"
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1295
+#: src/Omnigit/Services/GitService.cs:1299
 msgid "Pulled with conflicts — resolve them before committing"
 msgstr ""
 
@@ -1415,7 +1415,7 @@ msgstr ""
 msgid "Push origin"
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1344
+#: src/Omnigit/Services/GitService.cs:1348
 msgid "Pushed {0} to {1}"
 msgstr ""
 
@@ -1517,7 +1517,7 @@ msgstr ""
 msgid "Restored your stashed changes"
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:901
+#: src/Omnigit/Services/GitService.cs:905
 msgid "Restoring the stash caused conflicts — resolve them before continuing."
 msgstr ""
 
@@ -1727,7 +1727,7 @@ msgstr ""
 msgid "That name has characters a folder can't have in it."
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:908
+#: src/Omnigit/Services/GitService.cs:912
 msgid "That stash no longer exists."
 msgstr ""
 
@@ -1779,7 +1779,7 @@ msgstr ""
 msgid "The password prompt was dismissed."
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1210
+#: src/Omnigit/Services/GitService.cs:1214
 msgid "The remote has no {0} — the pull request may have been merged or closed."
 msgstr ""
 
@@ -1825,7 +1825,7 @@ msgstr ""
 msgid "The {0} went through — commit it to finish."
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:925
+#: src/Omnigit/Services/GitService.cs:929
 msgid "There is no commit to amend."
 msgstr ""
 
@@ -1873,19 +1873,19 @@ msgstr ""
 msgid "This lockfile is too large to read. Switch to Text to see the raw diff."
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1187
+#: src/Omnigit/Services/GitService.cs:1191
 msgid "This repository has no remote to fetch a pull request from."
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1139
+#: src/Omnigit/Services/GitService.cs:1143
 msgid "This repository has no remote to fetch from."
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1269
+#: src/Omnigit/Services/GitService.cs:1273
 msgid "This repository has no remote to pull from."
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1309
+#: src/Omnigit/Services/GitService.cs:1313
 msgid "This repository has no remote to push to."
 msgstr ""
 
@@ -1927,8 +1927,8 @@ msgstr ""
 msgid "Took the incoming version of {0}"
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1822
-#: src/Omnigit/Services/GitService.cs:1942
+#: src/Omnigit/Services/GitService.cs:1826
+#: src/Omnigit/Services/GitService.cs:1946
 msgid "Unable to read file"
 msgstr ""
 
@@ -1964,7 +1964,7 @@ msgstr ""
 msgid "Updated to {0}. Restarting…"
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1256
+#: src/Omnigit/Services/GitService.cs:1260
 msgid "Updated {0} to the latest on pull request #{1}"
 msgstr ""
 
@@ -2322,7 +2322,7 @@ msgstr[1] ""
 msgid "{0} must give at least an id and an assembly."
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1521
+#: src/Omnigit/Services/GitService.cs:1525
 msgid "{0} needs you to be signed in. Open the Accounts screen and add an account for {0}, then try again."
 msgstr ""
 
@@ -2340,7 +2340,7 @@ msgstr[1] ""
 msgid "{0} overrides the built-in '{1}' provider."
 msgstr ""
 
-#: src/Omnigit/Services/GitService.cs:1512
+#: src/Omnigit/Services/GitService.cs:1516
 msgid "{0} rejected the saved credentials. The token may have expired or lost its scopes — sign in again on the Accounts screen."
 msgstr ""
 

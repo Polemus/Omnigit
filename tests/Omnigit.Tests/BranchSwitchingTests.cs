@@ -418,6 +418,20 @@ public class BranchSwitchingTests
     }
 
     [Fact]
+    public void AWorktreeWhoseFolderWasDeletedDoesNotBreakTheBranchList()
+    {
+        using var repo = RepoWithCommit();
+        var worktree = repo.AddWorktree("sidecar");
+
+        // git still lists it, as "prunable", until someone runs git worktree prune.
+        Directory.Delete(worktree, recursive: true);
+
+        var branches = Git.GetBranches(repo.Path);
+
+        Assert.False(branches.Single(b => b.Name == "sidecar").IsCheckedOutElsewhere);
+    }
+
+    [Fact]
     public void AWorktreeOpensAsARepositoryThatSaysItIsOne()
     {
         using var repo = RepoWithCommit();
