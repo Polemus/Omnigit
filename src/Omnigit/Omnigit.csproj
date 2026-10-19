@@ -67,7 +67,7 @@
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="LibGit2Sharp" Version="0.32.0" />
-    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.12" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.13" />
     <PackageReference Include="TextMateSharp" Version="2.0.4" />
     <PackageReference Include="TextMateSharp.Grammars" Version="2.0.4" />
 
@@ -80,7 +80,7 @@
 
     <!-- Parses Markdown for the rendered viewer. Parsing only - the drawing is ours, so
          nothing in it can load an image or follow a link on its own. -->
-    <PackageReference Include="Markdig" Version="1.4.0" />
+    <PackageReference Include="Markdig" Version="1.4.1" />
   </ItemGroup>
 
   <ItemGroup>
